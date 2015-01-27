@@ -44,24 +44,37 @@
       });
     } else {
       // query gmus
-      $.getJSON("http://macrostrat.org/api/v1/mobile/point_details?lat=" + d.latlng.lat + "&lng=" + d.latlng.lng, function(data) {
+      $.getJSON("http://macrostrat.org/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat + "&lng=" + d.latlng.lng, function(data) {
 
-        var data = data.success.data[0].gmus,
+        var data = data.success.data[0],
             rocktype = "";
 
-        if (data.rocktype1) {
-          rocktype += data.rocktype1
+        if (data.rt1) {
+          rocktype += data.rt1
         }
-        if (data.rocktype2) {
-          rocktype += ", " + data.rocktype2
+        if (data.rt2) {
+          rocktype += ", " + data.rt2
         }
-        if (data.rocktype3) {
-          rocktype += ", " + data.rocktype3
+        if (data.rt3) {
+          rocktype += ", " + data.rt3
         }
-        var content = "<h3>GMUS</h3><h2>" + data.unit_name + "</h2><strong>ID: </strong>" + data.gid + "<br><strong>Age: </strong>" + data.unit_age + "<br><strong>Rock type: </strong>" + rocktype + "<br>";
+
+        // Build the lithology
+        var lithology = "";
+        for (var i = 1; i < 6; i++) {
+          if (data["lith" + i]) {
+            if (i === 1) {
+              lithology += data["lith" + i];
+            } else {
+              lithology += ", " + data["lith" + i];
+            }
+          }
+        }
+
+        var content = "<h3>GMUS</h3><h2>" + data.unit_name + "</h2><strong>ID: </strong>" + data.gid + "<br><strong>USGS info: </strong><a target='_blank' href='http://mrdata.usgs.gov/geology/state/sgmc-unit.php?unit=" + data.unit_link + "'>" + data.unit_link + "</a><br><strong>Age: </strong>" + data.unit_age + "<br><strong>Age range: </strong>" + data.min_age + " - " + data.max_age + "<br><strong>Rock type: </strong>" + rocktype + "<br><strong>Lithology: </strong>" + lithology;
 
         if (data.unitdesc) {
-          content += "<strong>About: </strong>" + data.unitdesc + "<br>"; 
+          content += "<br><strong>About: </strong>" + data.unitdesc + "<br>"; 
         }
 
         popup = L.popup()
