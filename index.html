@@ -6,7 +6,7 @@
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.css" />
+  <link rel="stylesheet" href="css/leaflet.css" />
   <style>
     body {
       padding: 0;
@@ -32,8 +32,8 @@
     }
     #info {
       display: block;
-      height: 14px;
-      width: 14px;
+      height: 16px;
+      width: 16px;
       padding: 4px;
 
       -webkit-border-radius: 50%;
@@ -44,11 +44,10 @@
       border: 1px solid #777;
       color: #777;
       text-align: center;
-      font-size: 1em;
+      font-size: 14px;
       font-weight: 200;
       -webkit-touch-callout: none;
       -webkit-user-select: none;
-      -khtml-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
@@ -70,6 +69,9 @@
       vertical-align: middle;
       padding: 25px;
     }
+    #attr-info > a {
+      color: #222;
+    }
     </style>
 </head>
 <body>
@@ -79,107 +81,16 @@
   </div>
   <div class="attr-container">
     <div id="attr-info">
-      Mapping API - <a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> <br><br>
-      B&W tiles - <a href="http://stamen.com">Stamen Design</a> (<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>)<br><br>
-      B&W tile data - <a href="http://openstreetmap.org">OpenStreetMap</a> (<a href="http://www.openstreetmap.org/copyright">ODbL</a>) <br><br>
-      Geologic tiles - <a href="http://dev.macrostrat.org">Macrostrat.org</a> (<a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode">CC0</a>)<br><br>
-      Geologic tile data - <a href="http://ngmdb.usgs.gov/gmna/">USGS</a>
+      <strong>Mapping API - </strong><a href="http://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> <br><br>
+      <strong>Black & white tiles - </strong><a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright">ODbL</a>.<br><br>
+
+      <strong>Geologic tiles - </strong><a href="http://dev.macrostrat.org">Macrostrat.org</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode">CC0</a>. GMNA data by <a href="http://pubs.usgs.gov/ds/424/">USGS</a>. GMUS data by various states, provided by <a href="http://mrdata.usgs.gov/geology/state/state.php">USGS</a>.
     </div>
   </div>
     
-  <script src="zepto.min.js"></script>
-  <script src="http://cdn.leafletjs.com/leaflet-0.7.3/leaflet.js"></script>
-  <script>
-  (function() {
-    var map = L.map('map', {
-      attributionControl: false
-    }).setView([40, -97], 5);
-
-    L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
-      maxZoom: 12,
-      attribution: 'Tiles - <a href="http://stamen.com">Stamen Design</a> (<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>). Data - <a href="http://openstreetmap.org">OpenStreetMap</a> (<a href="http://www.openstreetmap.org/copyright">ODbL</a>).'
-    }).addTo(map);
-
-    L.tileLayer('http://macrostrat.org/tiles/geologic/{z}/{x}/{y}.png', {
-      maxZoom: 12,
-      opacity: 0.8,
-      attribution: 'Tiles - <a href="http://stamen.com">Stamen Design</a> (<a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>). Data - <a href="http://openstreetmap.org">OpenStreetMap</a> (<a href="http://www.openstreetmap.org/copyright">ODbL</a>).'
-    }).addTo(map);
-
-
-    var popup;
-
-    map.on("click", function(d) {
-      if (map.getZoom() < 10) {
-        // query gmna
-        $.getJSON("http://macrostrat.org/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat + "&lng=" + d.latlng.lng, function(data) {
-          var data = data.success.data[0];
-
-          var content = "<h3>GMNA</h3><h2>" + data.interval_name + "</h2><strong>Age: </strong>" + data.min_age + " - " + data.max_age + "<br>";
-
-          if (data.rocktype) {
-            content += "<strong>Rock type: </strong>" + data.rocktype + "<br>";
-          }
-          if (data.lithology) {
-            content += "<strong>Lithology: </strong>" + data.lithology + "<br>";
-          }
-
-          popup = L.popup()
-            .setLatLng(d.latlng)
-            .setContent(content)
-            .openOn(map);
-        });
-      } else {
-        // query gmus
-        $.getJSON("http://macrostrat.org/api/v1/mobile/point_details?lat=" + d.latlng.lat + "&lng=" + d.latlng.lng, function(data) {
-
-          var data = data.success.data[0].gmus,
-              rocktype = "";
-
-          if (data.rocktype1) {
-            rocktype += data.rocktype1
-          }
-          if (data.rocktype2) {
-            rocktype += ", " + data.rocktype2
-          }
-          if (data.rocktype3) {
-            rocktype += ", " + data.rocktype3
-          }
-          var content = "<h3>GMUS</h3><h2>" + data.unit_name + "</h2><strong>ID: </strong>" + data.gid + "<br><strong>Age: </strong>" + data.unit_age + "<br><strong>Rock type: </strong>" + rocktype + "<br>";
-
-          if (data.unitdesc) {
-            content += "<strong>About: </strong>" + data.unitdesc + "<br>"; 
-          }
-
-          popup = L.popup()
-            .setLatLng(d.latlng)
-            .setContent(content)
-            .openOn(map);
-        });
-      }
-  
-
-    });
-  
-    // Hide popups when map state changes
-    map.on("zoomstart, movestart", function() {
-      if (map.hasLayer(popup)) {
-        map.removeLayer(popup);
-      }
-    });
-
-    // Show attribution
-    $("#info-link").click(function() {
-      $(".attr-container").css("visibility", "visible");
-    });
-
-    // Hide attribution
-    $(".attr-container").click(function() {
-      $(this).css("visibility", "hidden");
-    });
-
-  })();
-
-  </script>
+  <script src="js/zepto.min.js"></script>
+  <script src="js/leaflet.js"></script>
+  <script src="js/leaflet-hash.js"></script>
+  <script async src="js/map.js"></script>
 </body>
 </html>
