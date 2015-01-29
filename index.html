@@ -8,6 +8,7 @@
 
   <link rel="stylesheet" href="css/leaflet.css" />
   <style>
+    
     body {
       padding: 0;
       margin: 0;
@@ -16,9 +17,27 @@
     html, body, #map {
       height: 100%;
       width: 100%;
+      overflow: hidden;
+    }
+    .container {
+      overflow: hidden;
+      height: 100%;
+      width: 100%;
+      position: fixed;
     }
     h3 {
-      color: #ccc;
+      color: #aaa;
+      font-size: 1.6em;
+      letter-spacing: 2px;
+      font-weight: 200;
+      text-align: center;
+    }
+    h2 {
+      font-size: 1.8em;
+      line-height: 1.2em;
+    }
+    strong {
+      color: orange;
     }
     .leaflet-popup-content {
       line-height: 1.6;
@@ -77,9 +96,73 @@
       text-align: left;
       margin: 0 auto;
     }
+
+    .unit_info {
+      position: absolute;
+      z-index: 100000;
+      background-color: rgba(0,0,0,0.6);
+      color: #ccc;
+      overflow-y: scroll;
+      line-height: 23px;
+      -webkit-transition: all 0.6s ease;
+      -moz-transition: all 0.6s ease;
+      -o-transition: all 0.6s ease;
+      -ms-transition: all 0.6s ease;
+      transition: all 0.6s ease;
+      transform: translate3d(0,0,0);
+      -webkit-transform: translate3d(0,0,0);
+      -webkit-perspective: 1000;
+      -webkit-backface-visibility: hidden;
+    }
+
+    #unit_info_right {
+      width: 60%;
+      top: 0;
+      height: 100%;
+      right: -60%;
+    }
+
+    #unit_info_right.moveRight {
+      right: 0;
+    }
+
+    #unit_info_bottom {
+      width: 100%;
+      bottom: -60%;
+      height: 60%;
+    }
+
+    #unit_info_bottom.moveDown {
+      bottom: 0;
+    }
+
+    .unit_info_content {
+      padding: 25px;
+      z-index: 0;
+    }
+
+    .unit_info_content > a {
+      color: #aaa;
+    }
+
+    .close {
+      color: #fff;
+      position: absolute;
+      cursor: pointer;
+      font-size: 25px;
+      padding: 20px;
+      top: 0;
+    }
+    .close.bottom {
+      right: 0;
+    }
+    .close.right {
+      left: 0;
+    }
     </style>
 </head>
 <body>
+  <div class="container">
   <div id="map"></div>
   <div id="attr" class="leaflet-control-attribution leaflet-control">
     <a href="#" id="info-link"><div id="info">i</div></a>
@@ -96,7 +179,16 @@
       </div>
     </div>
   </div>
-    
+
+  <div id="unit_info_right" class="unit_info">
+    <div class="close right">x</div>
+    <div class="unit_info_content"></div>
+  </div>
+  <div id="unit_info_bottom" class="unit_info">
+    <div class="close bottom">x</div>
+    <div class="unit_info_content"></div>
+  </div>
+  </div>
   <script src="js/zepto.min.js"></script>
   <script src="js/leaflet.js"></script>
   <script src="js/leaflet-hash.js"></script>

@@ -1,4 +1,4 @@
-(function() {
+//(function() {
   var map = L.map('map', {
     // We have a different attribution control...
     attributionControl: false
@@ -19,16 +19,30 @@
   }).addTo(map);
 
 
-  // Define our popup out here for ease of adding/removing
-  var popup;
+  // Define our marker out here for ease of adding/removing
+  var marker;
+  var bwIcon = L.icon({
+    iconUrl: 'js/images/marker-icon-bw-2x.png',
+    shadowUrl: 'js/images/marker-shadow.png',
+    iconSize: [25,41],
+    iconAnchor: [12, 41]
+  });
 
   map.on("click", function(d) {
+    if (map.hasLayer(marker)) {
+      map.removeLayer(marker);
+    }
+
+   // marker = L.marker(d.latlng).addTo(map);
+    marker = L.marker(d.latlng, {icon: bwIcon}).addTo(map);
+
+    
     if (map.getZoom() < 10) {
       // query gmna
       $.getJSON("http://macrostrat.org/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat + "&lng=" + d.latlng.lng, function(data) {
         var data = data.success.data[0];
 
-        var content = "<h3>GMNA</h3><h2>" + data.interval_name + "</h2><strong>Age: </strong>" + data.min_age + " - " + data.max_age + "<br>";
+        var content = "<h3>GMNA</h3><hr><h2>" + data.interval_name + "</h2><strong>Age: </strong>" + data.min_age + " - " + data.max_age + "<br>";
 
         if (data.rocktype) {
           content += "<strong>Rock type: </strong>" + data.rocktype + "<br>";
@@ -37,10 +51,8 @@
           content += "<strong>Lithology: </strong>" + data.lithology + "<br>";
         }
 
-        popup = L.popup()
-          .setLatLng(d.latlng)
-          .setContent(content)
-          .openOn(map);
+        setUnitInfoContent(content, d.latlng);
+
       });
     } else {
       // query gmus
@@ -71,26 +83,22 @@
           }
         }
 
-        var content = "<h3>GMUS</h3><h2>" + data.unit_name + "</h2><strong>ID: </strong>" + data.gid + "<br><strong>USGS info: </strong><a target='_blank' href='http://mrdata.usgs.gov/geology/state/sgmc-unit.php?unit=" + data.unit_link + "'>" + data.unit_link + "</a><br><strong>Age: </strong>" + data.unit_age + "<br><strong>Age range: </strong>" + data.min_age + " - " + data.max_age + "<br><strong>Rock type: </strong>" + rocktype + "<br><strong>Lithology: </strong>" + lithology;
+        var content = "<h3>GMUS</h3><hr><h2>" + data.unit_name + "</h2><strong>ID: </strong>" + data.gid + "<br><strong>USGS info: </strong><a target='_blank' href='http://mrdata.usgs.gov/geology/state/sgmc-unit.php?unit=" + data.unit_link + "'>" + data.unit_link + "</a><br><strong>Age: </strong>" + data.unit_age + "<br><strong>Age range: </strong>" + data.min_age + " - " + data.max_age + "<br><strong>Rock type: </strong>" + rocktype + "<br><strong>Lithology: </strong>" + lithology;
 
         if (data.unitdesc) {
           content += "<br><strong>About: </strong>" + data.unitdesc + "<br>"; 
         }
 
-        popup = L.popup()
-          .setLatLng(d.latlng)
-          .setContent(content)
-          .openOn(map);
+        setUnitInfoContent(content, d.latlng);
+
       });
     }
   });
 
   // Hide popups when map state changes
-  map.on("zoomstart, movestart", function() {
-    if (map.hasLayer(popup)) {
-      map.removeLayer(popup);
-    }
-  });
+  map.on("zoomstart, movestart", hideInfoAndMarker);
+  $(window).on("resize", hideInfoAndMarker);
+  $(".close").click(hideInfoAndMarker);
 
   // Show attribution
   $("#info-link").click(function(d) {
@@ -103,4 +111,79 @@
     $(this).css("visibility", "hidden");
   });
 
-})();
+  
+  function hideInfoAndMarker() {
+    if (map.hasLayer(marker)) {
+      map.removeLayer(marker);
+    }
+    closeRightBar();
+    closeBottomBar();
+  }
+
+  function setUnitInfoContent(html, ll) {
+    $(".unit_info_content").html(html);
+    toggleUnitInfoBar(ll);
+  }
+
+  function toggleUnitInfoBar(ll) {
+    // Landscape
+    if (window.innerWidth > window.innerHeight) {
+      centerMapRight(ll);
+      openRightBar();
+    } else {
+    // Portrait
+      centerMapBottom(ll);
+      openBottomBar();
+    }
+  }
+
+  function toggleRightBar() {
+    if ($("#unit_info_right").hasClass("moveRight")) {
+      closeRightBar();
+    } else {
+      openRightBar();
+    }
+  }
+  function openRightBar() {
+    $("#unit_info_right").addClass("moveRight");
+  }
+
+  function closeRightBar() {
+    $("#unit_info_right").removeClass("moveRight");
+  }
+
+  function toggleBottomBar() {
+    if ($("#unit_info_bottom").hasClass("moveDown")) {
+      closeBottomBar();
+    } else {
+      openBottomBar();
+    }
+  }
+  function openBottomBar() {
+    $("#unit_info_bottom").addClass("moveDown");
+  }
+  function closeBottomBar() {
+    $("#unit_info_bottom").removeClass("moveDown");
+  }
+
+  /* Via https://gist.github.com/missinglink/7620340 */
+  L.Map.prototype.panToOffset = function (latlng, offset, options) {
+    var x = this.latLngToContainerPoint(latlng).x - offset[0],
+        y = this.latLngToContainerPoint(latlng).y - offset[1],
+        point = this.containerPointToLatLng([x, y]),
+        opts = (options) ? options : {"animate": true, "duration": 0.6, "noMoveStart": true};
+
+    return this.setView(point, this._zoom, { pan: opts })
+  }
+
+  function centerMapRight(ll){
+    var contentWidth = $("#unit_info_right").width() / 2;
+    map.panToOffset( ll, [ -contentWidth, 0 ] );
+  }
+
+  function centerMapBottom(ll){
+    var contentWidth = $("#unit_info_bottom").height() / 2;
+    map.panToOffset( ll, [ 0, -contentWidth ] );
+  }
+
+//})();
