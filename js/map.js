@@ -113,6 +113,10 @@
     $(this).css("visibility", "hidden");
   });
 
+  // Don't close the attribution window when a link is clicked
+  $("#attr-info>div>a").click(function(d) {
+    d.stopPropagation();
+  });
   
   // Removes the marker from the map and hides info bars
   function hideInfoAndMarker() {
