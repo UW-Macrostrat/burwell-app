@@ -21,6 +21,8 @@
 
   // Define our marker out here for ease of adding/removing
   var marker;
+
+  // Custom desaturated icon
   var bwIcon = L.icon({
     iconUrl: 'js/images/marker-icon-bw-2x.png',
     shadowUrl: 'js/images/marker-shadow.png',
@@ -36,13 +38,13 @@
    // marker = L.marker(d.latlng).addTo(map);
     marker = L.marker(d.latlng, {icon: bwIcon}).addTo(map);
 
-    
+
     if (map.getZoom() < 10) {
       // query gmna
       $.getJSON("http://macrostrat.org/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat + "&lng=" + d.latlng.lng, function(data) {
         var data = data.success.data[0];
 
-        var content = "<h3>GMNA</h3><hr><h2>" + data.interval_name + "</h2><strong>Age: </strong>" + data.min_age + " - " + data.max_age + "<br>";
+        var content = "<h3>GMNA</h3><hr><h2>" + ((data.interval_name) ? data.interval_name : "Unknown interval") + "</h2><strong>Age: </strong>" + data.min_age + " - " + data.max_age + "<br>";
 
         if (data.rocktype) {
           content += "<strong>Rock type: </strong>" + data.rocktype + "<br>";
@@ -95,7 +97,7 @@
     }
   });
 
-  // Hide popups when map state changes
+  // Hide info bars and marker when map state changes, window is resized, or bar is closed
   map.on("zoomstart, movestart", hideInfoAndMarker);
   $(window).on("resize", hideInfoAndMarker);
   $(".close").click(hideInfoAndMarker);
@@ -112,6 +114,7 @@
   });
 
   
+  // Removes the marker from the map and hides info bars
   function hideInfoAndMarker() {
     if (map.hasLayer(marker)) {
       map.removeLayer(marker);
@@ -120,11 +123,13 @@
     closeBottomBar();
   }
 
+  // Update and open the unit info bars
   function setUnitInfoContent(html, ll) {
     $(".unit_info_content").html(html);
     toggleUnitInfoBar(ll);
   }
 
+  // Open the right info bar depending on the screen orientation
   function toggleUnitInfoBar(ll) {
     // Landscape
     if (window.innerWidth > window.innerHeight) {
