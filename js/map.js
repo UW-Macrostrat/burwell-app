@@ -232,7 +232,7 @@
     var content = "<h2>via Macrostrat</h2><strong>Units present: </strong>" + ids.join(", ") +
       "<br><strong>Thickness: </strong>" + Math.min.apply(null, min_thicks) + " - " + Math.max.apply(null, max_thicks) +
       "<br><strong>Age range: </strong>" + uniqueIntervals.join(", ") +
-      "<br><strong>Age (est.): </strong>" + Math.min.apply(null, t_ages) + " - " + Math.max.apply(null, b_ages) +
+      "<br><strong>Age (est.): </strong>" + Math.max.apply(null, b_ages) + " - " + Math.min.apply(null, t_ages) +
       "<br><strong>Environment: </strong>" + uniqueEnvironments.join(", ") +
       "<br><strong>PBDB Collections: </strong>" + Math.max.apply(null, pbdb);
 
