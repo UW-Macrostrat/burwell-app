@@ -13,7 +13,7 @@
   }).addTo(map);
 
   // Add the geologic basemap
-  L.tileLayer('http://macrostrat.org/tiles/geologic/{z}/{x}/{y}.png', {
+  L.tileLayer('//macrostrat.org/tiles/geologic_new/{z}/{x}/{y}.png', {
     maxZoom: 12,
     opacity: 0.8
   }).addTo(map);
@@ -30,6 +30,12 @@
     iconAnchor: [12, 41]
   });
 
+  var gmnaTemplate = $('#gmna-template').html();
+  Mustache.parse(gmnaTemplate);
+
+  var gmusTemplate = $('#gmus-template').html();
+  Mustache.parse(gmusTemplate);
+
   map.on("click", function(d) {
     if (map.hasLayer(marker)) {
       map.removeLayer(marker);
@@ -38,31 +44,22 @@
     marker = L.marker(d.latlng, {icon: bwIcon}).addTo(map);
 
 
-    if (map.getZoom() < 10) {
+    if (map.getZoom() < 8) {
       // query gmna
-      $.getJSON("http://macrostrat.org/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat + "&lng=" + d.latlng.lng, function(data) {
-        var data = data.success.data[0];
-
-        var content = "<h3>GMNA</h3><hr><h2>" + ((data.interval_name) ? data.interval_name : "Unknown interval") + "</h2><strong>Age: </strong>" + data.min_age + " - " + data.max_age + "<br>";
-
-        if (data.rocktype) {
-          content += "<strong>Rock type: </strong>" + data.rocktype + "<br>";
-        }
-        if (data.lithology) {
-          content += "<strong>Lithology: </strong>" + data.lithology + "<br>";
-        }
-
-        setUnitInfoContent(content, d.latlng);
+      $.getJSON("//dev.macrostrat.org/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
+        var rendered = Mustache.render(gmnaTemplate, data.success.data[0]);
+        setUnitInfoContent(rendered, d.latlng);
 
       });
     } else {
       // query gmus
-      $.getJSON("http://macrostrat.org/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat + "&lng=" + d.latlng.lng, function(data) {
+      $.getJSON("//dev.macrostrat.org/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
 
         // Hold unique rocktypes + lithologies
         var rocktypes = [],
             lithologies = [];
 
+        // Find unique rocktypes + lithologies
         data.success.data.forEach(function(d) {
           // Get unique list of rocktypes
           for (var i = 1; i < 4; i++) {
@@ -82,30 +79,18 @@
 
         var data = data.success.data[0]
 
-        var content = "<h3>GMUS</h3><hr><h2>" + data.unit_name + "</h2><strong>ID: </strong>" + data.gid + "<br><strong>USGS info: </strong><a target='_blank' href='http://mrdata.usgs.gov/geology/state/sgmc-unit.php?unit=" + data.unit_link + "'>" + data.unit_link + "</a><br><strong>Age: </strong>" + data.unit_age + "<br><strong>Age range: </strong>" + data.min_age + " - " + data.max_age + "<br><strong>Rock type: </strong>" + rocktypes.join(", ") + "<br><strong>Lithology: </strong>" + lithologies.join(", ");
+        data.rocktypes = (rocktypes) ? rocktypes.join(", ") : null;
+        data.lithologies = (lithologies) ? lithologies.join(", ") : null;
 
-        if (data.unitdesc) {
-          content += "<br><strong>About: </strong>" + data.unitdesc + "<br>"; 
-        }
-
-        if (data.unit_com) {
-          content += "<strong>Comments: </strong>" + data.unit_com + "<br>"; 
-        }
-
-        if (data.macro_units.length > 0) {
-          var units = [];
-          data.macro_units.forEach(function(j, i) {
-            $.getJSON("http://macrostrat.org/api/units?response=long&id=" + j, function(response) {
-              units.push(response.success.data[0]);
-              if (i === data.macro_units.length - 1) {
-                content += processUnits(units);
-                setUnitInfoContent(content, d.latlng);
-
-              }
-            });
+        if (data.macro_units && data.macro_units.length > 0) {
+          $.getJSON("//macrostrat.org/api/v1/units?response=long&id=" + data.macro_units.join(","), function(response) {
+            data.macrodata = processUnits(response.success.data);
+            var rendered = Mustache.render(gmusTemplate, data);
+            setUnitInfoContent(rendered, d.latlng);
           });
         } else {
-          setUnitInfoContent(content, d.latlng);
+          var rendered = Mustache.render(gmusTemplate, data);
+          setUnitInfoContent(rendered, d.latlng);
         }
 
       });
@@ -145,7 +130,35 @@
 
   // Update and open the unit info bars
   function setUnitInfoContent(html, ll) {
+    document.getElementById("unit_info_bottom").scrollTop = 0;
+    document.getElementById("unit_info_right").scrollTop = 0;
+
     $(".unit_info_content").html(html);
+
+    var maxLength = 200;
+    $(".long-text").each(function() {
+      if ($(this).html().length > maxLength) {
+        var firstBit = $(this).html().substr(0, maxLength),
+            secondBit = $(this).html().substr(maxLength, $(this).html().length - maxLength);
+
+        $(this).html("<span>" + firstBit + "</span><span class='ellipsis'>... </span><span class='the-rest'>" + secondBit + "</span><span class='show-more'> >>></span>");
+      }
+    });
+
+    $(".show-more").click(function(d) {
+      if ($(this).siblings(".the-rest").hasClass("view-text")) {
+        $(this).html(" >>>");
+        $(this).siblings(".ellipsis").removeClass("hidden");
+        $(this).siblings(".the-rest").removeClass("view-text");
+      } else {
+        $(this).html(" <<<");
+        $(this).siblings(".ellipsis").addClass("hidden");
+        $(this).siblings(".the-rest").addClass("view-text");
+      }
+    });
+
+    $("#unit_info_right").find(".lt-holder").last().css("padding-bottom", "40px");
+    $("#unit_info_bottom").find(".lt-holder").last().css("padding-bottom", "40px");
     toggleUnitInfoBar(ll);
   }
 
@@ -211,32 +224,32 @@
     map.panToOffset( ll, [ 0, -contentWidth ] );
   }
 
-  // Distill the data from many Macrostrat units down into HTML
+  // Distill the data from many Macrostrat units down into something coherent
   function processUnits(units) {
-    // environments, FO and LO interval, min t_age and max b_age, min min_thick, max max_thick, pbdb
-    var ids = units.map(function(d) { return d.id }),
-        max_thicks = units.map(function(d) { return d.max_thick }),
-        min_thicks = units.map(function(d) { return d.min_thick }),
-        t_ages = units.map(function(d) { return d.t_age }),
-        b_ages = units.map(function(d) { return d.b_age }),
-        pbdb = units.map(function(d) { return d.pbdb }),
-        environments = units.map(function(d) { return d.environ }),
-        uniqueEnvironments = environments.filter(function(item, pos, self) {
-            return self.indexOf(item) == pos;
-        }),
-        intervals = units.map(function(d) { return d.LO_interval + " - " + d.FO_interval }),
-        uniqueIntervals = intervals.filter(function(item, pos, self) {
-            return self.indexOf(item) == pos;
-        });
 
-    var content = "<h2>via Macrostrat</h2><strong>Units present: </strong>" + ids.join(", ") +
-      "<br><strong>Thickness: </strong>" + Math.min.apply(null, min_thicks) + " - " + Math.max.apply(null, max_thicks) +
-      "<br><strong>Age range: </strong>" + uniqueIntervals.join(", ") +
-      "<br><strong>Age (est.): </strong>" + Math.max.apply(null, b_ages) + " - " + Math.min.apply(null, t_ages) +
-      "<br><strong>Environment: </strong>" + uniqueEnvironments.join(", ") +
-      "<br><strong>PBDB Collections: </strong>" + Math.max.apply(null, pbdb);
-
-    return content;
+    return {
+      names: units.map(function(d) { return d.strat_name }).join(", "),
+      ids: units.map(function(d) { return d.id }).join(", "),
+      max_thicks: Math.max.apply(null, units.map(function(d) { return d.max_thick })),
+      min_thicks: Math.min.apply(null, units.map(function(d) { return d.min_thick })),
+      t_ages: Math.min.apply(null, units.map(function(d) { return d.t_age })),
+      b_ages: Math.max.apply(null, units.map(function(d) { return d.b_age })),
+      pbdb: Math.max.apply(null, units.map(function(d) { return d.pbdb })),
+      uniqueEnvironments: 
+        units
+          .map(function(d) { return d.environ })
+          .filter(function(item, pos, self) {
+              return self.indexOf(item) == pos;
+          })
+          .join(", "),
+      uniqueIntervals: 
+        units
+          .map(function(d) { return d.LO_interval + " - " + d.FO_interval })
+          .filter(function(item, pos, self) {
+              return self.indexOf(item) == pos;
+          })
+          .join(", ")
+    }
 
   }
 
