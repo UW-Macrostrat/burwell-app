@@ -131,7 +131,11 @@
     d.preventDefault();
     // If it's the adjust control
     if ($(this).hasClass("fa-sliders")) {
-
+      if ($(".opacity-adjuster").css("display") === "none") {
+        $(".opacity-adjuster").css("display", "block");
+      } else {
+        $(".opacity-adjuster").css("display", "none");
+      }
     } else {
       // If it's on, turn it off
       if ($(this).hasClass("fa-toggle-on")) {
@@ -163,6 +167,13 @@
       }
     }
   });
+
+  /* Courtesy of the Alligator http://bl.ocks.org/rgdonohue/8465271 */
+  $("#geology-opacity-slider")
+    .attr({'max': 100, 'min':0, 'step': 10,'value': String(80)})
+    .on('input change', function() {
+      geology.setOpacity(this.value/100);
+    });
 
   // Hide attribution
   $(".attr-container").click(function() {
@@ -277,6 +288,7 @@
   }
   function closeMenuBar() {
     $("#unit_info_left").removeClass("moveLeft");
+    $(".opacity-adjuster").css("display", "none");
   }
 
   /* Via https://gist.github.com/missinglink/7620340 */

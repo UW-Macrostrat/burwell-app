@@ -169,6 +169,21 @@
       max-width: 500px;
     }
 
+    .opacity-adjuster {
+      display: none;
+    }
+    #geology-opacity-slider {
+      width: 100%;
+      padding: 25px 0;
+    }
+
+    #geology-opacity-slider::-moz-range-thumb {
+        padding: 3px;
+    }
+    #geology-opacity-slider:active::-moz-range-thumb {
+        background: orange;               
+    }
+
     #unit_info_right.moveRight {
       right: 0;
     }
@@ -291,7 +306,11 @@
       <div class="close left">x</div>
       <div class="menu-content">
         <div class="menu-layers">
-          <div class="layer" id="geology">Geology <i class="fa fa-toggle-on layer-control"></i><i class="fa fa-sliders layer-control"></i></div>
+          <div class="layer" id="geology">Geology <i class="fa fa-toggle-on layer-control"></i><i class="fa fa-sliders layer-control"></i>
+            <div class="opacity-adjuster">
+              <input id="geology-opacity-slider" type="range">
+            </div>
+          </div>
           <div class="layer" id="satellite">Satellite <i class="fa fa-toggle-off layer-control"></i></div>
         </div>
       </div>
