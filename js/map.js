@@ -8,16 +8,25 @@
   var hash = new L.Hash(map);
 
   // Add our basemap
-  L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
+  var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
     maxZoom: 12
   }).addTo(map);
 
+  stamen.setZIndex(1);
+
+  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
+    attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox © OpenStreetMap</a>'
+  });
+
+  satellite.setZIndex(1);
+
   // Add the geologic basemap
-  L.tileLayer('//macrostrat.org/tiles/geologic_new/{z}/{x}/{y}.png', {
+  var geology = L.tileLayer('//macrostrat.org/tiles/geologic_new/{z}/{x}/{y}.png', {
     maxZoom: 12,
     opacity: 0.8
   }).addTo(map);
 
+  geology.setZIndex(100);
 
   // Define our marker out here for ease of adding/removing
   var marker;
@@ -55,6 +64,9 @@
       // query gmus
       $.getJSON("//dev.macrostrat.org/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
 
+        if (data.success.data.length < 1) {
+          return;
+        }
         // Hold unique rocktypes + lithologies
         var rocktypes = [],
             lithologies = [];
@@ -109,6 +121,49 @@
     $(".attr-container").css("visibility", "visible");
   });
 
+  // Show menu
+  $("#menu-link").click(function(d) {
+    d.preventDefault();
+    toggleMenuBar();
+  });
+
+  $(".layer-control").click(function(d) {
+    d.preventDefault();
+    // If it's the adjust control
+    if ($(this).hasClass("fa-sliders")) {
+
+    } else {
+      // If it's on, turn it off
+      if ($(this).hasClass("fa-toggle-on")) {
+        $(this).removeClass("fa-toggle-on").addClass("fa-toggle-off");
+        switch ($(this).parent().attr("id")) {
+          case 'geology' :
+            return map.removeLayer(geology);
+          case 'satellite' :
+            map.addLayer(stamen);
+            map.removeLayer(satellite);
+            return;
+          default :
+            console.log("hmmmm")
+        }
+      // If it's off, turn it on
+      } else {
+        $(this).addClass("fa-toggle-on").removeClass("fa-toggle-off");
+
+        switch ($(this).parent().attr("id")) {
+          case 'geology' :
+            return map.addLayer(geology);
+          case 'satellite' :
+            map.removeLayer(stamen);
+            map.addLayer(satellite);
+            return;
+          default :
+            console.log("hmmmm")
+        }
+      }
+    }
+  });
+
   // Hide attribution
   $(".attr-container").click(function() {
     $(this).css("visibility", "hidden");
@@ -126,6 +181,7 @@
     }
     closeRightBar();
     closeBottomBar();
+    closeMenuBar();
   }
 
   // Update and open the unit info bars
@@ -183,6 +239,7 @@
     }
   }
   function openRightBar() {
+    closeMenuBar();
     $("#unit_info_right").addClass("moveRight");
   }
 
@@ -198,10 +255,28 @@
     }
   }
   function openBottomBar() {
+    closeMenuBar();
     $("#unit_info_bottom").addClass("moveDown");
   }
   function closeBottomBar() {
     $("#unit_info_bottom").removeClass("moveDown");
+  }
+
+
+  function toggleMenuBar() {
+    if ($("#unit_info_left").hasClass("moveLeft")) {
+      closeMenuBar();
+    } else {
+      openMenuBar();
+    }
+  }
+  function openMenuBar() {
+    closeRightBar();
+    closeBottomBar();
+    $("#unit_info_left").addClass("moveLeft");
+  }
+  function closeMenuBar() {
+    $("#unit_info_left").removeClass("moveLeft");
   }
 
   /* Via https://gist.github.com/missinglink/7620340 */

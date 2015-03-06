@@ -7,6 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <link rel="stylesheet" href="css/leaflet.css" />
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   <style>
     
     body {
@@ -42,19 +43,29 @@
     .leaflet-popup-content {
       line-height: 1.6;
     }
-    #attr {
+    .controls {
       position: absolute;
       z-index: 1000;
-      bottom: 0;
-      right: 0;
       margin: 0;
+    }
+    .menu {
+      position: absolute;
+      bottom: -45px;
+      padding-left: 9px;
+      padding-bottom: 7px;
+    }
+    #menu-control {
+      left: -45px;
+    }
+    #attr {
+      right: -45px;
       padding-right: 9px;
       padding-bottom: 7px;
     }
-    #info {
+    .menu-button {
       display: block;
-      height: 16px;
-      width: 16px;
+      height: 70px;
+      width: 70px;
       padding: 4px;
 
       -webkit-border-radius: 50%;
@@ -76,6 +87,21 @@
     #info-link:hover {
       text-decoration: none;
     }
+
+    .i {
+      position: absolute;
+      left: 35px;
+      top: 16px;
+      font-weight: bold;
+    }
+
+    .m {
+      position: absolute;
+      right: 27px;
+      top: 16px;
+      font-weight: bold;
+    }
+
     .attr-container {
       z-index: 1000;
       height: 100%;
@@ -102,6 +128,7 @@
       margin: 0 auto;
     }
 
+    
     .unit_info {
       position: absolute;
       z-index: 100000;
@@ -118,6 +145,20 @@
       -webkit-transform: translate3d(0,0,0);
       -webkit-perspective: 1000;
       -webkit-backface-visibility: hidden;
+    }
+
+    #unit_info_left {
+      width: 60%;
+      top: 0;
+      height: 100%;
+      left: -60%;
+      max-width: 500px;
+      overflow: hidden;
+      background-color: rgba(0,0,0,0.84);
+    }
+
+    #unit_info_left.moveLeft {
+      left: 0;
     }
 
     #unit_info_right {
@@ -154,6 +195,23 @@
       color: #aaa;
     }
 
+    .menu-content {
+      margin-top: 60px;
+      padding: 20px;
+    }
+
+    .layer {
+      font-size: 20px;
+      line-height: 35px;
+      border-bottom: 1px solid rgba(245,245,245,0.2);
+    }
+
+    .layer-control {
+      float: right;
+      padding: 8px;
+      cursor: pointer;
+    }
+
     .close {
       color: #fff;
       position: absolute;
@@ -161,6 +219,9 @@
       font-size: 25px;
       padding: 20px;
       top: 0;
+    }
+    .close.left {
+      right: 0;
     }
     .close.bottom {
       right: 0;
@@ -203,8 +264,12 @@
 
   <div class="container">
     <div id="map"></div>
-    <div id="attr" class="leaflet-control-attribution leaflet-control">
-      <a href="#" id="info-link"><div id="info">i</div></a>
+    <div id="menu-control" class="leaflet-control-attribution leaflet-control menu">
+      <div class="menu-shelf"></div>
+      <a href="#" id="menu-link"><div id="info" class="menu-button"><div class="m">m</div></div></a>
+    </div>
+    <div id="attr" class="leaflet-control-attribution leaflet-control menu">
+      <a href="#" id="info-link"><div id="info" class="menu-button"><div class="i">i</div></div></a>
     </div>
     <div class="attr-container">
       <div id="attr-info">
@@ -222,6 +287,15 @@
       </div>
     </div>
 
+    <div id="unit_info_left" class="unit_info">
+      <div class="close left">x</div>
+      <div class="menu-content">
+        <div class="menu-layers">
+          <div class="layer" id="geology">Geology <i class="fa fa-toggle-on layer-control"></i><i class="fa fa-sliders layer-control"></i></div>
+          <div class="layer" id="satellite">Satellite <i class="fa fa-toggle-off layer-control"></i></div>
+        </div>
+      </div>
+    </div>
     <div id="unit_info_right" class="unit_info">
       <div class="close right">x</div>
       <div class="unit_info_content"></div>
