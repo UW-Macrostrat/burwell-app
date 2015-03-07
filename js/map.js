@@ -172,6 +172,10 @@
   $("#geology-opacity-slider")
     .attr({'max': 100, 'min':0, 'step': 10,'value': String(80)})
     .on('input change', function() {
+      if (!map.hasLayer(geology)) {
+        map.addLayer(geology);
+        $(this).parent().siblings(".fa-toggle-off").removeClass("fa-toggle-off").addClass("fa-toggle-on");
+      }
       geology.setOpacity(this.value/100);
     });
 
