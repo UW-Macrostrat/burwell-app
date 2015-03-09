@@ -14,9 +14,7 @@
 
   stamen.setZIndex(1);
 
-  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
-    attribution: '<a href="https://www.mapbox.com/about/maps/" target="_blank">© Mapbox © OpenStreetMap</a>'
-  });
+  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png');
 
   satellite.setZIndex(1);
 
@@ -129,6 +127,9 @@
 
   $(".layer-control").click(function(d) {
     d.preventDefault();
+    if ($(this).hasClass("disabled")) { 
+      return;
+    }
     // If it's the adjust control
     if ($(this).hasClass("fa-sliders")) {
       if ($(".opacity-adjuster").css("display") === "none") {

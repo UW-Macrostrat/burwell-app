@@ -8,6 +8,7 @@
 
   <link rel="stylesheet" href="css/leaflet.css" />
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link href="//fonts.googleapis.com/css?family=Maven+Pro&text=macrostrat" rel="stylesheet" type="text/css">
   <style>
     
     body {
@@ -110,8 +111,9 @@
       top: 0;
       display: table;
       text-align: center;
-      background: rgba(255, 255, 255, 0.7);
+      background: rgba(0,0,0,0.7);
       visibility: hidden;
+      color: #f7f7f7;
     }
     #attr-info {
       font-size: 12px;
@@ -120,7 +122,7 @@
       padding: 25px;
     }
     #attr-info > div > a {
-      color: #222;
+      color: #eaeaea;
     }
     #attr-info > div {
       max-width: 500px;
@@ -169,6 +171,22 @@
       max-width: 500px;
     }
 
+    .menu-header {
+      padding: 20px;
+      font-size: 2em;
+      display: table;
+      font-family: "Maven Pro", sans-serif;
+    }
+    .menu-header > img {
+      height: 33px;
+      display: table-cell;
+    }
+    .menu-header > #title {
+      display: table-cell;
+      vertical-align: middle;
+      padding-left: 15px;
+    }
+
     .opacity-adjuster {
       display: none;
     }
@@ -211,7 +229,7 @@
     }
 
     .menu-content {
-      margin-top: 60px;
+      margin-top: 20px;
       padding: 20px;
     }
 
@@ -227,6 +245,17 @@
       cursor: pointer;
     }
 
+    #opacity-label {
+      font-size: 10px;
+      margin-top: -43px;
+      padding-bottom: 20px;
+      padding-left: 10px;
+    }
+    .disabled {
+      color: #777;
+      cursor: not-allowed;
+    }
+
     .close {
       color: #fff;
       position: absolute;
@@ -237,6 +266,9 @@
     }
     .close.left {
       right: 0;
+      display: table-cell;
+      vertical-align: middle;
+      float: right;
     }
     .close.bottom {
       right: 0;
@@ -267,11 +299,32 @@
       display: inline;
     }
 
+    @media(max-width: 460px) {
+      .menu-header {
+        font-size: 1.5em;
+      }
+      .menu-header > img {
+        height: 23px;
+      }
+    }
 
     @media(max-width: 400px) {
       .leaflet-control-zoom {
         display: none;
       }
+      .layer {
+        font-size: 16px;
+      }
+    }
+
+    @media(max-width: 380px) {
+      .menu-header > img {
+        display: none;
+      }
+      .menu-header > #title {
+        padding-left: 0;
+      }
+
     }
     </style>
 </head>
@@ -293,6 +346,8 @@
 
           <strong>Black & white tiles </strong>by <a href="http://stamen.com" target="_blank">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright" target="_blank">ODbL</a>.<br><br>
 
+          <strong>Satellite tiles </strong>by <a href="https://www.mapbox.com/about/maps/" target="_blank">Mapbox</a>. Data by <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright" target="_blank">ODbL</a>.<br><br>
+
           <strong>Geologic tiles </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat.org</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>. GMNA and GMUS data have been heavily modified by <a href="http://dev.macrostrat.og" target="_blank">Macrostrat</a>. Original GMNA data by <a href="http://pubs.usgs.gov/ds/424/" target="_blank">USGS</a>, free of copyright in the USA. Original GMUS data by various states, provided by <a href="http://mrdata.usgs.gov/geology/state/state.php" target="_blank">USGS</a>.<br><br>
 
           <strong>Code </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>, and can be found <a href="https://github.com/UW-Macrostrat/gmna-app" target="_blank">on Github</a>.<br><br>
@@ -303,15 +358,22 @@
     </div>
 
     <div id="unit_info_left" class="unit_info">
-      <div class="close left">x</div>
+      <div class="menu-header">
+        <img src="img/logo.png"> <div id="title">Macrostrat</div>
+
+        <div class="close left">x</div>
+      </div>
+      
       <div class="menu-content">
         <div class="menu-layers">
           <div class="layer" id="geology">Geology <i class="fa fa-toggle-on layer-control"></i><i class="fa fa-sliders layer-control"></i>
             <div class="opacity-adjuster">
               <input id="geology-opacity-slider" type="range">
+              <div id="opacity-label">Opacity</div>
             </div>
           </div>
           <div class="layer" id="satellite">Satellite <i class="fa fa-toggle-off layer-control"></i></div>
+          <div class="layer" id="satellite">Faults <i class="fa fa-ban layer-control disabled"></i></div>
         </div>
       </div>
     </div>
