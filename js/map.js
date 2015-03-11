@@ -9,8 +9,7 @@
 
   // Add our basemap
   var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
-    maxZoom: 12,
-    detectRetina: true
+    maxZoom: 12
   }).addTo(map);
   stamen.setZIndex(1);
 
@@ -33,8 +32,7 @@
   // Add the geologic basemap
   var geology = L.tileLayer('//macrostrat.org/tiles/geologic_new/{z}/{x}/{y}.png', {
     maxZoom: 12,
-    opacity: 0.8,
-    detectRetina: true
+    opacity: 0.8
   }).addTo(map);
 
   geology.setZIndex(100);
