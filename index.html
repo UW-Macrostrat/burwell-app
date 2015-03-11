@@ -372,8 +372,9 @@
               <div id="opacity-label">Opacity</div>
             </div>
           </div>
+          <div class="layer" id="gmnaFaults">GMNA faults <i class="fa fa-toggle-off layer-control"></i></div>
+          <div class="layer" id="gmusFaults">GMUS faults <i class="fa fa-toggle-off layer-control"></i></div>
           <div class="layer" id="satellite">Satellite <i class="fa fa-toggle-off layer-control"></i></div>
-          <div class="layer" id="satellite">Faults <i class="fa fa-ban layer-control disabled"></i></div>
         </div>
       </div>
     </div>
@@ -387,15 +388,7 @@
     </div>
   </div>
   
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-59921731-1', 'auto');
-    ga('send', 'pageview');
-  </script>
 
   <script id="gmna-template" type="x-tmpl-mustache">
     <h3>GMNA</h3>
@@ -452,8 +445,21 @@
     {{/macrodata}}
   </script>
 
+
+  <script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-59921731-1', 'auto');
+    ga('send', 'pageview');
+  </script>
+
   <script src="js/zepto.min.js"></script>
   <script src="js/leaflet.js"></script>
+  <script src="//cdn.maptiks.com/maptiks-leaflet.min.js"></script>
+  <script>maptiks.trackcode='7d87cb7f-54e9-4bac-a23b-a23cfce8b62b';</script>
   <script src="js/leaflet-hash.js"></script>
   <script src="js/mustache.min.js"></script>
   <script async src="js/map.js"></script>

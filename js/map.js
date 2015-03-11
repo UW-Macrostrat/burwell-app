@@ -9,22 +9,36 @@
 
   // Add our basemap
   var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
-    maxZoom: 12
+    maxZoom: 12,
+    detectRetina: true
   }).addTo(map);
-
   stamen.setZIndex(1);
 
-  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png');
+  var gmnaFaults = L.tileLayer('//macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
+    maxZoom: 12,
+    detectRetina: true
+  });
+  gmnaFaults.setZIndex(1000);
 
+  var gmusFaults = L.tileLayer('//macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
+    maxZoom: 12,
+    detectRetina: true
+  });
+  gmusFaults.setZIndex(1000);
+
+
+  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png');
   satellite.setZIndex(1);
 
   // Add the geologic basemap
   var geology = L.tileLayer('//macrostrat.org/tiles/geologic_new/{z}/{x}/{y}.png', {
     maxZoom: 12,
-    opacity: 0.8
+    opacity: 0.8,
+    detectRetina: true
   }).addTo(map);
 
   geology.setZIndex(100);
+
 
   // Define our marker out here for ease of adding/removing
   var marker;
@@ -127,9 +141,11 @@
 
   $(".layer-control").click(function(d) {
     d.preventDefault();
+
     if ($(this).hasClass("disabled")) { 
       return;
     }
+
     // If it's the adjust control
     if ($(this).hasClass("fa-sliders")) {
       if ($(".opacity-adjuster").css("display") === "none") {
@@ -144,6 +160,10 @@
         switch ($(this).parent().attr("id")) {
           case 'geology' :
             return map.removeLayer(geology);
+          case 'gmnaFaults' :
+            return removeGmnaFaults();
+          case 'gmusFaults' :
+            return removeGmusFaults();
           case 'satellite' :
             map.addLayer(stamen);
             map.removeLayer(satellite);
@@ -158,6 +178,10 @@
         switch ($(this).parent().attr("id")) {
           case 'geology' :
             return map.addLayer(geology);
+          case 'gmnaFaults' :
+            return addGmnaFaults();
+          case 'gmusFaults' :
+            return addGmusFaults();
           case 'satellite' :
             map.removeLayer(stamen);
             map.addLayer(satellite);
@@ -168,6 +192,36 @@
       }
     }
   });
+
+  function addGmnaFaults() {
+    if (map.hasLayer(gmusFaults)) {
+      removeGmusFaults();
+    }
+    map.addLayer(gmnaFaults);
+    $($("#gmnaFaults").children(".layer-control")[0]).addClass("fa-toggle-on");
+    $($("#gmnaFaults").children(".layer-control")[0]).removeClass("fa-toggle-off");
+  }
+
+  function removeGmnaFaults() {
+    map.removeLayer(gmnaFaults);
+    $($("#gmnaFaults").children(".layer-control")[0]).removeClass("fa-toggle-on");
+    $($("#gmnaFaults").children(".layer-control")[0]).addClass("fa-toggle-off");
+  }
+
+  function addGmusFaults() {
+    if (map.hasLayer(gmnaFaults)) {
+      removeGmnaFaults();
+    }
+    map.addLayer(gmusFaults);
+    $($("#gmusFaults").children(".layer-control")[0]).addClass("fa-toggle-on");
+    $($("#gmusFaults").children(".layer-control")[0]).removeClass("fa-toggle-off");
+  }
+
+  function removeGmusFaults() {
+    map.removeLayer(gmusFaults);
+    $($("#gmusFaults").children(".layer-control")[0]).removeClass("fa-toggle-on");
+    $($("#gmusFaults").children(".layer-control")[0]).addClass("fa-toggle-off");
+  }
 
   /* Courtesy of the Alligator http://bl.ocks.org/rgdonohue/8465271 */
   $("#geology-opacity-slider")
