@@ -1,7 +1,9 @@
 (function() {
   var map = L.map('map', {
     // We have a different attribution control...
-    attributionControl: false
+    attributionControl: false,
+    maxZoom: 12,
+    minZoom: 2
   }).setView([40, -97], 5);
 
   // Make map states linkable
@@ -13,24 +15,26 @@
   }).addTo(map);
   stamen.setZIndex(1);
 
-  var gmnaFaults = L.tileLayer('//macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
+  var gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
     maxZoom: 12,
     detectRetina: true
   });
   gmnaFaults.setZIndex(1000);
 
-  var gmusFaults = L.tileLayer('//macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
+  var gmusFaults = L.tileLayer('http://macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
     maxZoom: 12,
     detectRetina: true
   });
   gmusFaults.setZIndex(1000);
 
 
-  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png');
+  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
+    maxZoom: 12
+  });
   satellite.setZIndex(1);
 
   // Add the geologic basemap
-  var geology = L.tileLayer('//macrostrat.org/tiles/geologic_new/{z}/{x}/{y}.png', {
+  var geology = L.tileLayer('http://macrostrat.org/tiles/geologic_new/{z}/{x}/{y}.png', {
     maxZoom: 12,
     opacity: 0.8
   }).addTo(map);
