@@ -2,7 +2,6 @@
   var map = L.map('map', {
     // We have a different attribution control...
     attributionControl: false,
-    maxZoom: 12,
     minZoom: 2
   }).setView([40, -97], 5);
 
@@ -28,9 +27,7 @@
   gmusFaults.setZIndex(1000);
 
 
-  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
-    maxZoom: 12
-  });
+  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png');
   satellite.setZIndex(1);
 
   // Add the geologic basemap
