@@ -9,9 +9,7 @@
   var hash = new L.Hash(map);
 
   // Add our basemap
-  var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
-    maxZoom: 12
-  }).addTo(map);
+  var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png').addTo(map);
   stamen.setZIndex(1);
 
   var gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
