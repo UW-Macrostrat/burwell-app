@@ -71,7 +71,7 @@
       });
     } else {
       // query gmus
-      $.getJSON("//localhost:5000/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
+      $.getJSON("//macrostrat.org/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
 
         if (data.success.data.length < 1) {
           return;
