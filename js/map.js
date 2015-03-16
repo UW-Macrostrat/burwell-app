@@ -9,29 +9,36 @@
   var hash = new L.Hash(map);
 
   // Add our basemap
-  var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png').addTo(map);
+  var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
+    maptiks_id: 'Stamen toner'
+  }).addTo(map);
   stamen.setZIndex(1);
 
   var gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
     maxZoom: 12,
-    detectRetina: true
+    detectRetina: true,
+    maptiks_id: 'GMNA faults'
   });
   gmnaFaults.setZIndex(1000);
 
   var gmusFaults = L.tileLayer('http://macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
     maxZoom: 12,
-    detectRetina: true
+    detectRetina: true,
+    maptiks_id: 'GMUS faults'
   });
   gmusFaults.setZIndex(1000);
 
 
-  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png');
+  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
+    maptiks_id: 'Mapbox satellite'
+  });
   satellite.setZIndex(1);
 
   // Add the geologic basemap
   var geology = L.tileLayer('http://macrostrat.org/tiles/geologic_new/{z}/{x}/{y}.png', {
     maxZoom: 12,
-    opacity: 0.8
+    opacity: 0.8,
+    maptiks_id: 'Geology'
   }).addTo(map);
 
   geology.setZIndex(100);
