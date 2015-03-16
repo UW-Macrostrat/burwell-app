@@ -35,7 +35,7 @@
   satellite.setZIndex(1);
 
   // Add the geologic basemap
-  var geology = L.tileLayer('http://macrostrat.org/tiles/geologic_new/{z}/{x}/{y}.png', {
+  var geology = L.tileLayer('http://macrostrat.org/tiles/geologic_v1/{z}/{x}/{y}.png', {
     maxZoom: 12,
     opacity: 0.8,
     maptiks_id: 'Geology'
