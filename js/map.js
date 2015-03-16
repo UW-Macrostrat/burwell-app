@@ -62,7 +62,7 @@
     marker = L.marker(d.latlng, {icon: bwIcon}).addTo(map);
 
 
-    if (map.getZoom() < 8) {
+    if (map.getZoom() < 7) {
       // query gmna
       $.getJSON("//macrostrat.org/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
         var rendered = Mustache.render(gmnaTemplate, data.success.data[0]);
@@ -71,7 +71,7 @@
       });
     } else {
       // query gmus
-      $.getJSON("//macrostrat.org/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
+      $.getJSON("//localhost:5000/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
 
         if (data.success.data.length < 1) {
           return;
@@ -135,6 +135,10 @@
     d.preventDefault();
     toggleMenuBar();
   });
+
+  // Make things fast
+  var attachFastClick = Origami.fastclick;
+  attachFastClick(document.getElementById("not-map"));
 
   $(".layer-control").click(function(d) {
     d.preventDefault();
@@ -371,7 +375,12 @@
   function processUnits(units) {
 
     return {
-      names: units.map(function(d) { return d.strat_name }).join(", "),
+      names: units
+          .map(function(d) { return d.strat_name })
+          .filter(function(item, pos, self) {
+              return self.indexOf(item) == pos;
+          })
+          .join(", "),
       ids: units.map(function(d) { return d.id }).join(", "),
       max_thicks: Math.max.apply(null, units.map(function(d) { return d.max_thick })),
       min_thicks: Math.min.apply(null, units.map(function(d) { return d.min_thick })),
@@ -380,18 +389,38 @@
       pbdb: Math.max.apply(null, units.map(function(d) { return d.pbdb })),
       uniqueEnvironments: 
         units
-          .map(function(d) { return d.environ })
+          .map(function(d) { return d.environ.split("|").join(", ") })
           .filter(function(item, pos, self) {
-              return self.indexOf(item) == pos;
+              if (item.length > 1) {
+                return self.indexOf(item) == pos;
+              }
+              
           })
           .join(", "),
-      uniqueIntervals: 
-        units
+      uniqueIntervals: function() {
+        var min_age = 9999,
+            min_age_interval = "",
+            max_age = -1,
+            max_age_interval = "";
+
+        units.forEach(function(d, i) {
+          if (d.t_age < min_age) {
+            min_age = d.t_age;
+            min_age_interval = d.LO_interval
+          }
+          if (d.b_age > max_age) {
+            max_age = d.b_age;
+            max_age_interval = d.FO_interval;
+          }
+        });
+        return (max_age_interval === min_age_interval) ? min_age_interval : max_age_interval + " - " + min_age_interval;
+      }
+      /*  units
           .map(function(d) { return d.LO_interval + " - " + d.FO_interval })
           .filter(function(item, pos, self) {
               return self.indexOf(item) == pos;
           })
-          .join(", ")
+          .join(", ")*/
     }
 
   }

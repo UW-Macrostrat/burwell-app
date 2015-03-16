@@ -279,7 +279,7 @@
 
 
     .lt-holder {
-      float: left;
+      /*float: left;*/
     }
 
     .show-more {
@@ -332,59 +332,61 @@
 
   <div class="container">
     <div id="map"></div>
-    <div id="menu-control" class="leaflet-control-attribution leaflet-control menu">
-      <div class="menu-shelf"></div>
-      <a href="#" id="menu-link"><div id="info" class="menu-button"><div class="m"><i class="fa fa-bars"></i></div></div></a>
-    </div>
-    <div id="attr" class="leaflet-control-attribution leaflet-control menu">
-      <a href="#" id="info-link"><div id="info" class="menu-button"><div class="i"><i class="fa fa-info"></i></div></div></a>
-    </div>
-    <div class="attr-container">
-      <div id="attr-info">
-        <div>
-          <strong>Mapping API </strong> via <a href="http://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> under <a href="https://github.com/Leaflet/Leaflet/blob/master/LICENSE" target="_blank">BSD 2-Clause</a>.<br><br>
-
-          <strong>Black & white tiles </strong>by <a href="http://stamen.com" target="_blank">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright" target="_blank">ODbL</a>.<br><br>
-
-          <strong>Satellite tiles </strong>by <a href="https://www.mapbox.com/about/maps/" target="_blank">Mapbox</a>. Data by <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright" target="_blank">ODbL</a>.<br><br>
-
-          <strong>Geologic tiles </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat.org</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>. GMNA and GMUS data have been heavily modified by <a href="http://dev.macrostrat.og" target="_blank">Macrostrat</a>. Original GMNA data by <a href="http://pubs.usgs.gov/ds/424/" target="_blank">USGS</a>, free of copyright in the USA. Original GMUS data by various states, provided by <a href="http://mrdata.usgs.gov/geology/state/state.php" target="_blank">USGS</a>.<br><br>
-
-          <strong>Code </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>, and can be found <a href="https://github.com/UW-Macrostrat/gmna-app" target="_blank">on Github</a>.<br><br>
-          
-          <strong>Development team </strong>comprised of <a href="https://github.com/jczaplew" target="_blank">John Czaplewski</a>, lead developer. <a href="http://strata.geology.wisc.edu" target="_blank">Shanan Peters</a>, P.I. and scientific lead. Puneet Kishor, initial <a href="http://earth-base.org" target="_blank">earth-base</a> development.
-        </div>
+    <div id="not-map">
+      <div id="menu-control" class="leaflet-control-attribution leaflet-control menu">
+        <div class="menu-shelf"></div>
+        <a href="#" id="menu-link"><div id="info" class="menu-button"><div class="m"><i class="fa fa-gear"></i></div></div></a>
       </div>
-    </div>
-
-    <div id="unit_info_left" class="unit_info">
-      <div class="menu-header">
-        <img src="img/logo.png"> <div id="title">Macrostrat</div>
-
-        <div class="close left">x</div>
+      <div id="attr" class="leaflet-control-attribution leaflet-control menu">
+        <a href="#" id="info-link"><div id="info" class="menu-button"><div class="i"><i class="fa fa-info"></i></div></div></a>
       </div>
-      
-      <div class="menu-content">
-        <div class="menu-layers">
-          <div class="layer" id="geology">Geology <i class="fa fa-toggle-on layer-control"></i><i class="fa fa-sliders layer-control"></i>
-            <div class="opacity-adjuster">
-              <input id="geology-opacity-slider" type="range">
-              <div id="opacity-label">Opacity</div>
-            </div>
+      <div class="attr-container">
+        <div id="attr-info">
+          <div>
+            <strong>Mapping API </strong> via <a href="http://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> under <a href="https://github.com/Leaflet/Leaflet/blob/master/LICENSE" target="_blank">BSD 2-Clause</a>.<br><br>
+
+            <strong>Black & white tiles </strong>by <a href="http://stamen.com" target="_blank">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright" target="_blank">ODbL</a>.<br><br>
+
+            <strong>Satellite tiles </strong>by <a href="https://www.mapbox.com/about/maps/" target="_blank">Mapbox</a>. Data by <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright" target="_blank">ODbL</a>.<br><br>
+
+            <strong>Geologic tiles </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat.org</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>. GMNA and GMUS data have been heavily modified by <a href="http://dev.macrostrat.og" target="_blank">Macrostrat</a>. Original GMNA data by <a href="http://pubs.usgs.gov/ds/424/" target="_blank">USGS</a>, free of copyright in the USA. Original GMUS data by various states, provided by <a href="http://mrdata.usgs.gov/geology/state/state.php" target="_blank">USGS</a>.<br><br>
+
+            <strong>Code </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>, and can be found <a href="https://github.com/UW-Macrostrat/gmna-app" target="_blank">on Github</a>.<br><br>
+            
+            <strong>Development team </strong>comprised of <a href="https://github.com/jczaplew" target="_blank">John Czaplewski</a>, lead developer. <a href="http://strata.geology.wisc.edu" target="_blank">Shanan Peters</a>, P.I. and scientific lead. Puneet Kishor, initial <a href="http://earth-base.org" target="_blank">earth-base</a> development.
           </div>
-          <div class="layer" id="gmnaFaults">GMNA faults <i class="fa fa-toggle-off layer-control"></i></div>
-          <div class="layer" id="gmusFaults">GMUS faults <i class="fa fa-toggle-off layer-control"></i></div>
-          <div class="layer" id="satellite">Satellite <i class="fa fa-toggle-off layer-control"></i></div>
         </div>
       </div>
-    </div>
-    <div id="unit_info_right" class="unit_info">
-      <div class="close right">x</div>
-      <div class="unit_info_content"></div>
-    </div>
-    <div id="unit_info_bottom" class="unit_info">
-      <div class="close bottom">x</div>
-      <div class="unit_info_content"></div>
+
+      <div id="unit_info_left" class="unit_info">
+        <div class="menu-header">
+          <img src="img/logo.png"> <div id="title">Macrostrat</div>
+
+          <div class="close left">x</div>
+        </div>
+        
+        <div class="menu-content">
+          <div class="menu-layers">
+            <div class="layer" id="geology">Geology <i class="fa fa-toggle-on layer-control"></i><i class="fa fa-sliders layer-control"></i>
+              <div class="opacity-adjuster">
+                <input id="geology-opacity-slider" type="range">
+                <div id="opacity-label">Opacity</div>
+              </div>
+            </div>
+            <div class="layer" id="gmnaFaults">GMNA faults <i class="fa fa-toggle-off layer-control"></i></div>
+            <div class="layer" id="gmusFaults">GMUS faults <i class="fa fa-toggle-off layer-control"></i></div>
+            <div class="layer" id="satellite">Satellite <i class="fa fa-toggle-off layer-control"></i></div>
+          </div>
+        </div>
+      </div>
+      <div id="unit_info_right" class="unit_info">
+        <div class="close right">x</div>
+        <div class="unit_info_content"></div>
+      </div>
+      <div id="unit_info_bottom" class="unit_info">
+        <div class="close bottom">x</div>
+        <div class="unit_info_content"></div>
+      </div>
     </div>
   </div>
   
@@ -412,7 +414,10 @@
     <strong>ID: </strong>{{gid}} <br>
     <strong>USGS info: </strong><a target='_blank' href='http://mrdata.usgs.gov/geology/state/sgmc-unit.php?unit={{unit_link}}'>{{unit_link}}</a> <br>
     <strong>Age: </strong>{{unit_age}} <br>
-    <strong>Age range: </strong>{{min_age}} - {{max_age}} <br>
+    <strong>Age range: </strong>{{max_age}} - {{min_age}} <br>
+    {{#strat_unit}}
+    <strong>Strat unit: </strong>{{strat_unit}} <br>
+    {{/strat_unit}}
     <strong>Rock type: </strong>{{rocktypes}} <br>
     <strong>Lithology: </strong>{{lithologies}} <br>
     
@@ -420,14 +425,12 @@
     <div class="lt-holder">
       <strong>Description: </strong><span class="long-text">{{unitdesc}}</span> 
     </div>
-    <br>
     {{/unitdesc}}
 
     {{#unit_com}}
     <div class="lt-holder">
       <strong>Comments: </strong><span class="long-text">{{unit_com}}</span>
     </div>
-     <br>
     {{/unit_com}}
 
     {{#macrodata}}
@@ -438,8 +441,10 @@
       <strong>Units present: </strong>{{ids}} <br>
       <strong>Thickness: </strong>{{min_thicks}} - {{max_thicks}} <br>
       <strong>Age range: </strong>{{uniqueIntervals}} <br>
-      <strong>Age (est.): </strong>{{b_ages}} MA - {{t_ages}} MA <br>
+      <strong>Age (est.): </strong>{{b_ages}}Ma - {{t_ages}}Ma <br>
+      {{#uniqueEnvironments}}
       <strong>Environment: </strong>{{uniqueEnvironments}} <br>
+      {{/uniqueEnvironments}}
       <strong>PBDB Collections: </strong>{{pbdb}}
     </div>
     {{/macrodata}}
@@ -457,6 +462,7 @@
   </script>
 
   <script src="js/zepto.min.js"></script>
+  <script src="js/fastclick.min.js"></script>
   <script src="js/leaflet.js"></script>
   <script src="//cdn.maptiks.com/maptiks-leaflet.min.js"></script>
   <script>
