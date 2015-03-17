@@ -1,3 +1,6 @@
+maptiks.trackcode = "7d87cb7f-54e9-4bac-a23b-a23cfce8b62b";
+maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
+
 (function() {
   var map = L.map('map', {
     // We have a different attribution control...
@@ -71,20 +74,20 @@
 
     if (map.getZoom() < 7) {
       // query gmna
-      $.getJSON("//localhost:5000/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
+      $.getJSON("//macrostrat.org/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
         var data = data.success.data[0];
 
         data.ages = (data.min_age === data.max_age) ? data.min_age : data.max_age + " - " + data.min_age;
         data.age_bottom = parseFloat(data.age_bottom);
         data.age_top = parseFloat(data.age_top);
-        
+
         var rendered = Mustache.render(gmnaTemplate, data);
         setUnitInfoContent(rendered, d.latlng);
 
       });
     } else {
       // query gmus
-      $.getJSON("//localhost:5000/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
+      $.getJSON("//macrostrat.org/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
 
         if (data.success.data.length < 1) {
           return;
