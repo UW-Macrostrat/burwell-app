@@ -9,8 +9,8 @@ gulp.task('default', function() {
     .pipe(uglify())
     .pipe(gulp.dest('./js/'));
 
-  gulp.src(['css/leaflet.css', 'css/font-awesome.min.css'])
-    .pipe(concat('styles.css'))
+  gulp.src(['css/leaflet.css'])
+    .pipe(concat('leaflet.min.css'))
     .pipe(minifyCSS())
     .pipe(gulp.dest('./css/'))
 });
