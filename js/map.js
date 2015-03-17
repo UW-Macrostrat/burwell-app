@@ -71,14 +71,20 @@
 
     if (map.getZoom() < 7) {
       // query gmna
-      $.getJSON("//macrostrat.org/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
-        var rendered = Mustache.render(gmnaTemplate, data.success.data[0]);
+      $.getJSON("//localhost:5000/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
+        var data = data.success.data[0];
+
+        data.ages = (data.min_age === data.max_age) ? data.min_age : data.max_age + " - " + data.min_age;
+        data.age_bottom = parseFloat(data.age_bottom);
+        data.age_top = parseFloat(data.age_top);
+        
+        var rendered = Mustache.render(gmnaTemplate, data);
         setUnitInfoContent(rendered, d.latlng);
 
       });
     } else {
       // query gmus
-      $.getJSON("//macrostrat.org/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
+      $.getJSON("//localhost:5000/api/v1/geologic_units?type=gmus&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
 
         if (data.success.data.length < 1) {
           return;
@@ -106,9 +112,11 @@
         });
 
         var data = data.success.data[0]
-
+        data.age_bottom = parseFloat(data.age_bottom);
+        data.age_top = parseFloat(data.age_top);
         data.rocktypes = (rocktypes) ? rocktypes.join(", ") : null;
         data.lithologies = (lithologies) ? lithologies.join(", ") : null;
+        data.ages = (data.min_age === data.max_age) ? data.min_age : data.max_age + " - " + data.min_age;
 
         if (data.macro_units && data.macro_units.length > 0) {
           $.getJSON("//macrostrat.org/api/v1/units?response=long&id=" + data.macro_units.join(","), function(response) {
@@ -271,7 +279,7 @@
 
     var maxLength = 200;
     $(".long-text").each(function() {
-      if ($(this).html().length > maxLength) {
+      if ($(this).html().length > maxLength && $(this).html().length - maxLength > 50) {
         var firstBit = $(this).html().substr(0, maxLength),
             secondBit = $(this).html().substr(maxLength, $(this).html().length - maxLength);
 
