@@ -6,7 +6,15 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
     // We have a different attribution control...
     attributionControl: false,
     minZoom: 2
-  }).setView([40, -97], 5);
+  });
+
+  // If there is a hash location, go there immediately
+  if (window.location.hash.length > 3) {
+    var hashLocation = L.Hash.parseHash(window.location.hash)
+    map.setView(hashLocation.center, hashLocation.zoom);
+  } else {
+    map.setView([40, -97], 5);
+  }
 
   // Make map states linkable
   var hash = new L.Hash(map);
@@ -399,12 +407,14 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
               return self.indexOf(item) == pos;
           })
           .join(", "),
+
       ids: units.map(function(d) { return d.id }).join(", "),
       max_thicks: Math.max.apply(null, units.map(function(d) { return d.max_thick })),
       min_thicks: Math.min.apply(null, units.map(function(d) { return d.min_thick })),
       t_ages: Math.min.apply(null, units.map(function(d) { return d.t_age })),
       b_ages: Math.max.apply(null, units.map(function(d) { return d.b_age })),
       pbdb: Math.max.apply(null, units.map(function(d) { return d.pbdb })),
+
       uniqueEnvironments: 
         units
           .map(function(d) { return d.environ.split("|").join(", ") })
@@ -415,6 +425,7 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
               
           })
           .join(", "),
+
       uniqueIntervals: function() {
         var min_age = 9999,
             min_age_interval = "",
@@ -433,12 +444,6 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
         });
         return (max_age_interval === min_age_interval) ? min_age_interval : max_age_interval + " - " + min_age_interval;
       }
-      /*  units
-          .map(function(d) { return d.LO_interval + " - " + d.FO_interval })
-          .filter(function(item, pos, self) {
-              return self.indexOf(item) == pos;
-          })
-          .join(", ")*/
     }
 
   }
