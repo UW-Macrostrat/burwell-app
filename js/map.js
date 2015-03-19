@@ -46,7 +46,7 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
   satellite.setZIndex(1);
 
   // Add the geologic basemap
-  var geology = L.tileLayer('http://macrostrat.org/tiles/geologic_v1/{z}/{x}/{y}.png', {
+  var geology = L.tileLayer('http://macrostrat.org/tiles/geologic_v2/{z}/{x}/{y}.png', {
     maxZoom: 12,
     opacity: 0.8,
     maptiks_id: 'Geology'
@@ -166,6 +166,7 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
   var attachFastClick = Origami.fastclick;
   attachFastClick(document.getElementById("not-map"));
 
+  // Handle interaction with layers
   $(".layer-control").click(function(d) {
     d.preventDefault();
 
@@ -283,12 +284,16 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
 
   // Update and open the unit info bars
   function setUnitInfoContent(html, ll) {
+    // Make sure they are scrolled to the top
     document.getElementById("unit_info_bottom").scrollTop = 0;
     document.getElementById("unit_info_right").scrollTop = 0;
 
+    // Update the content
     $(".unit_info_content").html(html);
 
     var maxLength = 200;
+
+    // If the text is long, hide everything after 200 characters
     $(".long-text").each(function() {
       if ($(this).html().length > maxLength && $(this).html().length - maxLength > 50) {
         var firstBit = $(this).html().substr(0, maxLength),
@@ -298,6 +303,7 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
       }
     });
 
+    // Show everything after 200 characters on click
     $(".show-more").click(function(d) {
       if ($(this).siblings(".the-rest").hasClass("view-text")) {
         $(this).html(" >>>");
@@ -310,6 +316,7 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
       }
     });
 
+    // Space things out
     $("#unit_info_right").find(".lt-holder").last().css("padding-bottom", "40px");
     $("#unit_info_bottom").find(".lt-holder").last().css("padding-bottom", "40px");
     toggleUnitInfoBar(ll);
