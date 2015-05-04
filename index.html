@@ -6,388 +6,21 @@
   <meta http-equiv="Content-Language" content="en">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="css/leaflet.min.css" />
+  <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link href="//fonts.googleapis.com/css?family=Maven+Pro&text=macrostrat" rel="stylesheet" type="text/css">
-  <style>
-    
-    body {
-      padding: 0;
-      margin: 0;
-      font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
-    }
-    html, body, #map {
-      height: 100%;
-      width: 100%;
-      overflow: hidden;
-    }
-    .container {
-      overflow: hidden;
-      height: 100%;
-      width: 100%;
-      position: fixed;
-    }
-    h3 {
-      color: #aaa;
-      font-size: 1.5em;
-      letter-spacing: 2px;
-      font-weight: 200;
-      text-align: center;
-    }
-    h2 {
-      font-size: 1.4em;
-      line-height: 1.2em;
-    }
-    strong {
-      color: orange;
-    }
-    small {
-      color: #bbb; 
-    }
-    .leaflet-popup-content {
-      line-height: 1.6;
-    }
-    .controls {
-      position: absolute;
-      z-index: 1000;
-      margin: 0;
-    }
-    .menu {
-      position: absolute;
-      bottom: -45px;
-      padding-left: 9px;
-      padding-bottom: 7px;
-    }
-    #menu-control {
-      left: -45px;
-    }
-    #attr {
-      right: -45px;
-      padding-right: 9px;
-      padding-bottom: 7px;
-    }
-    .menu-button {
-      display: block;
-      height: 70px;
-      width: 70px;
-      padding: 4px;
-
-      -webkit-border-radius: 50%;
-      -moz-border-radius: 50%;
-      border-radius: 50%;
-
-      background: rgba(255, 255, 255, 0.7);
-      border: 1px solid #777;
-      color: #777;
-      text-align: center;
-      font-size: 14px;
-      font-weight: 200;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      -moz-user-select: none;
-      -ms-user-select: none;
-      user-select: none;
-    }
-    #info-link:hover {
-      text-decoration: none;
-    }
-
-    .i {
-      position: absolute;
-      left: 35px;
-      top: 16px;
-      font-weight: bold;
-    }
-
-    .m {
-      position: absolute;
-      right: 27px;
-      top: 16px;
-      font-weight: bold;
-    }
-
-    .attr-container {
-      z-index: 1000;
-      height: 100%;
-      width: 100%;
-      position: absolute;
-      top: 0;
-      display: table;
-      text-align: center;
-      background: rgba(0,0,0,0.7);
-      visibility: hidden;
-      color: #f7f7f7;
-    }
-    #attr-info {
-      font-size: 12px;
-      display: table-cell;
-      vertical-align: middle;
-      padding: 25px;
-    }
-    #attr-info > div > a {
-      color: #eaeaea;
-    }
-    #attr-info > div {
-      max-width: 500px;
-      text-align: left;
-      margin: 0 auto;
-    }
-
-    
-    .unit_info {
-      position: absolute;
-      z-index: 100000;
-      background-color: rgba(0,0,0,0.6);
-      color: #ccc;
-      overflow-y: scroll;
-      line-height: 23px;
-      -webkit-transition: all 0.6s ease;
-      -moz-transition: all 0.6s ease;
-      -o-transition: all 0.6s ease;
-      -ms-transition: all 0.6s ease;
-      transition: all 0.6s ease;
-      transform: translate3d(0,0,0);
-      -webkit-transform: translate3d(0,0,0);
-      -webkit-perspective: 1000;
-      -webkit-backface-visibility: hidden;
-    }
-
-    #unit_info_left {
-      width: 60%;
-      top: 0;
-      height: 100%;
-      left: -60%;
-      max-width: 500px;
-      overflow: hidden;
-      background-color: rgba(0,0,0,0.84);
-    }
-
-    #unit_info_left.moveLeft {
-      left: 0;
-    }
-
-    #unit_info_right {
-      width: 60%;
-      top: 0;
-      height: 100%;
-      right: -60%;
-      max-width: 500px;
-    }
-
-    .menu-header {
-      padding: 20px;
-      font-size: 2em;
-      display: table;
-      font-family: "Maven Pro", sans-serif;
-    }
-    .menu-header > img {
-      height: 33px;
-      display: table-cell;
-    }
-    .menu-header > #title {
-      display: table-cell;
-      vertical-align: middle;
-      padding-left: 15px;
-    }
-
-    .opacity-adjuster {
-      display: none;
-    }
-    #geology-opacity-slider {
-      width: 100%;
-      padding: 25px 0;
-    }
-
-    #geology-opacity-slider::-moz-range-thumb {
-        padding: 3px;
-    }
-    #geology-opacity-slider:active::-moz-range-thumb {
-        background: orange;               
-    }
-
-    #unit_info_right.moveRight {
-      right: 0;
-    }
-
-    #unit_info_bottom {
-      width: 100%;
-      bottom: -60%;
-      height: 60%;
-      max-height: 500px;
-    }
-
-    #unit_info_bottom.moveDown {
-      bottom: 0;
-    }
-
-    .unit_info_content {
-      padding: 25px;
-     /* padding-bottom: 140px; */
-      z-index: 0;
-      height: auto;
-    }
-
-    .unit_info_content > a {
-      color: #aaa;
-    }
-
-    .dd-result {
-      padding-bottom: 20px;
-    }
-
-    .dd_content {
-      padding: 25px;
-      padding-bottom: 140px;
-      z-index: 0;
-      height: auto;
-    }
-
-    .dd_content > a {
-      color: #aaa;
-    }
-
-    .journal {
-      padding-bottom: 35px;
-    }
-
-    .journal-title {
-      font-weight: bold;
-      font-size: 1.2em;
-    }
-
-    .dd-snippet {
-      font-size: 11px;
-      line-height: 16px;
-      padding: 10px;
-    }
-
-    .dd-content {
-      display: none;
-    }
-
-    .show-content {
-      color: #7FDBFF;
-      cursor: pointer;
-    }
-
-    .hl {
-      background-color: #7FDBFF;
-      color: #708090;
-      font-style: normal;
-      padding: 2px;
-    }
-
-    .menu-content {
-      margin-top: 20px;
-      padding: 20px;
-    }
-
-    .layer {
-      font-size: 20px;
-      line-height: 35px;
-      border-bottom: 1px solid rgba(245,245,245,0.2);
-    }
-
-    .layer-control {
-      float: right;
-      padding: 8px;
-      cursor: pointer;
-    }
-
-    #opacity-label {
-      font-size: 10px;
-      margin-top: -43px;
-      padding-bottom: 20px;
-      padding-left: 10px;
-    }
-    .disabled {
-      color: #777;
-      cursor: not-allowed;
-    }
-
-    .close {
-      color: #fff;
-      position: absolute;
-      cursor: pointer;
-      font-size: 25px;
-      padding: 20px;
-      top: 0;
-    }
-    .close.left {
-      right: 0;
-      display: table-cell;
-      vertical-align: middle;
-      float: right;
-    }
-    .close.bottom {
-      right: 0;
-    }
-    .close.right {
-      left: 0;
-    }
-
-
-    .lt-holder {
-      /*float: left;*/
-    }
-
-    .show-more {
-      cursor: pointer;
-      color: orange;
-    }
-
-    .the-rest {
-      display: none;
-    }
-
-    .hidden {
-      display: none;
-    }
-
-    .view-text {
-      display: inline;
-    }
-
-    @media(max-width: 460px) {
-      .menu-header {
-        font-size: 1.5em;
-      }
-      .menu-header > img {
-        height: 23px;
-      }
-    }
-
-    @media(max-width: 400px) {
-      .leaflet-control-zoom {
-        display: none;
-      }
-      .layer {
-        font-size: 16px;
-      }
-    }
-
-    @media(max-width: 380px) {
-      .menu-header > img {
-        display: none;
-      }
-      .menu-header > #title {
-        padding-left: 0;
-      }
-
-    }
-    </style>
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Maven+Pro&text=macrostrat">
 </head>
 <body>
 
   <div class="container">
     <div id="map"></div>
-    <div id="not-map">
-      <div id="menu-control" class="leaflet-control-attribution leaflet-control menu">
+    <div class="not-map">
+      <div class="leaflet-control-attribution leaflet-control menu menu-control">
         <div class="menu-shelf"></div>
-        <a href="#" id="menu-link"><div id="info" class="menu-button"><div class="m"><i class="fa fa-gear"></i></div></div></a>
+        <a href="#" class="menu-link"><div class="menu-button"><div class="m"><i class="fa fa-gear"></i></div></div></a>
       </div>
-      <div id="attr" class="leaflet-control-attribution leaflet-control menu">
-        <a href="#" id="info-link"><div id="info" class="menu-button"><div class="i"><i class="fa fa-info"></i></div></div></a>
+      <div class="leaflet-control-attribution leaflet-control menu attr">
+        <a href="#" class="info-link"><div class="menu-button"><div class="i"><i class="fa fa-info"></i></div></div></a>
       </div>
       <div class="attr-container">
         <div id="attr-info">
@@ -402,7 +35,7 @@
 
             <strong>Code </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>, and can be found <a href="https://github.com/UW-Macrostrat/gmna-app" target="_blank">on Github</a>.<br><br>
             
-            <strong>Development team </strong>comprised of <a href="https://github.com/jczaplew" target="_blank">John Czaplewski</a>, lead developer. <a href="http://strata.geology.wisc.edu" target="_blank">Shanan Peters</a>, P.I. and scientific lead. Puneet Kishor, initial <a href="http://earth-base.org" target="_blank">earth-base</a> development.<br><br>
+            <strong>Development team </strong>comprised of <a href="https://github.com/jczaplew" target="_blank">John Czaplewski</a>, lead developer. <a href="http://strata.geology.wisc.edu" target="_blank">Shanan Peters</a>, P.I. and scientific lead. Puneet Kishor, initial <a href="http://earth-base.org" target="_blank">earth-base</a> and literature search development.<br><br>
 
             <strong>Funding </strong> for core <a href="//macrostrat.org">Macrostrat</a> development via NSF EAR-1150082, Macrostrat&mdash;geologic map integration via NSF ICER-1440312, and literation integration via NSF ICER-1343760.
           </div>
@@ -411,7 +44,7 @@
 
       <div id="unit_info_left" class="unit_info">
         <div class="menu-header">
-          <img src="img/logo_small.png"> <div id="title">Macrostrat</div>
+          <img src="img/logo_small.png"> <div class="title">Macrostrat</div>
 
           <div class="close left">x</div>
         </div>
@@ -446,12 +79,10 @@
     </div>
   </div>
   
-
-
   <script id="gmna-template" type="x-tmpl-mustache">
-    <h3>GMNA</h3>
+    <h3 class="title-three">GMNA</h3>
     <hr>
-    <h2>{{#interval_name}}{{interval_name}}{{/interval_name}}{{^interval_name}}"Unknown interval"{{/interval_name}}</h2>
+    <h2 class="title-two">{{#interval_name}}{{interval_name}}{{/interval_name}}{{^interval_name}}"Unknown interval"{{/interval_name}}</h2>
     <strong>Age: </strong>{{ages}} ({{age_bottom}} - {{age_top}} <small>Ma</small>)<br>
     
     {{#rocktype}}
@@ -464,9 +95,9 @@
   </script>
 
   <script id="gmus-template" type="x-tmpl-mustache">
-    <h3>GMUS</h3>
+    <h3 class="title-three">GMUS</h3>
     <hr>
-    <h2>{{unit_name}}</h2>
+    <h2 class="title-two">{{unit_name}}</h2>
     <strong>USGS info: </strong><a target='_blank' href='info?unit_link={{unit_link}}'>{{unit_link}}</a> &mdash; <small>{{gid}}</small> <br>
     <strong>Age: </strong>{{ages}} ({{age_bottom}} - {{age_top}} <small>Ma</small>)<br>
     {{#strat_unit}}
@@ -489,9 +120,9 @@
 
     {{#macrodata}}
     <div class="macrostrat-data">
-      <h3>Macrostrat</h3>
+      <h3 class="title-three">Macrostrat</h3>
       <hr>
-      <h2>{{names}}</h2>
+      <h2 class="title-two">{{names}}</h2>
       <strong>Units present: </strong>{{ids}} <br>
       <strong>Age: </strong>{{uniqueIntervals}} ({{b_ages}} - {{t_ages}} <small>Ma</small>)<br>
       <strong>Thickness: </strong>{{min_thicks}} - {{max_thicks}} <br>
@@ -504,7 +135,7 @@
   </script>
 
   <script id="dd-template" type="x-tmpl-mustache">
-    <h3>Literature</h3>
+    <h3 class="title-three">Literature</h3>
     <hr>
     {{#journals}}
       <div class="journal">
@@ -515,7 +146,7 @@
             <strong>{{fields.title}}</strong> <i>{{#fields.authors}}{{.}}{{/fields.authors}}</i>
             <i class="fa fa-plus-square-o show-content"></i>
           </div>
-          <div class="dd-content">
+          <div class="dd-text">
             {{#highlight.contents}}
               <div class="dd-snippet">
                 ...{{{.}}}...
@@ -523,11 +154,10 @@
             {{/highlight.contents}}
           </div>
         </div>
-      </div>
       {{/articles}}
+      </div>
     {{/journals}}
   </script>
-
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){

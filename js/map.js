@@ -7,7 +7,7 @@
 
   // If there is a hash location, go there immediately
   if (window.location.hash.length > 3) {
-    var hashLocation = L.Hash.parseHash(window.location.hash)
+    var hashLocation = L.Hash.parseHash(window.location.hash);
     map.setView(hashLocation.center, hashLocation.zoom);
   } else {
     map.setView([40, -97], 5);
@@ -67,7 +67,10 @@
 
   var apiUrl = (window.location.hostname === "localhost") ? "http://localhost:5000" : window.location.origin;
   map.on("click", function(d) {
-    $(".dd_content").html("")
+
+    // Clean up DD results
+    $(".dd_content").html("");
+
     if (map.hasLayer(marker)) {
       map.removeLayer(marker);
     }
@@ -78,7 +81,7 @@
     if (map.getZoom() < 7) {
       // query gmna
       $.getJSON(apiUrl + "/api/v1/geologic_units?type=gmna&lat=" + d.latlng.lat.toFixed(5) + "&lng=" + d.latlng.lng.toFixed(5), function(data) {
-        var data = data.success.data[0];
+        data = data.success.data[0];
 
         data.ages = (data.min_age === data.max_age) ? data.min_age : data.max_age + " - " + data.min_age;
         data.age_bottom = parseFloat(data.age_bottom);
@@ -117,7 +120,7 @@
 
         });
 
-        var data = data.success.data[0]
+        data = data.success.data[0];
         data.age_bottom = parseFloat(data.age_bottom);
         data.age_top = parseFloat(data.age_top);
         data.rocktypes = (rocktypes) ? rocktypes.join(", ") : null;
@@ -130,7 +133,7 @@
             var rendered = Mustache.render(gmusTemplate, data);
             setUnitInfoContent(rendered, d.latlng);
 
-            var stratNames = []
+            var stratNames = [];
 
             response.success.data.forEach(function(d) {
               if (stratNames.indexOf(d.strat_name) < 0) {
@@ -138,49 +141,44 @@
               }
             });
 
-            stratNames.forEach(function(d) {
-
-            })
-
             if (stratNames.length > 0) {
               $.getJSON("//teststrata.geology.wisc.edu/mdd/" + stratNames.join("*"), function(res) {
                 if (res.results.length > 0) {
                   var parsed = {
                     journals: []
-                  }
+                  };
+
                   res.results.forEach(function(d) {
                     var found = false;
 
                     parsed.journals.forEach(function(j) {
                       if (j.name === d.fields.pubname[0]) {
-                        j.articles.push(d)
+                        j.articles.push(d);
                         found = true;
                       }
-                    })
+                    });
                     if (!found) {
                       parsed.journals.push({
                         name: d.fields.pubname[0],
                         articles: [d]
-                      })
+                      });
                     }
                   });
 
                   var ddRendered = Mustache.render(ddTemplate, parsed);
-                  $(".dd_content").html(ddRendered)
+                  $(".dd_content").html(ddRendered);
 
                   $(".show-content").on("click", function(d) {
                     if ($(this).hasClass("fa-plus-square-o")) {
-                      $(this).parent(".dd-article-heading").next(".dd-content").css("display", "block");
+                      $(this).parent(".dd-article-heading").next(".dd-text").css("display", "block");
                       $(this).removeClass("fa-plus-square-o");
                       $(this).addClass("fa-minus-square-o");
                     } else {
-                      $(this).parent(".dd-article-heading").next(".dd-content").css("display", "none");
+                      $(this).parent(".dd-article-heading").next(".dd-text").css("display", "none");
                       $(this).removeClass("fa-minus-square-o");
                       $(this).addClass("fa-plus-square-o");
                     }
-                    
-                    
-                  })
+                  });
                 }
               });
             }
@@ -200,21 +198,27 @@
   $(window).on("resize", hideInfoAndMarker);
   $(".close").click(hideInfoAndMarker);
 
+  // Hide things if the <esc> key is pressed
+  $(document).on("keyup", function(e) {
+    if (e.keyCode === 27) {
+      closeRightBar();
+      closeBottomBar();
+      closeMenuBar();
+      $(".attr-container").css("visibility", "hidden");
+    }
+  });
+
   // Show attribution
-  $("#info-link").click(function(d) {
+  $(".info-link").click(function(d) {
     d.preventDefault();
     $(".attr-container").css("visibility", "visible");
   });
 
   // Show menu
-  $("#menu-link").click(function(d) {
+  $(".menu-link").click(function(d) {
     d.preventDefault();
     toggleMenuBar();
   });
-
-  // Make things fast
-  var attachFastClick = Origami.fastclick;
-  attachFastClick(document.getElementById("not-map"));
 
   // Handle interaction with layers
   $(".layer-control").click(function(d) {
@@ -247,7 +251,7 @@
             map.removeLayer(satellite);
             return;
           default :
-            console.log("hmmmm")
+            console.log("hmmmm");
         }
       // If it's off, turn it on
       } else {
@@ -265,11 +269,17 @@
             map.addLayer(satellite);
             return;
           default :
-            console.log("hmmmm")
+            console.log("hmmmm");
         }
       }
     }
   });
+  
+
+  // And finally, make things fast
+  var attachFastClick = Origami.fastclick;
+  attachFastClick(document.getElementsByClassName("not-map")[0]);
+
 
   function addGmnaFaults() {
     if (map.hasLayer(gmusFaults)) {
@@ -441,8 +451,8 @@
         point = this.containerPointToLatLng([x, y]),
         opts = (options) ? options : {"animate": true, "duration": 0.6, "noMoveStart": true};
 
-    return this.setView(point, this._zoom, { pan: opts })
-  }
+    return this.setView(point, this._zoom, { pan: opts });
+  };
 
   function centerMapRight(ll){
     var contentWidth = $("#unit_info_right").width() / 2;
@@ -459,22 +469,22 @@
 
     return {
       names: units
-          .map(function(d) { return d.strat_name })
+          .map(function(d) { return d.strat_name; })
           .filter(function(item, pos, self) {
               return self.indexOf(item) == pos;
           })
           .join(", "),
 
-      ids: units.map(function(d) { return d.id }).join(", "),
-      max_thicks: Math.max.apply(null, units.map(function(d) { return d.max_thick })),
-      min_thicks: Math.min.apply(null, units.map(function(d) { return d.min_thick })),
-      t_ages: Math.min.apply(null, units.map(function(d) { return d.t_age })),
-      b_ages: Math.max.apply(null, units.map(function(d) { return d.b_age })),
-      pbdb: Math.max.apply(null, units.map(function(d) { return d.pbdb })),
+      ids: units.map(function(d) { return d.id; }).join(", "),
+      max_thicks: Math.max.apply(null, units.map(function(d) { return d.max_thick; })),
+      min_thicks: Math.min.apply(null, units.map(function(d) { return d.min_thick; })),
+      t_ages: Math.min.apply(null, units.map(function(d) { return d.t_age; })),
+      b_ages: Math.max.apply(null, units.map(function(d) { return d.b_age; })),
+      pbdb: Math.max.apply(null, units.map(function(d) { return d.pbdb; })),
 
       uniqueEnvironments: 
         units
-          .map(function(d) { return d.environ.split("|").join(", ") })
+          .map(function(d) { return d.environ.split("|").join(", "); })
           .filter(function(item, pos, self) {
               if (item.length > 1) {
                 return self.indexOf(item) == pos;
@@ -492,7 +502,7 @@
         units.forEach(function(d, i) {
           if (d.t_age < min_age) {
             min_age = d.t_age;
-            min_age_interval = d.LO_interval
+            min_age_interval = d.LO_interval;
           }
           if (d.b_age > max_age) {
             max_age = d.b_age;
@@ -501,8 +511,7 @@
         });
         return (max_age_interval === min_age_interval) ? min_age_interval : max_age_interval + " - " + min_age_interval;
       }
-    }
-
+    };
   }
 
 })();
