@@ -1,6 +1,3 @@
-maptiks.trackcode = "7d87cb7f-54e9-4bac-a23b-a23cfce8b62b";
-maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
-
 (function() {
   var map = L.map('map', {
     // We have a different attribution control...
@@ -20,36 +17,29 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
   var hash = new L.Hash(map);
 
   // Add our basemap
-  var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png', {
-    maptiks_id: 'Stamen toner'
-  }).addTo(map);
+  var stamen = L.tileLayer('http://{s}.tile.stamen.com/toner-lite/{z}/{x}/{y}.png').addTo(map);
   stamen.setZIndex(1);
 
   var gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
     maxZoom: 12,
-    detectRetina: true,
-    maptiks_id: 'GMNA faults'
+    detectRetina: true
   });
   gmnaFaults.setZIndex(1000);
 
   var gmusFaults = L.tileLayer('http://macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
     maxZoom: 12,
-    detectRetina: true,
-    maptiks_id: 'GMUS faults'
+    detectRetina: true
   });
   gmusFaults.setZIndex(1000);
 
 
-  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
-    maptiks_id: 'Mapbox satellite'
-  });
+  var satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png');
   satellite.setZIndex(1);
 
   // Add the geologic basemap
   var geology = L.tileLayer('http://macrostrat.org/tiles/geologic_v2/{z}/{x}/{y}.png', {
     maxZoom: 12,
-    opacity: 0.8,
-    maptiks_id: 'Geology'
+    opacity: 0.8
   }).addTo(map);
 
   geology.setZIndex(100);
@@ -72,8 +62,12 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
   var gmusTemplate = $('#gmus-template').html();
   Mustache.parse(gmusTemplate);
 
+  var ddTemplate = $('#dd-template').html();
+  Mustache.parse(ddTemplate);
+
   var apiUrl = (window.location.hostname === "localhost") ? "http://localhost:5000" : window.location.origin;
   map.on("click", function(d) {
+    $(".dd_content").html("")
     if (map.hasLayer(marker)) {
       map.removeLayer(marker);
     }
@@ -135,6 +129,61 @@ maptiks.debug = (window.location.hostname !== "macrostrat.org") ? true : false;
             data.macrodata = processUnits(response.success.data);
             var rendered = Mustache.render(gmusTemplate, data);
             setUnitInfoContent(rendered, d.latlng);
+
+            var stratNames = []
+
+            response.success.data.forEach(function(d) {
+              if (stratNames.indexOf(d.strat_name) < 0) {
+                stratNames.push(d.strat_name);
+              }
+            });
+
+            stratNames.forEach(function(d) {
+
+            })
+
+            if (stratNames.length > 0) {
+              $.getJSON("//teststrata.geology.wisc.edu/mdd/" + stratNames.join("*"), function(res) {
+                if (res.results.length > 0) {
+                  var parsed = {
+                    journals: []
+                  }
+                  res.results.forEach(function(d) {
+                    var found = false;
+
+                    parsed.journals.forEach(function(j) {
+                      if (j.name === d.fields.pubname[0]) {
+                        j.articles.push(d)
+                        found = true;
+                      }
+                    })
+                    if (!found) {
+                      parsed.journals.push({
+                        name: d.fields.pubname[0],
+                        articles: [d]
+                      })
+                    }
+                  });
+
+                  var ddRendered = Mustache.render(ddTemplate, parsed);
+                  $(".dd_content").html(ddRendered)
+
+                  $(".show-content").on("click", function(d) {
+                    if ($(this).hasClass("fa-plus-square-o")) {
+                      $(this).parent(".dd-article-heading").next(".dd-content").css("display", "block");
+                      $(this).removeClass("fa-plus-square-o");
+                      $(this).addClass("fa-minus-square-o");
+                    } else {
+                      $(this).parent(".dd-article-heading").next(".dd-content").css("display", "none");
+                      $(this).removeClass("fa-minus-square-o");
+                      $(this).addClass("fa-plus-square-o");
+                    }
+                    
+                    
+                  })
+                }
+              });
+            }
           });
         } else {
           var rendered = Mustache.render(gmusTemplate, data);

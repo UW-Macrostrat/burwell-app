@@ -29,13 +29,13 @@
     }
     h3 {
       color: #aaa;
-      font-size: 1.6em;
+      font-size: 1.5em;
       letter-spacing: 2px;
       font-weight: 200;
       text-align: center;
     }
     h2 {
-      font-size: 1.8em;
+      font-size: 1.4em;
       line-height: 1.2em;
     }
     strong {
@@ -222,13 +222,59 @@
 
     .unit_info_content {
       padding: 25px;
-      padding-bottom: 140px;
+     /* padding-bottom: 140px; */
       z-index: 0;
       height: auto;
     }
 
     .unit_info_content > a {
       color: #aaa;
+    }
+
+    .dd-result {
+      padding-bottom: 20px;
+    }
+
+    .dd_content {
+      padding: 25px;
+      padding-bottom: 140px;
+      z-index: 0;
+      height: auto;
+    }
+
+    .dd_content > a {
+      color: #aaa;
+    }
+
+    .journal {
+      padding-bottom: 35px;
+    }
+
+    .journal-title {
+      font-weight: bold;
+      font-size: 1.2em;
+    }
+
+    .dd-snippet {
+      font-size: 11px;
+      line-height: 16px;
+      padding: 10px;
+    }
+
+    .dd-content {
+      display: none;
+    }
+
+    .show-content {
+      color: #7FDBFF;
+      cursor: pointer;
+    }
+
+    .hl {
+      background-color: #7FDBFF;
+      color: #708090;
+      font-style: normal;
+      padding: 2px;
     }
 
     .menu-content {
@@ -356,7 +402,9 @@
 
             <strong>Code </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>, and can be found <a href="https://github.com/UW-Macrostrat/gmna-app" target="_blank">on Github</a>.<br><br>
             
-            <strong>Development team </strong>comprised of <a href="https://github.com/jczaplew" target="_blank">John Czaplewski</a>, lead developer. <a href="http://strata.geology.wisc.edu" target="_blank">Shanan Peters</a>, P.I. and scientific lead. Puneet Kishor, initial <a href="http://earth-base.org" target="_blank">earth-base</a> development.
+            <strong>Development team </strong>comprised of <a href="https://github.com/jczaplew" target="_blank">John Czaplewski</a>, lead developer. <a href="http://strata.geology.wisc.edu" target="_blank">Shanan Peters</a>, P.I. and scientific lead. Puneet Kishor, initial <a href="http://earth-base.org" target="_blank">earth-base</a> development.<br><br>
+
+            <strong>Funding </strong> for core <a href="//macrostrat.org">Macrostrat</a> development via NSF EAR-1150082, Macrostrat&mdash;geologic map integration via NSF ICER-1440312, and literation integration via NSF ICER-1343760.
           </div>
         </div>
       </div>
@@ -382,14 +430,19 @@
           </div>
         </div>
       </div>
+
       <div id="unit_info_right" class="unit_info">
         <div class="close right">x</div>
         <div class="unit_info_content"></div>
+        <div class="dd_content"></div>
       </div>
+
       <div id="unit_info_bottom" class="unit_info">
         <div class="close bottom">x</div>
         <div class="unit_info_content"></div>
+        <div class="dd_content"></div>
       </div>
+
     </div>
   </div>
   
@@ -450,6 +503,31 @@
     {{/macrodata}}
   </script>
 
+  <script id="dd-template" type="x-tmpl-mustache">
+    <h3>Literature</h3>
+    <hr>
+    {{#journals}}
+      <div class="journal">
+        <div class="journal-title"><i>{{name}}</i></div>
+        {{#articles}}
+        <div class="dd-article">
+          <div class="dd-article-heading">
+            <strong>{{fields.title}}</strong> <i>{{#fields.authors}}{{.}}{{/fields.authors}}</i>
+            <i class="fa fa-plus-square-o show-content"></i>
+          </div>
+          <div class="dd-content">
+            {{#highlight.contents}}
+              <div class="dd-snippet">
+                ...{{{.}}}...
+              </div>
+            {{/highlight.contents}}
+          </div>
+        </div>
+      </div>
+      {{/articles}}
+    {{/journals}}
+  </script>
+
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -462,8 +540,6 @@
   </script>
 
   <script src="js/libs.js"></script>
-  <script src="//cdn.maptiks.com/maptiks-leaflet.min.js"></script>
-
   <script async src="js/map.js"></script>
 </body>
 </html>
