@@ -260,6 +260,9 @@ small {
   font-weight: bold;
   font-size: 1.2em;
 }
+.title-link {
+  text-decoration: none;
+}
 .dd-article {
   padding-bottom: 15px;
 }

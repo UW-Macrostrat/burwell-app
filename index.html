@@ -143,8 +143,8 @@
         {{#articles}}
         <div class="dd-article">
           <div class="dd-article-heading">
-            <strong>{{fields.title}}</strong> <i>{{#fields.authors}}{{.}}{{/fields.authors}}</i>
-            <i class="fa fa-plus-square-o show-content"></i>
+            <a href="{{fields.scidirect}}" target="_blank" class="title-link"><strong>{{fields.title}}</strong></a> <i>{{#fields.authors}}{{.}}{{/fields.authors}}</i>
+            <i class="fa fa-plus-square-o fa-lg show-content"></i>
           </div>
           <div class="dd-text">
             {{#highlight.contents}}

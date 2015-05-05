@@ -150,6 +150,7 @@
 
                   res.results.forEach(function(d) {
                     var found = false;
+                    d.fields.scidirect = "http://www.sciencedirect.com/science/article/pii/" + (d.fields.URL[0].split("/")[d.fields.URL[0].split("/").length - 1]);
 
                     parsed.journals.forEach(function(j) {
                       if (j.name === d.fields.pubname[0]) {
