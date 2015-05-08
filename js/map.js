@@ -142,7 +142,7 @@
             });
 
             if (stratNames.length > 0) {
-              $.getJSON("//teststrata.geology.wisc.edu/mdd/" + stratNames.join("*"), function(res) {
+              $.getJSON("//dev.macrostrat.org/mdd/" + stratNames.join("*"), function(res) {
                 if (res.results.length > 0) {
                   var parsed = {
                     journals: []
