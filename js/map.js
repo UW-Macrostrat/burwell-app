@@ -128,7 +128,7 @@
         data.ages = (data.min_age === data.max_age) ? data.min_age : data.max_age + " - " + data.min_age;
 
         if (data.macro_units && data.macro_units.length > 0) {
-          $.getJSON("//macrostrat.org/api/v1/units?response=long&id=" + data.macro_units.join(","), function(response) {
+          $.getJSON(apiUrl + "/api/v1/units?response=long&id=" + data.macro_units.join(","), function(response) {
             data.macrodata = processUnits(response.success.data);
             var rendered = Mustache.render(gmusTemplate, data);
             setUnitInfoContent(rendered, d.latlng);
