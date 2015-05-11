@@ -17,7 +17,7 @@
   var hash = new L.Hash(map);
 
   // Add our basemap
-  var stamen = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png', {
+  var stamen = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png', {
     zIndex: 1
   }).addTo(map);
 
@@ -38,7 +38,7 @@
   });
 
   // Add the geologic basemap
-  var geology = L.tileLayer('http://macrostrat.org/tiles/geologic_v2/{z}/{x}/{y}.png', {
+  var geology = L.tileLayer('https://dev.macrostrat.org/tiles/geologic_v2/{z}/{x}/{y}.png', {
     maxZoom: 12,
     opacity: 0.8,
     zIndex: 100
