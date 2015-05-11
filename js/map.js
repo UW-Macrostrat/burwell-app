@@ -21,13 +21,13 @@
     zIndex: 1
   }).addTo(map);
 
-  var gmnaFaults = L.tileLayer('//macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
+  var gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
     maxZoom: 12,
     detectRetina: true,
     zIndex: 1000
   });
 
-  var gmusFaults = L.tileLayer('//macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
+  var gmusFaults = L.tileLayer('http://macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
     maxZoom: 12,
     detectRetina: true,
     zIndex: 1000
@@ -38,7 +38,7 @@
   });
 
   // Add the geologic basemap
-  var geology = L.tileLayer('//macrostrat.org/tiles/geologic_v2/{z}/{x}/{y}.png', {
+  var geology = L.tileLayer('http://macrostrat.org/tiles/geologic_v2/{z}/{x}/{y}.png', {
     maxZoom: 12,
     opacity: 0.8,
     zIndex: 100
