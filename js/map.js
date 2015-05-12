@@ -1,4 +1,7 @@
 (function() {
+  var apiUrl = (window.location.hostname === "localhost") ? "http://localhost:5000" : window.location.origin,
+      tileUrl = (window.location.hostname === "localhost") ? "https://dev.macrostrat.org" : window.location.origin;
+
   var map = L.map('map', {
     // We have a different attribution control...
     attributionControl: false,
@@ -38,7 +41,7 @@
   });
 
   // Add the geologic basemap
-  var geology = L.tileLayer('https://dev.macrostrat.org/tiles/geologic_v2/{z}/{x}/{y}.png', {
+  var geology = L.tileLayer(tileUrl + '/tiles/geologic_v2/{z}/{x}/{y}.png', {
     maxZoom: 12,
     opacity: 0.8,
     zIndex: 100
@@ -65,7 +68,6 @@
   var ddTemplate = $('#dd-template').html();
   Mustache.parse(ddTemplate);
 
-  var apiUrl = (window.location.hostname === "localhost") ? "http://localhost:5000" : window.location.origin;
   map.on("click", function(d) {
 
     // Clean up DD results
@@ -470,13 +472,13 @@
 
     return {
       names: units
-          .map(function(d) { return d.strat_name; })
+          .map(function(d) { return "<a target='_blank' href='//dev.macrostrat.org/sift/info/?strat_id=" + d.strat_name_id + "'>" + d.strat_name + "</a>"; })
           .filter(function(item, pos, self) {
               return self.indexOf(item) == pos;
           })
           .join(", "),
 
-      ids: units.map(function(d) { return d.id; }).join(", "),
+      ids: units.map(function(d) { return "<a target='_blank' href='//dev.macrostrat.org/sift/info/?unit_id=" + d.id + "'>" + d.id + "</a>"; }).join(", "),
       max_thicks: Math.max.apply(null, units.map(function(d) { return d.max_thick; })),
       min_thicks: Math.min.apply(null, units.map(function(d) { return d.min_thick; })),
       t_ages: Math.min.apply(null, units.map(function(d) { return d.t_age; })),

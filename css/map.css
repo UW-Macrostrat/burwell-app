@@ -155,6 +155,11 @@ small {
   -webkit-backface-visibility: hidden;
 }
 
+.macrostrat-data > a, .macrostrat-data > h2 > a {
+  text-decoration: none;
+  color: #ccc;
+}
+
 #unit_info_left {
   width: 60%;
   top: 0;

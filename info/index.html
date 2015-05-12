@@ -264,7 +264,7 @@
   </script>
   <script>
     (function() {
-      var baseURL = (window.location.hostname === "localhost") ? "http://localhost:5000" : "http://dev.macrostrat.org"
+      var baseURL = (window.location.hostname === "localhost") ? "http://localhost:5000" : "https://dev.macrostrat.org"
       // Create a map and set an initial view
       var map = L.map('map');
 
@@ -332,7 +332,6 @@
           // Bind some actions to each polygon
             onEachFeature: function (feature, layer) {
               layer.on("click", toggleUnitInfoBar)
-            //  layer.bindPopup("<strong>Unit link:</strong> " + feature.properties.unit_link + "<br><strong>Age:</strong> " + feature.properties.min_age + " - " + feature.properties.max_age + "<br><strong>Rock type:</strong> " + rocktypes.substr(0, rocktypes.length - 2, -2) + "<br><strong>Lithologies:</strong> " + liths.substr(0, liths.length - 2, -2));*/
             }
           }).addTo(map);
 
