@@ -144,13 +144,13 @@
             });
 
             if (stratNames.length > 0) {
-              $.getJSON("//dev.macrostrat.org/mdd/" + stratNames.join("*"), function(res) {
-                if (res.results.length > 0) {
+              $.getJSON("//dev.macrostrat.org/mdd/api/v1/articles?q=" + stratNames.join(","), function(res) {
+                if (res.results.results.length > 0) {
                   var parsed = {
                     journals: []
                   };
 
-                  res.results.forEach(function(d) {
+                  res.results.results.forEach(function(d) {
                     var found = false;
                     d.fields.scidirect = "http://www.sciencedirect.com/science/article/pii/" + (d.fields.URL[0].split("/")[d.fields.URL[0].split("/").length - 1]);
 
