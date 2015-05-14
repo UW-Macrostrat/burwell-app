@@ -130,61 +130,78 @@
         data.ages = (data.min_age === data.max_age) ? data.min_age : data.max_age + " - " + data.min_age;
 
         if (data.macro_units && data.macro_units.length > 0) {
+
           $.getJSON(apiUrl + "/api/v1/units?response=long&id=" + data.macro_units.join(","), function(response) {
             data.macrodata = processUnits(response.success.data);
-            var rendered = Mustache.render(gmusTemplate, data);
-            setUnitInfoContent(rendered, d.latlng);
 
-            var stratNames = [];
+            $.getJSON(apiUrl + "/api/v1/defs/strat_names?id=" + data.strat_names.join(","), function(names) {
 
-            response.success.data.forEach(function(d) {
-              if (stratNames.indexOf(d.strat_name) < 0) {
-                stratNames.push(d.strat_name);
-              }
-            });
+              data.macrodata.names = names.success.data.filter(function(d){
+                // Get back the ones I asked for!
+                if (data.strat_names.indexOf(d.id) > -1) {
+                  return d;
+                }
+              })
+              .map(function(d) {
+                return "<a target='_blank' href='//dev.macrostrat.org/sift/info/?strat_id=" + d.id + "'>" + d.name + " " + d.rank + "</a>";
+              }).join(", ");
 
-            if (stratNames.length > 0) {
-              $.getJSON("//dev.macrostrat.org/mdd/api/v1/articles?q=" + stratNames.join(","), function(res) {
-                if (res.results.results.length > 0) {
-                  var parsed = {
-                    journals: []
-                  };
+            
 
-                  res.results.results.forEach(function(d) {
-                    var found = false;
-                    d.fields.scidirect = "http://www.sciencedirect.com/science/article/pii/" + (d.fields.URL[0].split("/")[d.fields.URL[0].split("/").length - 1]);
+              var rendered = Mustache.render(gmusTemplate, data);
+              setUnitInfoContent(rendered, d.latlng);
 
-                    parsed.journals.forEach(function(j) {
-                      if (j.name === d.fields.pubname[0]) {
-                        j.articles.push(d);
-                        found = true;
-                      }
-                    });
-                    if (!found) {
-                      parsed.journals.push({
-                        name: d.fields.pubname[0],
-                        articles: [d]
-                      });
-                    }
-                  });
+              var stratNames = [];
 
-                  var ddRendered = Mustache.render(ddTemplate, parsed);
-                  $(".dd_content").html(ddRendered);
-
-                  $(".show-content").on("click", function(d) {
-                    if ($(this).hasClass("fa-plus-square-o")) {
-                      $(this).parent(".dd-article-heading").next(".dd-text").css("display", "block");
-                      $(this).removeClass("fa-plus-square-o");
-                      $(this).addClass("fa-minus-square-o");
-                    } else {
-                      $(this).parent(".dd-article-heading").next(".dd-text").css("display", "none");
-                      $(this).removeClass("fa-minus-square-o");
-                      $(this).addClass("fa-plus-square-o");
-                    }
-                  });
+              response.success.data.forEach(function(d) {
+                if (stratNames.indexOf(d.strat_name) < 0) {
+                  stratNames.push(d.strat_name);
                 }
               });
-            }
+
+              if (stratNames.length > 0) {
+                $.getJSON("//dev.macrostrat.org/mdd/api/v1/articles?q=" + stratNames.join(","), function(res) {
+                  if (res.results.results.length > 0) {
+                    var parsed = {
+                      journals: []
+                    };
+
+                    res.results.results.forEach(function(d) {
+                      var found = false;
+                      d.fields.scidirect = "http://www.sciencedirect.com/science/article/pii/" + (d.fields.URL[0].split("/")[d.fields.URL[0].split("/").length - 1]);
+
+                      parsed.journals.forEach(function(j) {
+                        if (j.name === d.fields.pubname[0]) {
+                          j.articles.push(d);
+                          found = true;
+                        }
+                      });
+                      if (!found) {
+                        parsed.journals.push({
+                          name: d.fields.pubname[0],
+                          articles: [d]
+                        });
+                      }
+                    });
+
+                    var ddRendered = Mustache.render(ddTemplate, parsed);
+                    $(".dd_content").html(ddRendered);
+
+                    $(".show-content").on("click", function(d) {
+                      if ($(this).hasClass("fa-plus-square-o")) {
+                        $(this).parent(".dd-article-heading").next(".dd-text").css("display", "block");
+                        $(this).removeClass("fa-plus-square-o");
+                        $(this).addClass("fa-minus-square-o");
+                      } else {
+                        $(this).parent(".dd-article-heading").next(".dd-text").css("display", "none");
+                        $(this).removeClass("fa-minus-square-o");
+                        $(this).addClass("fa-plus-square-o");
+                      }
+                    });
+                  }
+                });
+              }
+            });
           });
         } else {
           var rendered = Mustache.render(gmusTemplate, data);
