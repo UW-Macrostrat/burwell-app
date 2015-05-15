@@ -136,13 +136,16 @@
 
             $.getJSON(apiUrl + "/api/v1/defs/strat_names?id=" + data.strat_names.join(","), function(names) {
 
-              data.macrodata.names = names.success.data.filter(function(d){
+              var stratNames = data.macrodata.names = names.success.data.filter(function(d){
                 // Get back the ones I asked for!
                 if (data.strat_names.indexOf(d.id) > -1) {
                   return d;
                 }
-              })
-              .map(function(d) {
+              });
+
+              console.log(stratNames)
+
+              data.macrodata.names = stratNames.map(function(d) {
                 return "<a target='_blank' href='" + apiUrl + "/sift/info/?strat_id=" + d.id + "'>" + d.name + " " + d.rank + "</a>";
               }).join(", ");
 
@@ -151,12 +154,9 @@
               var rendered = Mustache.render(gmusTemplate, data);
               setUnitInfoContent(rendered, d.latlng);
 
-              var stratNames = [];
-
-              response.success.data.forEach(function(d) {
-                if (stratNames.indexOf(d.strat_name) < 0) {
-                  stratNames.push(d.strat_name);
-                }
+              
+              stratNames = stratNames.map(function(d) {
+                return d.name + " " + d.rank;
               });
 
               if (stratNames.length > 0) {
