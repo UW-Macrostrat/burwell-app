@@ -143,7 +143,7 @@
                 }
               })
               .map(function(d) {
-                return "<a target='_blank' href='//dev.macrostrat.org/sift/info/?strat_id=" + d.id + "'>" + d.name + " " + d.rank + "</a>";
+                return "<a target='_blank' href='" + apiUrl + "/sift/info/?strat_id=" + d.id + "'>" + d.name + " " + d.rank + "</a>";
               }).join(", ");
 
             
@@ -159,8 +159,7 @@
                 }
               });
 
-              // TODO: remove self loathing
-              if (stratNames.length > 0 && apiUrl != "http://macrostrat.org") {
+              if (stratNames.length > 0) {
                 $.getJSON("//dev.macrostrat.org/mdd/api/v1/articles?q=" + stratNames.join(","), function(res) {
                   if (res.results.results.length > 0) {
                     var parsed = {
@@ -490,13 +489,13 @@
 
     return {
       names: units
-          .map(function(d) { return "<a target='_blank' href='//dev.macrostrat.org/sift/info/?strat_id=" + d.strat_name_id + "'>" + d.strat_name + "</a>"; })
+          .map(function(d) { return "<a target='_blank' href='" + apiUrl + "/sift/info/?strat_id=" + d.strat_name_id + "'>" + d.strat_name + "</a>"; })
           .filter(function(item, pos, self) {
               return self.indexOf(item) == pos;
           })
           .join(", "),
 
-      ids: units.map(function(d) { return "<a target='_blank' href='//dev.macrostrat.org/sift/info/?unit_id=" + d.id + "'>" + d.id + "</a>"; }).join(", "),
+      ids: units.map(function(d) { return "<a target='_blank' href='" + apiUrl + "/sift/info/?unit_id=" + d.id + "'>" + d.id + "</a>"; }).join(", "),
       max_thicks: Math.max.apply(null, units.map(function(d) { return d.max_thick; })),
       min_thicks: Math.min.apply(null, units.map(function(d) { return d.min_thick; })),
       t_ages: Math.min.apply(null, units.map(function(d) { return d.t_age; })),
