@@ -159,7 +159,8 @@
                 }
               });
 
-              if (stratNames.length > 0) {
+              // TODO: remove self loathing
+              if (stratNames.length > 0 && apiUrl != "http://macrostrat.org") {
                 $.getJSON("//dev.macrostrat.org/mdd/api/v1/articles?q=" + stratNames.join(","), function(res) {
                   if (res.results.results.length > 0) {
                     var parsed = {
