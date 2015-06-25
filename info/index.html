@@ -280,7 +280,7 @@
 
       function getUnits(search) {
 
-        $.getJSON(baseURL + "/api/geologic_units?type=gmus&format=topojson_bare&" + search, function(data) {
+        $.getJSON(baseURL + "/api/v1/geologic_units?type=gmus&format=topojson_bare&" + search, function(data) {
 
           var unit_data = data.objects.output.geometries[0].properties;
 

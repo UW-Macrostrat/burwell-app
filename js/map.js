@@ -143,13 +143,11 @@
                 }
               });
 
-              console.log(stratNames)
 
               data.macrodata.names = stratNames.map(function(d) {
                 return "<a target='_blank' href='" + apiUrl + "/sift/info/?strat_id=" + d.id + "'>" + d.name + " " + d.rank + "</a>";
               }).join(", ");
 
-            
 
               var rendered = Mustache.render(gmusTemplate, data);
               setUnitInfoContent(rendered, d.latlng);
