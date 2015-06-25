@@ -37,7 +37,9 @@
             
             <strong>Development team </strong>comprised of <a href="https://github.com/jczaplew" target="_blank">John Czaplewski</a>, lead developer. <a href="http://strata.geology.wisc.edu" target="_blank">Shanan Peters</a>, P.I. and scientific lead. Puneet Kishor, initial <a href="http://earth-base.org" target="_blank">earth-base</a> and literature search development.<br><br>
 
-            <strong>Funding </strong> for core <a href="//macrostrat.org">Macrostrat</a> development via NSF EAR-1150082, Macrostrat&mdash;geologic map integration via NSF ICER-1440312, and literation integration via NSF ICER-1343760.
+            <strong>Funding </strong> for core <a href="//macrostrat.org">Macrostrat</a> development via NSF EAR-1150082, Macrostrat&mdash;geologic map integration via NSF ICER-1440312, and literature integration via NSF ICER-1343760.
+          
+            <strong>Licence: </strong> all Macrostrat geological data are licensed under a <a href='http://creativecommons.org/licenses/by/4.0/'>Creative Commons Attribution 4.0 International License</a>.<br> 
           </div>
         </div>
       </div>
@@ -80,7 +82,7 @@
   </div>
   
   <script id="gmna-template" type="x-tmpl-mustache">
-    <h3 class="title-three">GMNA</h3>
+    <h3 class="title-three"><a href='http://pubs.usgs.gov/ds/424/'>GMNA</a></h3>
     <hr>
     <h2 class="title-two">{{#interval_name}}{{interval_name}}{{/interval_name}}{{^interval_name}}"Unknown interval"{{/interval_name}}</h2>
     <strong>Age: </strong>{{ages}} ({{age_bottom}} - {{age_top}} <small>Ma</small>)<br>
@@ -95,7 +97,7 @@
   </script>
 
   <script id="gmus-template" type="x-tmpl-mustache">
-    <h3 class="title-three">GMUS</h3>
+    <h3 class="title-three"><a href='http://mrdata.usgs.gov/geology/state/state.php'>GMUS</a></h3>
     <hr>
     <h2 class="title-two">{{unit_name}}</h2>
     <strong>USGS info: </strong><a target='_blank' href='info?unit_link={{unit_link}}'>{{unit_link}}</a> &mdash; <small>{{gid}}</small> <br>
