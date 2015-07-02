@@ -152,13 +152,13 @@
               var rendered = Mustache.render(gmusTemplate, data);
               setUnitInfoContent(rendered, d.latlng);
 
-              
+
               stratNames = stratNames.map(function(d) {
                 return d.name + " " + d.rank;
               });
 
               if (stratNames.length > 0) {
-                $.getJSON("//dev.macrostrat.org/mdd/api/v1/articles?q=" + stratNames.join(","), function(res) {
+                $.getJSON("https://dev.macrostrat.org/mdd/api/v1/articles?q=" + stratNames.join(","), function(res) {
                   if (res.results.results.length > 0) {
                     var parsed = {
                       journals: []
@@ -242,7 +242,7 @@
   $(".layer-control").click(function(d) {
     d.preventDefault();
 
-    if ($(this).hasClass("disabled")) { 
+    if ($(this).hasClass("disabled")) {
       return;
     }
 
@@ -292,7 +292,7 @@
       }
     }
   });
-  
+
 
   // And finally, make things fast
   var attachFastClick = Origami.fastclick;
@@ -349,7 +349,7 @@
   $("#attr-info>div>a").click(function(d) {
     d.stopPropagation();
   });
-  
+
   // Removes the marker from the map and hides info bars
   function hideInfoAndMarker() {
     if (map.hasLayer(marker)) {
@@ -500,14 +500,14 @@
       b_ages: Math.max.apply(null, units.map(function(d) { return d.b_age; })),
       pbdb: Math.max.apply(null, units.map(function(d) { return d.pbdb; })),
 
-      uniqueEnvironments: 
+      uniqueEnvironments:
         units
           .map(function(d) { return d.environ.split("|").join(", "); })
           .filter(function(item, pos, self) {
               if (item.length > 1) {
                 return self.indexOf(item) == pos;
               }
-              
+
           })
           .join(", "),
 
