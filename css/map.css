@@ -17,14 +17,16 @@ html, body, #map {
   position: fixed;
 }
 
-.title-three {
+.title-three, .title-three > a {
   color: #aaa;
-  font-size: 1.5em;
+  font-size: 25px;
   letter-spacing: 2px;
   font-weight: 200;
   text-align: center;
   line-height: 5px;
+  text-decoration: none;
 }
+
 
 .title-two {
   font-size: 1.4em;
@@ -36,7 +38,7 @@ strong {
 }
 
 small {
-  color: #bbb; 
+  color: #bbb;
 }
 
 .leaflet-popup-content {
@@ -127,7 +129,7 @@ small {
   padding: 25px;
 }
 
-#attr-info > div > a {
+#attr-info > div > a, #attr-info > div > p > a {
   color: #eaeaea;
 }
 
@@ -200,10 +202,6 @@ small {
   padding-left: 15px;
 }
 
-.opacity-adjuster {
-  display: none;
-}
-
 #geology-opacity-slider {
   width: 100%;
   padding: 25px 0;
@@ -213,7 +211,7 @@ small {
     padding: 3px;
 }
 #geology-opacity-slider:active::-moz-range-thumb {
-    background: orange;               
+    background: orange;
 }
 
 #unit_info_right.moveRight {
@@ -267,6 +265,7 @@ small {
 }
 .title-link {
   text-decoration: none;
+  margin-right: 7px;
 }
 .dd-article {
   padding-bottom: 15px;
@@ -278,13 +277,10 @@ small {
   padding: 10px;
 }
 
-.dd-text {
-  display: none;
-}
-
 .show-content {
   color: #7FDBFF;
   cursor: pointer;
+  margin-left: 7px;
 }
 
 .hl {
@@ -347,9 +343,6 @@ small {
   left: 0;
 }
 
-.lt-holder {
-  /*float: left;*/
-}
 
 .show-more {
   cursor: pointer;
@@ -360,12 +353,33 @@ small {
   display: none;
 }
 
-.hidden {
+.view-text {
+  display: inline;
+}
+
+.noDisplay {
   display: none;
 }
 
-.view-text {
-  display: inline;
+.map-info {
+  position: absolute;
+  width: 150px;
+  background-color: #fff;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+}
+
+.info-attr {
+  margin: 0;
+  margin-bottom: 2px;
+}
+.info-attr > a {
+  color: #aaaaaa;
+}
+
+.visible {
+  visibility: visible;
 }
 
 @media(max-width: 460px) {
