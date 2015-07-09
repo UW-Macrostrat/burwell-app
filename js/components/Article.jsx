@@ -12,6 +12,7 @@ var Article = React.createClass({
   },
 
   render: function() {
+
     return (
       <div className='dd-article'>
         <div className='dd-article-heading'>
@@ -24,7 +25,18 @@ var Article = React.createClass({
         </div>
         <div className={this.state.showText ? 'dd-text' : 'noDisplay'}>
           {this.props.data.highlight.contents.map(function(snippet, i) {
-            return <div key={i} className='dd-snippet' dangerouslySetInnerHTML={{__html: '...' + snippet + '...'}}></div>
+            // The text from Elasticsearch sometimes has errant < and >, which mess up the html
+            // so we have to do this, otherwise when React encounters one of those
+            // problematic ones it stops working
+
+            var text = snippet.replace(/<em class='hl'>/g, "@@@")
+                              .replace(/<\/em>/g, "***")
+                              .replace(/(?:\r\n|\r|\n|\<|\>)/g, ' ')
+                              .trim()
+                              .replace(/@@@/g, '<em class="hl">')
+                              .replace(/\*\*\*/g, '</em>');
+
+            return <div key={i} className='dd-snippet' dangerouslySetInnerHTML={{__html: '...' + text + '...'}}></div>
           })}
         </div>
       </div>

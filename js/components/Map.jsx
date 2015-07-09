@@ -267,7 +267,7 @@ var Map = React.createClass({
           });
         }
       }
-
+      
       this.props.onInteraction('articles', parsed);
     }.bind(this));
   },
