@@ -1,5 +1,4 @@
 var gulp = require('gulp'),
-    watch = require('gulp-watch'),
     htmlhint = require('gulp-htmlhint'),
     concat = require('gulp-concat'),
     uglify = require('gulp-uglify'),
@@ -19,15 +18,22 @@ gulp.task('build', function() {
     .pipe(concat('leaflet-all.min.js'))
     .pipe(uglify())
     .pipe(gulp.dest('./build'));
+});
 
+gulp.task('css-min', function() {
   gulp.src(['node_modules/leaflet/dist/leaflet.css', 'css/map.css'])
     .pipe(concat('styles.min.css'))
     .pipe(minifyCSS())
     .pipe(gulp.dest('./css/'));
+})
 
+gulp.task('watch', function() {
+    gulp.watch('js/**/*.jsx', ['browserify-babel']);
+    gulp.watch('css/*.css', ['css-min']);
+    gulp.watch('index.html', ['build']);
 });
 
-gulp.task('babel', function() {
+gulp.task('browserify-babel', function() {
   browserify({
     entries: 'js/index.jsx',
     extensions: ['.jsx'],
@@ -40,7 +46,6 @@ gulp.task('babel', function() {
   .pipe(uglify())
   .pipe(gulp.dest('./build'))
 
-
 });
 
-gulp.task('default', ['build', 'babel']);
+gulp.task('default', ['build', 'css-min', 'browserify-babel']);
