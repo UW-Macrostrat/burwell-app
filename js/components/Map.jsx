@@ -1,5 +1,6 @@
 import React from 'react';
 import axios from 'axios';
+import Config from './Config.js';
 
 var Map = React.createClass({
   componentDidMount: function() {
@@ -144,7 +145,7 @@ var Map = React.createClass({
   },
 
   getGMNA: function(latlng) {
-    axios.get('http://localhost:5000/api/v2/geologic_units/gmna', {
+    axios.get(Config.apiUrl + '/geologic_units/gmna', {
       params: {
         lat: latlng.lat.toFixed(5),
         lng: latlng.lng.toFixed(5)
@@ -158,7 +159,7 @@ var Map = React.createClass({
   },
 
   getGMUS: function(latlng) {
-    axios.get('http://localhost:5000/api/v2/geologic_units/gmus', {
+    axios.get(Config.apiUrl + '/geologic_units/gmus', {
       params: {
         lat: latlng.lat.toFixed(5),
         lng: latlng.lng.toFixed(5)
@@ -181,7 +182,7 @@ var Map = React.createClass({
   },
 
   getMacrostrat: function(unit_ids) {
-    axios.get('http://localhost:5000/api/v2/units', {
+    axios.get(Config.apiUrl + '/units', {
       params: {
         response: 'long',
         unit_id: unit_ids.join(',')
