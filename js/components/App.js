@@ -20,6 +20,7 @@ var App = React.createClass({
         hasGMNAFaults: false,
         hasGMUSFaults: false,
         hasSatellite: false,
+        hasBurwell: false,
         gmna: {},
         gmus: {
           rocktype: [],
@@ -37,16 +38,16 @@ var App = React.createClass({
 
   updateState: function(prop, data) {
     // Do this so we can have a generic state update method
-    var updatedProp = (function() {
+    /*var updatedProp = (function() {
       var obj = {};
       obj[prop] = data;
       return obj;
     })();
-
+*/
     // If using ES6, I can do this instead:
-    // this.setState({ [prop] : data })
+     this.setState({ [prop] : data })
 
-    this.setState(updatedProp);
+    //this.setState(updatedProp);
   },
 
   render: function() {

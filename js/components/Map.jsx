@@ -3,6 +3,13 @@ import axios from 'axios';
 import Config from './Config.js';
 
 var Map = React.createClass({
+  getInitialState: function() {
+    return {
+      articleRequest: '',
+      articleRequestDone: true
+    }
+  },
+
   componentDidMount: function() {
     var map = this.map = L.map(this.getDOMNode(), {
       attributionControl: false,
@@ -33,6 +40,13 @@ var Map = React.createClass({
       zIndex: 100,
       detectRetina: true
     }).addTo(map);
+
+    this.burwell = L.tileLayer('https://dev.macrostrat.org/tilestache/burwell/{z}/{x}/{y}.png', {
+      maxZoom: 12,
+      opacity: 0.8,
+      zIndex: 100,
+      detectRetina: true
+    });
 
     this.gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
       maxZoom: 12,
@@ -73,6 +87,13 @@ var Map = React.createClass({
       this.map.addLayer(this.geology);
     } else if (!(nextProps.data.hasGeology) && this.map.hasLayer(this.geology)) {
       this.map.removeLayer(this.geology);
+    }
+
+    // Handle burwell
+    if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
+      this.map.addLayer(this.burwell);
+    } else if (!(nextProps.data.hasBurwell) && this.map.hasLayer(this.burwell)) {
+      this.map.removeLayer(this.burwell);
     }
 
     // Handle GMNA faults
@@ -239,12 +260,18 @@ var Map = React.createClass({
   },
 
   getArticles: function(strat_names) {
-    axios.get('https://dev.macrostrat.org/mdd/api/v1/articles', {
+    if (!(this.state.articleRequestDone)) {
+      axios.abort(this.state.articleRequest);
+    }
+    this.state.articleRequestDone = false;
+    this.state.articleRequest = axios.get('https://dev.macrostrat.org/mdd/api/v1/articles', {
       params: {
         q: strat_names.join(',')
       }
-    })
-    .then(function(response) {
+    });
+
+    this.state.articleRequest.then(function(response) {
+      this.state.articleRequestDone = true;
       var data = response.data.results.results;
 
       var parsed = {

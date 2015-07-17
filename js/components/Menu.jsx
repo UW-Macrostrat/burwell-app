@@ -15,6 +15,10 @@ var Menu = React.createClass({
     this.props.onInteraction('hasGeology', !this.props.data.hasGeology);
   },
 
+  toggleBurwell: function() {
+    this.props.onInteraction('hasBurwell', !this.props.data.hasBurwell);
+  },
+
   toggleGMNAFaults: function() {
     this.props.onInteraction('hasGMNAFaults', !this.props.data.hasGMNAFaults);
   },
@@ -57,6 +61,7 @@ var Menu = React.createClass({
             <div className='layer' id='gmnaFaults'>GMNA faults <i className={this.props.data.hasGMNAFaults ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleGMNAFaults}></i></div>
             <div className='layer' id='gmusFaults'>GMUS faults <i className={this.props.data.hasGMUSFaults ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleGMUSFaults}></i></div>
             <div className='layer' id='satellite'>Satellite <i className={this.props.data.hasSatellite ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleSatellite}></i></div>
+            <div className='layer' id='burwell'>Burwell <i className={this.props.data.hasBurwell ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleBurwell}></i></div>
           </div>
         </div>
       </div>
