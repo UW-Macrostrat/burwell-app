@@ -4,7 +4,7 @@ import LongText from './LongText.jsx';
 var GMUSInfo = React.createClass({
   render: function() {
     return (
-    <div className='gmus-info'>
+    <div className={(this.props.data.gid) ? 'gmus-info' : 'noDisplay' }>
       <h3 className='title-three'><a href='http://mrdata.usgs.gov/geology/state/state.php'>GMUS</a></h3>
       <hr/>
       <h2 className='title-two'>{this.props.data.unit_name}</h2>

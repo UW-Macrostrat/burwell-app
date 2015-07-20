@@ -138,6 +138,11 @@ var Map = React.createClass({
       names: [],
       ids: []
     });
+    this.props.onInteraction('gmna', {})
+    this.props.onInteraction('gmus', {
+      rocktype: [],
+      lithology: []
+    })
 
     // Hide the menu
     if (this.props.data.showMenu) {
