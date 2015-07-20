@@ -19,7 +19,7 @@ var Article = React.createClass({
           <a href={'http://www.sciencedirect.com/science/article/pii/' + this.props.data.fields.URL[0].split('pii/')[1]} target='_blank' className='title-link'>
             <strong>{this.props.data.fields.title[0]}</strong>
           </a>
-          <i>{this.props.data.fields.authors[0]}</i>
+          <i>{(this.props.data.fields.authors) ? this.props.data.fields.authors[0] : 'Unknown'}</i>
           <i className={this.state.showText ? 'noDisplay' : 'fa fa-plus-square-o fa-lg show-content'} onClick={this.toggle}></i>
           <i className={this.state.showText ? 'fa fa-minus-square-o fa-lg show-content' : 'noDisplay'} onClick={this.toggle}></i>
         </div>

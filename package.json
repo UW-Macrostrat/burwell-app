@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.html",
   "dependencies": {
-    "axios": "^0.5.4",
     "fastclick": "^1.0.6",
     "gulp": "^3.8.11",
     "leaflet": "^0.7.3",
     "leaflet-hash": "^0.2.1",
-    "react": "^0.13.3"
+    "react": "^0.13.3",
+    "xhr": "^2.0.2"
   },
   "devDependencies": {
     "babelify": "^6.1.2",

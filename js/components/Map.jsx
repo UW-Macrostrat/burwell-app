@@ -1,12 +1,16 @@
 import React from 'react';
-import axios from 'axios';
+import xhr from 'xhr';
 import Config from './Config.js';
 
 var Map = React.createClass({
   getInitialState: function() {
     return {
-      articleRequest: '',
-      articleRequestDone: true
+      requests: {
+        gmna: null,
+        gmus: null,
+        macrostrat: null,
+        articles: null
+      }
     }
   },
 
@@ -130,6 +134,10 @@ var Map = React.createClass({
     this.marker.setLatLng(d.latlng).addTo(this.map);
     this.props.onInteraction('active', true);
     this.props.onInteraction('articles', {journals: []});
+    this.props.onInteraction('macrostrat', {
+      names: [],
+      ids: []
+    });
 
     // Hide the menu
     if (this.props.data.showMenu) {
@@ -166,54 +174,52 @@ var Map = React.createClass({
   },
 
   getGMNA: function(latlng) {
-    axios.get(Config.apiUrl + '/geologic_units/gmna', {
-      params: {
-        lat: latlng.lat.toFixed(5),
-        lng: latlng.lng.toFixed(5)
-      }
-    })
-    .then(function(response) {
-      if (response.data.success.data.length) {
-        this.props.onInteraction('gmna', response.data.success.data[0]);
+    if (this.state.requests.gmna && this.state.requests.gmna.readyState != 4) {
+      this.state.requests.gmna.abort();
+    }
+
+    this.state.requests.gmna = xhr({
+      uri: Config.apiUrl + '/geologic_units/gmna?lat=' + latlng.lat.toFixed(5) + '&lng=' + latlng.lng.toFixed(5)
+    }, function(error, response, body) {
+      var data = JSON.parse(body);
+      if (data.success.data.length) {
+        this.props.onInteraction('gmna', data.success.data[0]);
       }
     }.bind(this));
   },
 
   getGMUS: function(latlng) {
-    axios.get(Config.apiUrl + '/geologic_units/gmus', {
-      params: {
-        lat: latlng.lat.toFixed(5),
-        lng: latlng.lng.toFixed(5)
-      }
-    })
-    .then(function(response) {
-      if (response.data.success.data.length) {
-        this.props.onInteraction('gmus', response.data.success.data[0]);
+    if (this.state.requests.gmus && this.state.requests.gmus.readyState != 4) {
+      this.state.requests.gmus.abort();
+    }
 
-        if (response.data.success.data[0].macro_units.length) {
-          this.getMacrostrat(response.data.success.data[0].macro_units);
-        } else {
-          this.props.onInteraction('macrostrat', {
-            names: [],
-            ids: []
-          });
+    this.state.requests.gmus = xhr({
+      uri: Config.apiUrl + '/geologic_units/gmus?lat=' + latlng.lat.toFixed(5) + '&lng=' + latlng.lng.toFixed(5)
+    }, function(error, response, body) {
+      var data = JSON.parse(body);
+      if (data.success.data.length) {
+        this.props.onInteraction('gmus', data.success.data[0]);
+
+        if (data.success.data[0].macro_units.length) {
+          this.getMacrostrat(data.success.data[0].macro_units);
         }
       }
     }.bind(this));
   },
 
   getMacrostrat: function(unit_ids) {
-    axios.get(Config.apiUrl + '/units', {
-      params: {
-        response: 'long',
-        unit_id: unit_ids.join(',')
-      }
-    })
-    .then(function(response) {
-      if (response.data.success.data.length) {
+    if (this.state.requests.macrostrat && this.state.requests.macrostrat.readyState != 4) {
+      this.state.requests.macrostrat.abort();
+    }
+
+    this.state.requests.macrostrat = xhr({
+      uri: Config.apiUrl + '/units?response=long&unit_id=' + unit_ids.join(',')
+    }, function(error, response, body) {
+      var data = JSON.parse(body);
+      if (data.success.data.length) {
         // Summarize the data
         var unitSummary = {
-          names: response.data.success.data.map(function(d) {
+          names: data.success.data.map(function(d) {
             if (d.Mbr) {
               return d.Mbr + " Member";
             } else if (d.Fm) {
@@ -224,19 +230,19 @@ var Map = React.createClass({
               return d.SGp + " Supergroup"
             }
           }).filter(function(name, idx, names) { return names.indexOf(name) === idx; }),
-          ids: response.data.success.data.map(function(d) { return d.unit_id }),
-          max_thick: Math.max.apply(null, response.data.success.data.map(function(d) { return d.max_thick; })),
-          min_thick: Math.min.apply(null, response.data.success.data.map(function(d) { return d.min_thick; })),
-          b_age: Math.max.apply(null, response.data.success.data.map(function(d) { return d.b_age; })),
-          t_age: Math.min.apply(null, response.data.success.data.map(function(d) { return d.t_age; })),
-          pbdb_collections: response.data.success.data.map(function(d) { return d.pbdb_collections; }).reduce(function(total, each) { return total + each }, 0),
+          ids: data.success.data.map(function(d) { return d.unit_id }),
+          max_thick: Math.max.apply(null, data.success.data.map(function(d) { return d.max_thick; })),
+          min_thick: Math.min.apply(null, data.success.data.map(function(d) { return d.min_thick; })),
+          b_age: Math.max.apply(null, data.success.data.map(function(d) { return d.b_age; })),
+          t_age: Math.min.apply(null, data.success.data.map(function(d) { return d.t_age; })),
+          pbdb_collections: data.success.data.map(function(d) { return d.pbdb_collections; }).reduce(function(total, each) { return total + each }, 0),
           uniqueIntervals: (function() {
             var min_age = 9999,
                 min_age_interval = "",
                 max_age = -1,
                 max_age_interval = "";
 
-            response.data.success.data.forEach(function(d, i) {
+            data.success.data.forEach(function(d, i) {
               if (d.t_age < min_age) {
                 min_age = d.t_age;
                 min_age_interval = d.t_int_name;
@@ -260,19 +266,20 @@ var Map = React.createClass({
   },
 
   getArticles: function(strat_names) {
-    if (!(this.state.articleRequestDone)) {
-      axios.abort(this.state.articleRequest);
+    if (this.state.requests.articles && this.state.requests.articles.readyState != 4) {
+      this.state.requests.articles.abort();
     }
-    this.state.articleRequestDone = false;
-    this.state.articleRequest = axios.get('https://dev.macrostrat.org/mdd/api/v1/articles', {
-      params: {
-        q: strat_names.join(',')
-      }
-    });
 
-    this.state.articleRequest.then(function(response) {
-      this.state.articleRequestDone = true;
-      var data = response.data.results.results;
+    this.state.requests.articles = xhr({
+      url: 'https://dev.macrostrat.org/mdd/api/v1/articles?q=' + strat_names.join(',')
+    }, function(error, response, body) {
+      var data;
+      if (body) {
+        data = JSON.parse(response.body).results.results;
+      } else {
+        data = []
+      }
+
 
       var parsed = {
         journals: []
@@ -296,7 +303,9 @@ var Map = React.createClass({
       }
 
       this.props.onInteraction('articles', parsed);
+
     }.bind(this));
+
   },
 
   render: function() {
