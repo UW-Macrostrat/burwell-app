@@ -184,7 +184,7 @@ var Map = React.createClass({
     }
 
     this.state.requests.gmna = xhr({
-      uri: Config.apiUrl + '/geologic_units/gmna?lat=' + latlng.lat.toFixed(5) + '&lng=' + latlng.lng.toFixed(5)
+      uri: `${Config.apiUrl}/geologic_units/gmna?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}`
     }, function(error, response, body) {
       var data = JSON.parse(body);
       if (data.success.data.length) {
@@ -199,7 +199,7 @@ var Map = React.createClass({
     }
 
     this.state.requests.gmus = xhr({
-      uri: Config.apiUrl + '/geologic_units/gmus?lat=' + latlng.lat.toFixed(5) + '&lng=' + latlng.lng.toFixed(5)
+      uri: `${Config.apiUrl}/geologic_units/gmus?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}`
     }, function(error, response, body) {
       var data = JSON.parse(body);
       if (data.success.data.length) {
@@ -218,7 +218,7 @@ var Map = React.createClass({
     }
 
     this.state.requests.macrostrat = xhr({
-      uri: Config.apiUrl + '/units?response=long&unit_id=' + unit_ids.join(',')
+      uri: `${Config.apiUrl}/units?response=long&unit_id=${unit_ids.join(',')}`
     }, function(error, response, body) {
       var data = JSON.parse(body);
       if (data.success.data.length) {
@@ -276,7 +276,7 @@ var Map = React.createClass({
     }
 
     this.state.requests.articles = xhr({
-      url: 'https://dev.macrostrat.org/mdd/api/v1/articles?q=' + strat_names.join(',')
+      uri: `https://dev.macrostrat.org/mdd/api/v1/articles?q=${strat_names.join(',')}`
     }, function(error, response, body) {
       var data;
       if (body) {
