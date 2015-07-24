@@ -12,6 +12,14 @@ var Article = React.createClass({
   },
 
   render: function() {
+    // Attempt to pull out only the year and not the whole date
+    var year;
+    try {
+      year = (this.props.data.fields.coverDate) ? this.props.data.fields.coverDate[0].match(/\d{4}/)[0] : '';
+    } catch(e) {
+      year = '';
+    }
+
 
     return (
       <div className='dd-article'>
@@ -20,6 +28,7 @@ var Article = React.createClass({
             <strong>{this.props.data.fields.title[0]}</strong>
           </a>
           <i>{(this.props.data.fields.authors) ? this.props.data.fields.authors[0] : 'Unknown'}</i>
+          {year.length ? (' ' + year + '.') : ''}
           <i className={this.state.showText ? 'noDisplay' : 'fa fa-plus-square-o fa-lg show-content'} onClick={this.toggle}></i>
           <i className={this.state.showText ? 'fa fa-minus-square-o fa-lg show-content' : 'noDisplay'} onClick={this.toggle}></i>
         </div>
