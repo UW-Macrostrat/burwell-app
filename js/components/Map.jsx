@@ -10,6 +10,10 @@ var Map = React.createClass({
         gmus: null,
         macrostrat: null,
         articles: null
+      },
+      geologyWasVisible: true,
+      status: {
+        layers: []
       }
     }
   },
@@ -89,16 +93,31 @@ var Map = React.createClass({
     // Handle geology
     if (nextProps.data.hasGeology && !(this.map.hasLayer(this.geology))) {
       this.map.addLayer(this.geology);
+      this.setState({"geologyWasVisible": true});
     } else if (!(nextProps.data.hasGeology) && this.map.hasLayer(this.geology)) {
       this.map.removeLayer(this.geology);
+      this.setState({"geologyWasVisible": false});
     }
 
     // Handle burwell
     if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
       this.map.addLayer(this.burwell);
+
+      if (this.map.hasLayer(this.geology)) {
+        this.setState({"geologyWasVisible": true });
+        this.map.removeLayer(this.geology);
+        this.props.onInteraction('hasGeology', false);
+      }
+
     } else if (!(nextProps.data.hasBurwell) && this.map.hasLayer(this.burwell)) {
       this.map.removeLayer(this.burwell);
+
+      if (this.state.geologyWasVisible) {
+        this.map.addLayer(this.geology);
+        this.props.onInteraction('hasGeology', true);
+      }
     }
+
 
     // Handle GMNA faults
     if (nextProps.data.hasGMNAFaults && !(this.map.hasLayer(this.gmnaFaults))) {
