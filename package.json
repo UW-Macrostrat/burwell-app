@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.html",
   "dependencies": {
+    "async": "^1.4.0",
     "fastclick": "^1.0.6",
     "gulp": "^3.8.11",
     "leaflet": "^0.7.3",

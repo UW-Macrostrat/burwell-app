@@ -1,5 +1,6 @@
 import React from 'react';
 import xhr from 'xhr';
+import async from 'async';
 import Config from './Config.js';
 
 var Map = React.createClass({
@@ -9,12 +10,10 @@ var Map = React.createClass({
         gmna: null,
         gmus: null,
         macrostrat: null,
-        articles: null
+        articles: null,
+        burwell: null
       },
-      geologyWasVisible: true,
-      status: {
-        layers: []
-      }
+      geologyWasVisible: true
     }
   },
 
@@ -93,24 +92,28 @@ var Map = React.createClass({
     // Handle geology
     if (nextProps.data.hasGeology && !(this.map.hasLayer(this.geology))) {
       this.map.addLayer(this.geology);
-      this.setState({"geologyWasVisible": true});
+      this.setState({'geologyWasVisible': true});
+      this.props.onInteraction('hasGeology', true);
     } else if (!(nextProps.data.hasGeology) && this.map.hasLayer(this.geology)) {
       this.map.removeLayer(this.geology);
-      this.setState({"geologyWasVisible": false});
+      this.setState({'geologyWasVisible': false});
+      this.props.onInteraction('hasGeology', false);
     }
 
     // Handle burwell
     if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
       this.map.addLayer(this.burwell);
+      this.props.onInteraction('hasBurwell', true);
 
       if (this.map.hasLayer(this.geology)) {
-        this.setState({"geologyWasVisible": true });
+        this.setState({'geologyWasVisible': true });
         this.map.removeLayer(this.geology);
         this.props.onInteraction('hasGeology', false);
       }
 
     } else if (!(nextProps.data.hasBurwell) && this.map.hasLayer(this.burwell)) {
       this.map.removeLayer(this.burwell);
+      this.props.onInteraction('hasGeology', false);
 
       if (this.state.geologyWasVisible) {
         this.map.addLayer(this.geology);
@@ -161,7 +164,8 @@ var Map = React.createClass({
     this.props.onInteraction('gmus', {
       rocktype: [],
       lithology: []
-    })
+    });
+    this.props.onInteraction('burwell', []);
 
     // Hide the menu
     if (this.props.data.showMenu) {
@@ -174,11 +178,19 @@ var Map = React.createClass({
     } else {
       this.map.panToOffset(d.latlng, [ -((window.innerWidth*0.6)/2), 0 ]);
     }
-
+    (this.props.data.zoom >= 7 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell))))
     // Fetch data depending on zoom level
-    if (this.map.getZoom() < 7) {
+    if (this.props.data.hasBurwell) {
+      if (this.map.getZoom() < 6) {
+        this.getBurwell(d.latlng, 'small');
+      } else if (this.map.getZoom() >= 6 && this.map.getZoom() < 10) {
+        this.getBurwell(d.latlng, 'medium');
+      } else {
+        this.getBurwell(d.latlng, 'large');
+      }
+    } else if (this.map.getZoom() < 7 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell)))) {
       this.getGMNA(d.latlng);
-    } else {
+    } else if (this.map.getZoom() >= 7 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell)))){
       this.getGMUS(d.latlng);
     }
   },
@@ -223,15 +235,43 @@ var Map = React.createClass({
       var data = JSON.parse(body);
       if (data.success.data.length) {
         this.props.onInteraction('gmus', data.success.data[0]);
-
+        var foo = this.props;
         if (data.success.data[0].macro_units.length) {
-          this.getMacrostrat(data.success.data[0].macro_units);
+          this.getMacrostrat(data.success.data[0].macro_units, function(unitSummary) {
+            foo.onInteraction('macrostrat', unitSummary);
+          }.bind(this));
         }
       }
     }.bind(this));
   },
 
-  getMacrostrat: function(unit_ids) {
+  getBurwell: function(latlng, scale) {
+    if (this.state.requests.burwell && this.state.requests.burwell.readyState != 4) {
+      this.state.requests.burwell.abort();
+    }
+
+    this.state.requests.burwell = xhr({
+      uri: `${Config.apiUrl}/geologic_units/burwell?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}&scale=${scale}`
+    }, function(error, response, body) {
+      var data = JSON.parse(body);
+      if (data.success.data.length) {
+        async.eachLimit(data.success.data, 1, function(d, callback) {
+          if (d.macro_units.length) {
+            this.getMacrostrat(d.macro_units, function(unitSummary) {
+              d.macrostrat = unitSummary;
+              callback(null);
+            });
+          } else {
+            callback(null);
+          }
+        }.bind(this), function(error) {
+          this.props.onInteraction('burwell', data.success.data);
+        }.bind(this));
+      }
+    }.bind(this));
+  },
+
+  getMacrostrat: function(unit_ids, callback) {
     if (this.state.requests.macrostrat && this.state.requests.macrostrat.readyState != 4) {
       this.state.requests.macrostrat.abort();
     }
@@ -284,7 +324,12 @@ var Map = React.createClass({
           this.getArticles(unitSummary.names);
         }
 
-        this.props.onInteraction('macrostrat', unitSummary);
+        callback(unitSummary);
+      } else {
+        callback({
+          names: [],
+          ids: []
+        });
       }
     }.bind(this));
   },

@@ -32,7 +32,8 @@ var App = React.createClass({
         },
         articles: {
          journals: []
-       }
+       },
+       burwell: []
       }
   },
 
