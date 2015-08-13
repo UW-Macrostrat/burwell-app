@@ -91,9 +91,15 @@ var Map = React.createClass({
   componentWillUpdate: function(nextProps) {
     // Handle geology
     if (nextProps.data.hasGeology && !(this.map.hasLayer(this.geology))) {
+      if (this.map.hasLayer(this.burwell)) {
+        this.map.removeLayer(this.burwell);
+        this.props.onInteraction('hasBurwell', false);
+      }
+
       this.map.addLayer(this.geology);
       this.setState({'geologyWasVisible': true});
       this.props.onInteraction('hasGeology', true);
+
     } else if (!(nextProps.data.hasGeology) && this.map.hasLayer(this.geology)) {
       this.map.removeLayer(this.geology);
       this.setState({'geologyWasVisible': false});
@@ -101,7 +107,7 @@ var Map = React.createClass({
     }
 
     // Handle burwell
-    if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
+    else if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
       this.map.addLayer(this.burwell);
       this.props.onInteraction('hasBurwell', true);
 

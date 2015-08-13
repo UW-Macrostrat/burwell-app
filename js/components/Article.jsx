@@ -20,11 +20,12 @@ var Article = React.createClass({
       year = '';
     }
 
+    var url = (this.props.data.fields.URL[0].indexOf('elsevier') > -1) ? 'http://www.sciencedirect.com/science/article/pii/' + this.props.data.fields.URL[0].split('pii/')[1] : this.props.data.fields.URL[0];
 
     return (
       <div className='dd-article'>
         <div className='dd-article-heading'>
-          <a href={'http://www.sciencedirect.com/science/article/pii/' + this.props.data.fields.URL[0].split('pii/')[1]} target='_blank' className='title-link'>
+          <a href={url} target='_blank' className='title-link'>
             <strong>{this.props.data.fields.title[0]}</strong>
           </a>
           <i>{(this.props.data.fields.authors) ? this.props.data.fields.authors[0] : 'Unknown'}</i>
