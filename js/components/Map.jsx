@@ -38,7 +38,7 @@ var Map = React.createClass({
     // Add our basemap
     this.stamen = L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png', {
       zIndex: 1
-    }).addTo(map);
+    });
 
     // Add the geologic basemap
     this.geology = L.tileLayer('https://dev.macrostrat.org/tiles/geologic_v2/{z}/{x}/{y}.png', {
@@ -46,14 +46,14 @@ var Map = React.createClass({
       opacity: 0.8,
       zIndex: 100,
       detectRetina: true
-    }).addTo(map);
+    });
 
     this.burwell = L.tileLayer('https://dev.macrostrat.org/tiles/burwell/{z}/{x}/{y}.png', {
       maxZoom: 12,
-      opacity: 0.8,
+      opacity: 0.6,
       zIndex: 100,
       detectRetina: true
-    });
+    }).addTo(map);
 
     this.gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
       maxZoom: 12,
@@ -69,7 +69,7 @@ var Map = React.createClass({
 
     this.satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
       zIndex: 1
-    });
+    }).addTo(map);
 
 
     // Create the marker that will be used when user clicks
@@ -154,6 +154,11 @@ var Map = React.createClass({
     // Handle geology opacity
     if (nextProps.data.geologyOpacity != this.props.data.geologyOpacity) {
       this.geology.setOpacity(nextProps.data.geologyOpacity/100);
+    }
+
+    // Handle burwell opacity
+    if (nextProps.data.burwellOpacity != this.props.data.burwellOpacity) {
+      this.burwell.setOpacity(nextProps.data.burwellOpacity/100);
     }
   },
 
