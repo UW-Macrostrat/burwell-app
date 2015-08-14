@@ -189,12 +189,12 @@ var Map = React.createClass({
     } else {
       this.map.panToOffset(d.latlng, [ -((window.innerWidth*0.6)/2), 0 ]);
     }
-    (this.props.data.zoom >= 7 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell))))
+    (this.props.data.zoom >= 5 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell))))
     // Fetch data depending on zoom level
     if (this.props.data.hasBurwell) {
-      if (this.map.getZoom() < 6) {
+      if (this.map.getZoom() < 5) {
         this.getBurwell(d.latlng, 'small');
-      } else if (this.map.getZoom() >= 6 && this.map.getZoom() < 10) {
+      } else if (this.map.getZoom() >= 5 && this.map.getZoom() < 10) {
         this.getBurwell(d.latlng, 'medium');
       } else {
         this.getBurwell(d.latlng, 'large');

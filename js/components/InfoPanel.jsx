@@ -20,13 +20,14 @@ var InfoPanel = React.createClass({
 
         <div className={this.props.data.hasBurwell ? 'unit_info_content' : 'noDisplay'}>
           <BurwellInfo data={this.props.data.burwell}/>
+          <ArticleInfo data={this.props.data.articles}/>
         </div>
 
         <div className={(this.props.data.zoom < 7  && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell)))) ? 'unit_info_content' : 'noDisplay'}>
           <GMNAInfo data={this.props.data.gmna} />
         </div>
 
-        <div className={(this.props.data.zoom >= 7 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell)))) ? 'unit_info_content' : 'noDisplay'}>
+        <div className={(this.props.data.zoom >= 5 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell)))) ? 'unit_info_content' : 'noDisplay'}>
           <GMUSInfo data={this.props.data.gmus}/>
           <MacrostratInfo data={this.props.data.macrostrat}/>
           <ArticleInfo data={this.props.data.articles}/>
