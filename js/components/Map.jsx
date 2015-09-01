@@ -267,7 +267,7 @@ var Map = React.createClass({
       var data = JSON.parse(body);
       if (data.success.data.length) {
         async.eachLimit(data.success.data, 1, function(d, callback) {
-          if (d.macro_units.length) {
+          if (d.macro_units && d.macro_units.length) {
             this.getMacrostrat(d.macro_units, function(unitSummary) {
               d.macrostrat = unitSummary;
               callback(null);
