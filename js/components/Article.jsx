@@ -33,7 +33,7 @@ var Article = React.createClass({
           <i className={this.state.showText ? 'noDisplay' : 'fa fa-plus-square-o fa-lg show-content'} onClick={this.toggle}></i>
           <i className={this.state.showText ? 'fa fa-minus-square-o fa-lg show-content' : 'noDisplay'} onClick={this.toggle}></i>
         </div>
-        <div className={this.state.showText ? 'dd-text' : 'noDisplay'}>
+        <div className={this.state.showText ? 'dd-text auto-height' : 'dd-text'}>
           {this.props.data.highlight.contents.map(function(snippet, i) {
             // The text from Elasticsearch sometimes has errant < and >, which mess up the html
             // so we have to do this, otherwise when React encounters one of those

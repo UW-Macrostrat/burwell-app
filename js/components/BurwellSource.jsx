@@ -6,7 +6,8 @@ var BurwellSource = React.createClass({
   render() {
     return (
       <div className='burwell-source'>
-        <h2 className='title-two'>{this.props.data.name} <small><i>&mdash; via {this.props.sourceMap[this.props.data.source_id].name}</i></small></h2>
+        <h2 className='title-two'>{this.props.data.name}</h2>
+        <p className='source-attribution'><small><i>From {this.props.sourceMap[this.props.data.source_id].name}</i></small></p>
 
         <p className='info-attr'><strong>Age: </strong>
         {

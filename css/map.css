@@ -79,17 +79,22 @@ small {
   -moz-border-radius: 50%;
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.7);
   border: 1px solid #777;
-  color: #777;
+  color: #ffffff;
   text-align: center;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 200;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.leaflet-bar a, .leaflet-bar a:hover {
+  background-color: rgba(0, 0, 0, 1);
+  color: #ffffff;
 }
 
 .info-link:hover {
@@ -256,6 +261,16 @@ small {
   color: #aaa;
 }
 
+.dd-text {
+  overflow: hidden;
+  max-height: 0;
+  -webkit-transition: max-height 0.65s ease-in-out;
+  -moz-transition: max-height 0.65s ease-in-out;
+  transition: max-height 0.65s ease-in-out;
+}
+.auto-height {
+  max-height: 500px;
+}
 .journal {
   padding-bottom: 25px;
 }
@@ -348,6 +363,7 @@ small {
 .show-more {
   cursor: pointer;
   color: orange;
+  font-size: 12px;
 }
 
 .the-rest {
@@ -381,6 +397,10 @@ small {
 
 .visible {
   visibility: visible;
+}
+
+.source-attribution {
+  margin-top: -15px;
 }
 
 @media(max-width: 460px) {

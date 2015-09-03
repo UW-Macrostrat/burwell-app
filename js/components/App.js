@@ -87,3 +87,5 @@ var App = React.createClass({
 });
 
 export default App;
+
+console.log('Looking for the code? Find it here - https://github.com/UW-Macrostrat/gmna-app');

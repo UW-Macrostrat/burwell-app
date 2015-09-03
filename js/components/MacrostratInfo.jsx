@@ -6,7 +6,7 @@ var MacrostratInfo = React.createClass({
       <h3 className='title-three'>Macrostrat</h3>
       <hr/>
       <h2 className='title-two'>{this.props.data.names.join(', ')}</h2>
-      <p className='info-attr'><strong>Units: </strong>{this.props.data.ids.join(', ')}</p>
+      <p className='info-attr'><strong>Unit ID(s): </strong>{this.props.data.ids.join(', ')}</p>
       <p className='info-attr'><strong>Age: </strong>{this.props.data.uniqueIntervals} - ({this.props.data.b_age} - {this.props.data.t_age}<small>Ma</small>)</p>
       <p className='info-attr'><strong>Thickness: </strong>{this.props.data.min_thick} - {this.props.data.max_thick}<small>m</small></p>
       <p className='info-attr'><strong>PBDB Collections: </strong>{this.props.data.pbdb_collections}</p>
