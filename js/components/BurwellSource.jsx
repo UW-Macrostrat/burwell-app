@@ -7,7 +7,9 @@ var BurwellSource = React.createClass({
     return (
       <div className='burwell-source'>
         <h2 className='title-two'>{this.props.data.name}</h2>
-        <p className='source-attribution'><small><i>From {this.props.sourceMap[this.props.data.source_id].name}</i></small></p>
+        <p className='source-attribution'><small><i>
+          From <a href={this.props.sourceMap[this.props.data.source_id].url} target='_blank'>{this.props.sourceMap[this.props.data.source_id].name}</a>
+        </i></small></p>
 
         <p className='info-attr'><strong>Age: </strong>
         {

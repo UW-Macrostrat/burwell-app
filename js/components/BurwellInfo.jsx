@@ -6,7 +6,8 @@ import BurwellSource from './BurwellSource.jsx';
 var BurwellInfo = React.createClass({
   getInitialState() {
     return {
-      sources: {}
+      sources: {},
+      scales: {},
     }
   },
 
@@ -18,11 +19,16 @@ var BurwellInfo = React.createClass({
 
       if (data.success.data.length) {
         var mappedSources = {};
+        var mappedScales = {};
         for (var i = 0; i < data.success.data.length; i++) {
           mappedSources[data.success.data[i].source_id] = data.success.data[i];
+          mappedScales[data.success.data[i].source_id] = data.success.data[i].scale;
         }
 
-        this.setState({sources: mappedSources});
+        this.setState({
+          sources: mappedSources,
+          scales: mappedScales
+        });
       }
     }.bind(this))
   },

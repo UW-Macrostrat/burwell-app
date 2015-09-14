@@ -17,6 +17,10 @@ var Map = React.createClass({
     }
   },
 
+  locate: function() {
+    this.map.locate();
+  },
+
   componentDidMount: function() {
     var map = this.map = L.map(this.getDOMNode(), {
       attributionControl: false,
@@ -68,7 +72,8 @@ var Map = React.createClass({
     });
 
     this.satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
-      zIndex: 1
+      zIndex: 1,
+      maxZoom: 14
     }).addTo(map);
 
 
@@ -86,6 +91,12 @@ var Map = React.createClass({
     map.on('click', this.onClick);
     map.on('zoomstart, movestart', this.onMove);
     map.on('zoomend', this.adjustInterface);
+
+    map.on('locationfound', function(event) {
+      map.setView(event.latlng, 9);
+    });
+
+    this.props.locate(this.locate);
   },
 
   componentWillUpdate: function(nextProps) {
@@ -257,15 +268,32 @@ var Map = React.createClass({
   },
 
   getBurwell: function(latlng, scale) {
+    var foo = {
+      2: 'small',
+      3: 'small',
+      4: 'small',
+      5: 'small',
+      6: 'medium',
+      7: 'medium',
+      8: 'medium',
+      9: 'medium',
+      10: 'large',
+      11: 'large',
+      12: 'large',
+      13: 'large',
+      14: 'large'
+    }
+
     if (this.state.requests.burwell && this.state.requests.burwell.readyState != 4) {
       this.state.requests.burwell.abort();
     }
 
     this.state.requests.burwell = xhr({
-      uri: `${Config.apiUrl}/geologic_units/burwell?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}&scale=${scale}`
+      uri: `${Config.apiUrl}/geologic_units/burwell?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}`
     }, function(error, response, body) {
       var data = JSON.parse(body);
       if (data.success.data.length) {
+        // Find which scale we should use
         async.eachLimit(data.success.data, 1, function(d, callback) {
           if (d.macro_units && d.macro_units.length) {
             this.getMacrostrat(d.macro_units, function(unitSummary) {

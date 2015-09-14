@@ -5,6 +5,7 @@ import Attribution from './Attribution.jsx';
 import MenuControl from './MenuControl.jsx';
 import Menu from './Menu.jsx';
 import InfoPanel from './InfoPanel.jsx';
+import MenuToggle from './MenuToggle.jsx';
 
 var App = React.createClass({
   getInitialState: function() {
@@ -34,7 +35,8 @@ var App = React.createClass({
         articles: {
          journals: []
        },
-       burwell: []
+       burwell: [],
+       locate: null
       }
   },
 
@@ -58,19 +60,17 @@ var App = React.createClass({
         <Map
           data={this.state}
           onInteraction={this.updateState}
+          locate={function(l) {
+            this.setState({locate: l});
+          }.bind(this)}
         />
 
-        <AttributionControl
-          onInteraction={this.updateState}
-        />
+
         <Attribution
           data={this.state}
           onInteraction={this.updateState}
         />
 
-        <MenuControl
-          onInteraction={this.updateState}
-        />
         <Menu
           data={this.state}
           onInteraction={this.updateState}
@@ -80,6 +80,11 @@ var App = React.createClass({
           data={this.state}
           onInteraction={this.updateState}
         />
+
+       <MenuToggle
+          onInteraction={this.updateState}
+          locate={this.state.locate}
+      />
 
       </div>
     );
