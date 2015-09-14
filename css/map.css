@@ -432,10 +432,15 @@ small {
 }
 
 .expand-menu-center {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
   display: flex;
   justify-content: center;
   flex-direction: column;
   text-align: center;
+  -webkit-justify-content: center;
+  -webkit-flex-direction: column;
 }
 
 .expand-menu {
