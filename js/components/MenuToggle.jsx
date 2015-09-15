@@ -54,9 +54,9 @@ var MenuToggle = React.createClass({
               <div className='expand-menu-button expand-menu-center' onClick={this.getLocation}>
                 <i className='fa fa-map-marker'></i>
               </div>
-              <div className='expand-menu-button expand-menu-center'>
+              {/*<div className='expand-menu-button expand-menu-center'>
                 <i className='fa fa-search'></i>
-              </div>
+              </div>*/}
           </div>
       </div>
     );

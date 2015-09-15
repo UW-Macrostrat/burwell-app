@@ -432,9 +432,19 @@ small {
     position: absolute;
     bottom: 0;
     z-index: 2;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+.expand-toggle:hover {
+  background-color: #e82200;
 }
 .expand-toggle.expanded {
     background-color: #35e1ff;
+}
+.expand-toggle.expanded:hover {
+    background-color: #00c5e8;
 }
 
 .expand-menu-center {
