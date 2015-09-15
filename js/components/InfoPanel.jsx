@@ -4,7 +4,7 @@ import GMUSInfo from './GMUSInfo.jsx';
 import MacrostratInfo from './MacrostratInfo.jsx';
 import ArticleInfo from './ArticleInfo.jsx';
 import BurwellInfo from './BurwellInfo.jsx';
-
+import LocationStats from './LocationStats.jsx';
 var InfoPanel = React.createClass({
 
   toggle: function() {
@@ -19,7 +19,11 @@ var InfoPanel = React.createClass({
         <div className='close' onClick={this.toggle}>x</div>
 
         <div className={this.props.data.hasBurwell ? 'unit_info_content' : 'noDisplay'}>
-          <BurwellInfo data={this.props.data.burwell} sources={this.props.sources}/>
+          <LocationStats
+            lat={this.props.data.lat}
+            lng={this.props.data.lng}
+          />
+          <BurwellInfo data={this.props.data.burwell} sources={this.props.sources} onInteraction={this.props.onInteraction}/>
           <ArticleInfo data={this.props.data.articles}/>
         </div>
 

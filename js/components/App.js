@@ -4,7 +4,7 @@ import xhr from 'xhr';
 import Config from './Config.js';
 
 import Attribution from './Attribution.jsx';
-
+import BurwellReference from './BurwellReference.jsx';
 import Menu from './Menu.jsx';
 import InfoPanel from './InfoPanel.jsx';
 import MenuToggle from './MenuToggle.jsx';
@@ -15,10 +15,11 @@ var App = React.createClass({
         sources: {},
         scales: {},
         showAttribution: false,
+        showSource: false,
         showMenu: false,
         active: false,
-        lat: -1,
-        lng: -1,
+        lat: null,
+        lng: null,
         zoom: 0,
         hasGeology: false,
         geologyOpacity: 80,
@@ -41,6 +42,16 @@ var App = React.createClass({
          journals: []
        },
        burwell: [],
+       currentSource: {
+         source_id: null,
+         name: '',
+         url: '',
+         ref_title: '',
+         authors: '',
+         ref_year: '',
+         ref_source: '',
+         isbn_doi: ''
+       },
        locate: null
       }
   },
@@ -99,6 +110,11 @@ var App = React.createClass({
           onInteraction={this.updateState}
         />
 
+        <BurwellReference
+          data={this.state}
+          onInteraction={this.updateState}
+        />
+
         <Menu
           data={this.state}
           onInteraction={this.updateState}
@@ -110,10 +126,10 @@ var App = React.createClass({
           sources={this.state.sources}
         />
 
-       <MenuToggle
+        <MenuToggle
           onInteraction={this.updateState}
           locate={this.state.locate}
-      />
+        />
 
       </div>
     );

@@ -176,6 +176,8 @@ var Map = React.createClass({
   onClick: function(d) {
     // Set the marker on the click location and add it to the map
     this.marker.setLatLng(d.latlng).addTo(this.map);
+    this.props.onInteraction('lat', d.latlng.lat);
+    this.props.onInteraction('lng', d.latlng.lng);
     this.props.onInteraction('active', true);
     this.props.onInteraction('articles', {journals: []});
     this.props.onInteraction('macrostrat', {

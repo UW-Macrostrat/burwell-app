@@ -16,7 +16,7 @@ var BurwellInfo = React.createClass({
       <h3 className='title-three'><a href='#'>Burwell</a></h3>
       <hr/>
       {this.props.data.map(
-        (source, idx) => <BurwellSource key={idx} data={source} sourceMap={sourceHash} />
+        (source, idx) => <BurwellSource key={idx} data={source} sourceMap={sourceHash} onInteraction={this.props.onInteraction}/>
       )}
 
     </div>

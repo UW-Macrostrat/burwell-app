@@ -3,12 +3,27 @@ import LongText from './LongText.jsx';
 import MacrostratInfo from './MacrostratInfo.jsx';
 
 var BurwellSource = React.createClass({
+  getInitialState() {
+    return {
+      source_id: null
+    }
+  },
+
+  showSource(event) {
+
+    event.preventDefault();
+    console.log(this.props.sourceMap[this.props.data.source_id]);
+    this.props.onInteraction('active', false);
+    this.props.onInteraction('currentSource', this.props.sourceMap[this.props.data.source_id]);
+    this.props.onInteraction('showSource', true);
+  },
+
   render() {
     return (
       <div className='burwell-source'>
         <h2 className='title-two'>{this.props.data.name}</h2>
         <p className='source-attribution'><small><i>
-          From <a href={this.props.sourceMap[this.props.data.source_id].url} target='_blank'>{this.props.sourceMap[this.props.data.source_id].name}</a>
+          From <a href='#' onClick={this.showSource}>{this.props.sourceMap[this.props.data.source_id].name}</a>
         </i></small></p>
 
         <p className='info-attr'><strong>Age: </strong>
