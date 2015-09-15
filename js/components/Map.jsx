@@ -180,6 +180,7 @@ var Map = React.createClass({
     this.props.onInteraction('articles', {journals: []});
     this.props.onInteraction('macrostrat', {
       names: [],
+      strat_names: [{id: null, name: null}],
       ids: []
     });
     this.props.onInteraction('gmna', {})
@@ -268,7 +269,7 @@ var Map = React.createClass({
   },
 
   getBurwell: function(latlng, scale) {
-    var foo = {
+    var scaleLookup = {
       2: 'small',
       3: 'small',
       4: 'small',
@@ -284,6 +285,12 @@ var Map = React.createClass({
       14: 'large'
     }
 
+    var priorities = {
+      'small': ['small', 'medium', 'large'],
+      'medium': ['medium', 'large', 'small'],
+      'large': ['large', 'medium', 'small']
+    }
+
     if (this.state.requests.burwell && this.state.requests.burwell.readyState != 4) {
       this.state.requests.burwell.abort();
     }
@@ -294,7 +301,25 @@ var Map = React.createClass({
       var data = JSON.parse(body);
       if (data.success.data.length) {
         // Find which scale we should use
-        async.eachLimit(data.success.data, 1, function(d, callback) {
+        var currentScale = scaleLookup[this.props.data.zoom];
+        var returnedScales = data.success.data.map(d => { return this.props.scales[d.source_id] });
+
+        var targetScale;
+
+        for (var i = 0; i < priorities[currentScale].length; i++) {
+          if (returnedScales.indexOf(priorities[currentScale][i]) > -1) {
+            targetScale = priorities[currentScale][i];
+            break;
+          }
+        }
+
+        var bestFit = data.success.data.filter(d => {
+          if (this.props.scales[d.source_id] == targetScale) {
+            return d;
+          }
+        });
+
+        async.eachLimit(bestFit, 1, function(d, callback) {
           if (d.macro_units && d.macro_units.length) {
             this.getMacrostrat(d.macro_units, function(unitSummary) {
               d.macrostrat = unitSummary;
@@ -304,7 +329,7 @@ var Map = React.createClass({
             callback(null);
           }
         }.bind(this), function(error) {
-          this.props.onInteraction('burwell', data.success.data);
+          this.props.onInteraction('burwell', bestFit);
         }.bind(this));
       }
     }.bind(this));
@@ -320,8 +345,37 @@ var Map = React.createClass({
     }, function(error, response, body) {
       var data = JSON.parse(body);
       if (data.success.data.length) {
+
+        var allStratNames = data.success.data.map(function(d) {
+          var name;
+
+          if (d.Mbr) {
+            name = d.Mbr + " Member";
+          } else if (d.Fm) {
+            name = d.Fm + " Formation";
+          } else if (d.Gp) {
+            name = d.Gp + " Group";
+          } else if (d.SGp) {
+            name = d.SGp + " Supergroup"
+          }
+
+          return {
+            name: name,
+            id: d.strat_name_id
+          }
+        });
+        var s = {}
+
+        var filteredStratNames = allStratNames.filter(function(d) {
+          if (!s[d.id]) {
+            s[d.id] = d;
+            return d;
+          }
+        });
+
         // Summarize the data
         var unitSummary = {
+          strat_names: filteredStratNames,
           names: data.success.data.map(function(d) {
             if (d.Mbr) {
               return d.Mbr + " Member";

@@ -33,6 +33,11 @@ html, body, #map {
   line-height: 1.2em;
 }
 
+.title-two a {
+  color: inherit;
+  text-decoration: none;
+}
+
 strong {
   color: orange;
 }
@@ -391,8 +396,9 @@ small {
   margin: 0;
   margin-bottom: 2px;
 }
-.info-attr > a {
-  color: #aaaaaa;
+.info-attr a {
+  color: inherit;
+  text-decoration: none;
 }
 
 .visible {
@@ -413,7 +419,7 @@ small {
     bottom: 10px;
     right: 10px;
     text-align: center;
-    z-index: 99999999;
+    z-index: 99999;
     color: white;
     width: auto;
     cursor: pointer;
@@ -455,7 +461,6 @@ small {
     width: 50px;
     border-radius: 35px;
     background-color: #3E92A3;
-    border: 1px solid #777777;
     margin-bottom: 5px;
     -moz-transition: all .2s ease-in;
     -o-transition: all .2s ease-in;

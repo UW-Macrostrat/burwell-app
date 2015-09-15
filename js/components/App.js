@@ -1,8 +1,10 @@
 import React from 'react';
 import Map from './Map.jsx';
-import AttributionControl from './AttributionControl.jsx';
+import xhr from 'xhr';
+import Config from './Config.js';
+
 import Attribution from './Attribution.jsx';
-import MenuControl from './MenuControl.jsx';
+
 import Menu from './Menu.jsx';
 import InfoPanel from './InfoPanel.jsx';
 import MenuToggle from './MenuToggle.jsx';
@@ -10,6 +12,8 @@ import MenuToggle from './MenuToggle.jsx';
 var App = React.createClass({
   getInitialState: function() {
       return {
+        sources: {},
+        scales: {},
         showAttribution: false,
         showMenu: false,
         active: false,
@@ -30,6 +34,7 @@ var App = React.createClass({
         },
         macrostrat: {
           names: [],
+          strat_names: [{id: null, name:null}],
           ids: []
         },
         articles: {
@@ -54,6 +59,28 @@ var App = React.createClass({
     //this.setState(updatedProp);
   },
 
+  componentWillMount() {
+    xhr({
+      uri: `${Config.apiUrl}/defs/sources?all`
+    }, function(error, response, body) {
+      var data = JSON.parse(body);
+
+      if (data.success.data.length) {
+        var mappedSources = {};
+        var mappedScales = {};
+        for (var i = 0; i < data.success.data.length; i++) {
+          mappedSources[data.success.data[i].source_id] = data.success.data[i];
+          mappedScales[data.success.data[i].source_id] = data.success.data[i].scale;
+        }
+
+        this.setState({
+          sources: mappedSources,
+          scales: mappedScales
+        });
+      }
+    }.bind(this))
+  },
+
   render: function() {
     return (
       <div className='container'>
@@ -63,6 +90,7 @@ var App = React.createClass({
           locate={function(l) {
             this.setState({locate: l});
           }.bind(this)}
+          scales={this.state.scales}
         />
 
 
@@ -79,6 +107,7 @@ var App = React.createClass({
         <InfoPanel
           data={this.state}
           onInteraction={this.updateState}
+          sources={this.state.sources}
         />
 
        <MenuToggle
