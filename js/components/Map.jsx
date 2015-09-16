@@ -24,7 +24,7 @@ var Map = React.createClass({
   componentDidMount: function() {
     var map = this.map = L.map(this.getDOMNode(), {
       attributionControl: false,
-      minZoom: 2
+      minZoom: 1
     }).setView([40, -97], 5);
 
     // If there is a hash location, go there immediately
@@ -174,6 +174,7 @@ var Map = React.createClass({
   },
 
   onClick: function(d) {
+    console.log(d);
     // Set the marker on the click location and add it to the map
     this.marker.setLatLng(d.latlng).addTo(this.map);
     this.props.onInteraction('lat', d.latlng.lat);
@@ -206,9 +207,11 @@ var Map = React.createClass({
     (this.props.data.zoom >= 5 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell))))
     // Fetch data depending on zoom level
     if (this.props.data.hasBurwell) {
-      if (this.map.getZoom() < 5) {
+      if (this.map.getZoom() < 4) {
+        this.getBurwell(d.latlng, 'tiny');
+      } else if (this.map.getZoom() > 3 && this.map.getZoom() < 6) {
         this.getBurwell(d.latlng, 'small');
-      } else if (this.map.getZoom() >= 5 && this.map.getZoom() < 10) {
+      } else if (this.map.getZoom() >= 6 && this.map.getZoom() < 10) {
         this.getBurwell(d.latlng, 'medium');
       } else {
         this.getBurwell(d.latlng, 'large');
@@ -272,8 +275,10 @@ var Map = React.createClass({
 
   getBurwell: function(latlng, scale) {
     var scaleLookup = {
-      2: 'small',
-      3: 'small',
+      0: 'tiny',
+      1: 'tiny',
+      2: 'tiny',
+      3: 'tiny',
       4: 'small',
       5: 'small',
       6: 'medium',
@@ -288,9 +293,10 @@ var Map = React.createClass({
     }
 
     var priorities = {
-      'small': ['small', 'medium', 'large'],
-      'medium': ['medium', 'large', 'small'],
-      'large': ['large', 'medium', 'small']
+      'tiny': ['tiny', 'small', 'medium', 'large'],
+      'small': ['small', 'medium', 'large', 'tiny'],
+      'medium': ['medium', 'large', 'small', 'tiny'],
+      'large': ['large', 'medium', 'small', 'tiny']
     }
 
     if (this.state.requests.burwell && this.state.requests.burwell.readyState != 4) {
