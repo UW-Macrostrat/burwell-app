@@ -15,13 +15,15 @@ var InfoPanel = React.createClass({
 
     return (
       <div className={this.props.data.active ? ('unit_info ' + ((orientation === 'portrait') ? 'moveDown' : 'moveRight')) : 'unit_info'} id={(orientation === 'portrait') ? 'unit_info_bottom' : 'unit_info_right'}>
-        <div className='close' onClick={this.toggle}>x</div>
+        <div className='unit-info-header'>
+          <div className='close' onClick={this.toggle}>x</div>
+            <LocationStats
+              lat={this.props.data.lat}
+              lng={this.props.data.lng}
+            />
+        </div>
 
         <div className={this.props.data.hasBurwell ? 'unit_info_content' : 'noDisplay'}>
-          <LocationStats
-            lat={this.props.data.lat}
-            lng={this.props.data.lng}
-          />
           <BurwellInfo data={this.props.data.burwell} sources={this.props.sources} onInteraction={this.props.onInteraction}/>
           <ArticleInfo data={this.props.data.articles}/>
         </div>

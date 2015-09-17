@@ -33,7 +33,7 @@ var Map = React.createClass({
       map.setView(hashLocation.center, hashLocation.zoom);
       this.props.onInteraction('zoom', hashLocation.zoom);
     } else {
-      map.setView([40, -97], 5);
+      map.setView([40.8, -94.1], 3);
     }
 
     // Make map states linkable
@@ -46,7 +46,7 @@ var Map = React.createClass({
 
     this.burwell = L.tileLayer('https://dev.macrostrat.org/tiles/burwell/{z}/{x}/{y}.png', {
       maxZoom: 12,
-      opacity: 0.6,
+      opacity: 0.4,
       zIndex: 100,
       detectRetina: true
     }).addTo(map);

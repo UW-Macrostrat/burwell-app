@@ -19,6 +19,11 @@ var LocationStats = React.createClass({
     }
   },
 
+  normalizeLng(lng) {
+    // via https://github.com/Leaflet/Leaflet/blob/32c9156cb1d1c9bd53130639ec4d8575fbeef5a6/src/core/Util.js#L87
+    return ((lng - 180) % 360 + 360) % 360 - 180;
+  },
+
   _update(lat, lng) {
     if (this.state.requests.elevation && this.state.requests.elevation.readyState != 4) {
       this.state.requests.elevation.abort();
@@ -26,6 +31,7 @@ var LocationStats = React.createClass({
     if (!lat || !lng) {
       return;
     }
+
     xhr({
       uri: `${Config.apiUrl}/elevation?lat=${lat.toFixed(5)}&lng=${lng.toFixed(5)}`
     }, (error, response, body) => {
@@ -67,18 +73,18 @@ var LocationStats = React.createClass({
     return (
     <div className='location-stats'>
       <div className='location-stat coordinates'>
-        <i className='fa fa-location-arrow'></i>
+        {/*<i className='fa fa-location-arrow'></i>*/}
         <div className='coords flex-center-text'>
-          <p>{this.state.lat ? this.state.lat.toFixed(4) : ''}, {this.state.lng ? this.state.lng.toFixed(4) : ''}</p>
-          <p>{this.state.dmsLat}, {this.state.dmsLng}</p>
+          <p>{this.state.lat ? this.state.lat.toFixed(4) : ''}, {this.state.lng ? this.normalizeLng(this.state.lng).toFixed(4) : ''}</p>
+          {/*<p>{this.state.dmsLat}, {this.state.dmsLng}</p>*/}
         </div>
       </div>
 
       <div className='location-stat'>
-        <i className='fa fa-area-chart fa-5x'></i>
+        {/*<i className='fa fa-area-chart fa-5x'></i>*/}
+
         <div className='elevations flex-center-text'>
-          <p>{this.state.elevation.m} <small>m</small></p>
-          <p>{this.state.elevation.ft} <small>ft</small></p>
+          <p>{this.state.elevation.m} <small>m</small> | {this.state.elevation.ft} <small>ft</small></p>
         </div>
       </div>
     </div>

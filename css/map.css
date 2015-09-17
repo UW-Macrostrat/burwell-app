@@ -168,6 +168,11 @@ small {
   -webkit-backface-visibility: hidden;
 }
 
+.unit-info-header {
+  height: 50px;
+  position: fixed;
+  width: 100%;
+}
 .macrostrat-data > a, .macrostrat-data > h2 > a {
   text-decoration: none;
   color: #ccc;
@@ -245,6 +250,7 @@ small {
  /* padding-bottom: 140px; */
   z-index: 0;
   height: auto;
+  margin-top: 15px;
 }
 
 .unit_info_content > a {
@@ -493,10 +499,10 @@ small {
 }
 
 .location-stats {
-  font-size: 12px;
-  text-align: center;
-  margin-top: -25px;
-  margin-bottom: -15px;
+  font-size: 11px;
+  text-align: right;
+  padding-right: 25px;
+  padding-top: 20px;
 }
 .inline {
   display: inline;
@@ -521,28 +527,19 @@ small {
 }
 .location-stat {
   display: inline-block;
-  text-align: left;
-  padding: 10px;
 }
 .coordinates > i {
   margin-left: 65px;
 }
 .elevations {
-  font-size: 16;
   line-height: 0;
   font-weight: 200;
-  width: 100px;
-  height: 100px;
-}
-.elevations > p:first-of-type {
-  margin: 10px;
+  margin-left: 16px;
 }
 .coords {
-    font-size: 14px;
-    line-height: 0;
-    font-weight: 200;
-    width: 222px;
-    height: 100px;
+  line-height: 0;
+  font-weight: 200;
+  letter-spacing: 1px;
 }
 
 @media(max-width: 460px) {
