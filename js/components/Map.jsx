@@ -44,14 +44,6 @@ var Map = React.createClass({
       zIndex: 1
     });
 
-    // Add the geologic basemap
-    this.geology = L.tileLayer('https://dev.macrostrat.org/tiles/geologic_v2/{z}/{x}/{y}.png', {
-      maxZoom: 12,
-      opacity: 0.8,
-      zIndex: 100,
-      detectRetina: true
-    });
-
     this.burwell = L.tileLayer('https://dev.macrostrat.org/tiles/burwell/{z}/{x}/{y}.png', {
       maxZoom: 12,
       opacity: 0.6,
@@ -100,44 +92,16 @@ var Map = React.createClass({
   },
 
   componentWillUpdate: function(nextProps) {
-    // Handle geology
-    if (nextProps.data.hasGeology && !(this.map.hasLayer(this.geology))) {
-      if (this.map.hasLayer(this.burwell)) {
-        this.map.removeLayer(this.burwell);
-        this.props.onInteraction('hasBurwell', false);
-      }
-
-      this.map.addLayer(this.geology);
-      this.setState({'geologyWasVisible': true});
-      this.props.onInteraction('hasGeology', true);
-
-    } else if (!(nextProps.data.hasGeology) && this.map.hasLayer(this.geology)) {
-      this.map.removeLayer(this.geology);
-      this.setState({'geologyWasVisible': false});
-      this.props.onInteraction('hasGeology', false);
-    }
 
     // Handle burwell
-    else if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
+    if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
       this.map.addLayer(this.burwell);
       this.props.onInteraction('hasBurwell', true);
-
-      if (this.map.hasLayer(this.geology)) {
-        this.setState({'geologyWasVisible': true });
-        this.map.removeLayer(this.geology);
-        this.props.onInteraction('hasGeology', false);
-      }
 
     } else if (!(nextProps.data.hasBurwell) && this.map.hasLayer(this.burwell)) {
       this.map.removeLayer(this.burwell);
       this.props.onInteraction('hasGeology', false);
-
-      if (this.state.geologyWasVisible) {
-        this.map.addLayer(this.geology);
-        this.props.onInteraction('hasGeology', true);
-      }
     }
-
 
     // Handle GMNA faults
     if (nextProps.data.hasGMNAFaults && !(this.map.hasLayer(this.gmnaFaults))) {
@@ -162,11 +126,6 @@ var Map = React.createClass({
       this.map.removeLayer(this.satellite);
     }
 
-    // Handle geology opacity
-    if (nextProps.data.geologyOpacity != this.props.data.geologyOpacity) {
-      this.geology.setOpacity(nextProps.data.geologyOpacity/100);
-    }
-
     // Handle burwell opacity
     if (nextProps.data.burwellOpacity != this.props.data.burwellOpacity) {
       this.burwell.setOpacity(nextProps.data.burwellOpacity/100);
@@ -186,11 +145,7 @@ var Map = React.createClass({
       strat_names: [{id: null, name: null}],
       ids: []
     });
-    this.props.onInteraction('gmna', {})
-    this.props.onInteraction('gmus', {
-      rocktype: [],
-      lithology: []
-    });
+
     this.props.onInteraction('burwell', []);
 
     // Hide the menu
@@ -216,10 +171,6 @@ var Map = React.createClass({
       } else {
         this.getBurwell(d.latlng, 'large');
       }
-    } else if (this.map.getZoom() < 7 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell)))) {
-      this.getGMNA(d.latlng);
-    } else if (this.map.getZoom() >= 7 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell)))){
-      this.getGMUS(d.latlng);
     }
   },
 
@@ -235,42 +186,6 @@ var Map = React.createClass({
 
   adjustInterface: function() {
     this.props.onInteraction('zoom', this.map.getZoom());
-  },
-
-  getGMNA: function(latlng) {
-    if (this.state.requests.gmna && this.state.requests.gmna.readyState != 4) {
-      this.state.requests.gmna.abort();
-    }
-
-    this.state.requests.gmna = xhr({
-      uri: `${Config.apiUrl}/geologic_units/gmna?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}`
-    }, function(error, response, body) {
-      var data = JSON.parse(body);
-      if (data.success.data.length) {
-        this.props.onInteraction('gmna', data.success.data[0]);
-      }
-    }.bind(this));
-  },
-
-  getGMUS: function(latlng) {
-    if (this.state.requests.gmus && this.state.requests.gmus.readyState != 4) {
-      this.state.requests.gmus.abort();
-    }
-
-    this.state.requests.gmus = xhr({
-      uri: `${Config.apiUrl}/geologic_units/gmus?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}`
-    }, function(error, response, body) {
-      var data = JSON.parse(body);
-      if (data.success.data.length) {
-        this.props.onInteraction('gmus', data.success.data[0]);
-        var foo = this.props;
-        if (data.success.data[0].macro_units.length) {
-          this.getMacrostrat(data.success.data[0].macro_units, function(unitSummary) {
-            foo.onInteraction('macrostrat', unitSummary);
-          }.bind(this));
-        }
-      }
-    }.bind(this));
   },
 
   getBurwell: function(latlng, scale) {

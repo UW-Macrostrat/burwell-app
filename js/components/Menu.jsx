@@ -12,10 +12,6 @@ var Menu = React.createClass({
     this.props.onInteraction('showMenu', false);
   },
 
-  toggleGeology: function() {
-    this.props.onInteraction('hasGeology', !this.props.data.hasGeology);
-  },
-
   toggleBurwell: function() {
     this.props.onInteraction('hasBurwell', !this.props.data.hasBurwell);
   },
@@ -30,14 +26,6 @@ var Menu = React.createClass({
 
   toggleSatellite: function() {
     this.props.onInteraction('hasSatellite', !this.props.data.hasSatellite);
-  },
-
-  toggleOpacity: function() {
-    this.setState({'showOpacity': !this.state.showOpacity})
-  },
-
-  changeOpacity: function(event) {
-    this.props.onInteraction('geologyOpacity', event.currentTarget.valueAsNumber);
   },
 
   toggleOpacityBurwell: function() {
@@ -64,15 +52,6 @@ var Menu = React.createClass({
               <i className='fa fa-sliders layer-control' onClick={this.toggleOpacityBurwell}></i>
               <div className={!this.state.showOpacityBurwell ? 'noDisplay' : 'opacity-adjuster'}>
                 <input id='geology-opacity-slider' type='range' max='100' min='0' step='10' value={this.props.data.burwellOpacity} onChange={this.changeOpacityBurwell}/>
-                <div id='opacity-label'>Opacity</div>
-              </div>
-            </div>
-
-            <div className='layer' id='geology'>Geology
-              <i className={this.props.data.hasGeology ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleGeology}></i>
-              <i className='fa fa-sliders layer-control' onClick={this.toggleOpacity}></i>
-              <div className={!this.state.showOpacity ? 'noDisplay' : 'opacity-adjuster'}>
-                <input id='geology-opacity-slider' type='range' max='100' min='0' step='10' value={this.props.data.geologyOpacity} onChange={this.changeOpacity}/>
                 <div id='opacity-label'>Opacity</div>
               </div>
             </div>
