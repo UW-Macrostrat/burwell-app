@@ -97,9 +97,17 @@ small {
   user-select: none;
 }
 
-.leaflet-bar a, .leaflet-bar a:hover {
-  background-color: rgba(0, 0, 0, 1);
+.leaflet-bar a {
+  background-color: #FF5335;
   color: #ffffff;
+  -moz-transition: all .2s ease-in;
+  -o-transition: all .2s ease-in;
+  -webkit-transition: all .2s ease-in;
+  transition: all .2s ease-in;
+}
+.leaflet-bar a:hover {
+  color: #ffffff;
+  background-color: #e82200;
 }
 
 .info-link:hover {
