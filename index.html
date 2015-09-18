@@ -1,177 +1,29 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>GMNA</title>
+  <title>Geologic map</title>
   <meta charset="utf-8" />
   <meta http-equiv="Content-Language" content="en">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link rel="stylesheet" href="css/styles.min.css" />
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Maven+Pro&text=macrostrat">
+  <link rel="stylesheet" href="css/styles.min.css"/>
+
 </head>
 <body>
-
-  <div class="container">
-    <div id="map"></div>
-    <div class="not-map">
-      <div class="leaflet-control-attribution leaflet-control menu menu-control">
-        <div class="menu-shelf"></div>
-        <a href="#" class="menu-link"><div class="menu-button"><div class="m"><i class="fa fa-gear"></i></div></div></a>
-      </div>
-      <div class="leaflet-control-attribution leaflet-control menu attr">
-        <a href="#" class="info-link"><div class="menu-button"><div class="i"><i class="fa fa-info"></i></div></div></a>
-      </div>
-      <div class="attr-container">
-        <div id="attr-info">
-          <div>
-            <strong>Mapping API </strong> via <a href="http://leafletjs.com" title="A JS library for interactive maps" target="_blank">Leaflet</a> under <a href="https://github.com/Leaflet/Leaflet/blob/master/LICENSE" target="_blank">BSD 2-Clause</a>.<br><br>
-
-            <strong>Black & white tiles </strong>by <a href="http://stamen.com" target="_blank">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0" target="_blank">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright" target="_blank">ODbL</a>.<br><br>
-
-            <strong>Satellite tiles </strong>by <a href="https://www.mapbox.com/about/maps/" target="_blank">Mapbox</a>. Data by <a href="http://openstreetmap.org" target="_blank">OpenStreetMap</a>, under <a href="http://www.openstreetmap.org/copyright" target="_blank">ODbL</a>.<br><br>
-
-            <strong>Geologic tiles </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat.org</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>. GMNA and GMUS data have been heavily modified by <a href="http://dev.macrostrat.og" target="_blank">Macrostrat</a>. Original GMNA data by <a href="http://pubs.usgs.gov/ds/424/" target="_blank">USGS</a>, free of copyright in the USA. Original GMUS data by various states, provided by <a href="http://mrdata.usgs.gov/geology/state/state.php" target="_blank">USGS</a>.<br><br>
-
-            <strong>Code </strong>by <a href="http://dev.macrostrat.org" target="_blank">Macrostrat</a>, under <a href="https://creativecommons.org/publicdomain/zero/1.0/legalcode" target="_blank">CC0</a>, and can be found <a href="https://github.com/UW-Macrostrat/gmna-app" target="_blank">on Github</a>.<br><br>
-            
-            <strong>Development team </strong>comprised of <a href="https://github.com/jczaplew" target="_blank">John Czaplewski</a>, lead developer. <a href="http://strata.geology.wisc.edu" target="_blank">Shanan Peters</a>, P.I. and scientific lead. Puneet Kishor, initial <a href="http://earth-base.org" target="_blank">earth-base</a> and literature search development.<br><br>
-
-            <strong>Funding </strong> for core <a href="//macrostrat.org">Macrostrat</a> development via NSF EAR-1150082, Macrostrat&mdash;geologic map integration via NSF ICER-1440312, and literature integration via NSF ICER-1343760.
-          
-            <strong>Licence: </strong> all Macrostrat geological data are licensed under a <a href='http://creativecommons.org/licenses/by/4.0/'>Creative Commons Attribution 4.0 International License</a>.<br> 
-          </div>
-        </div>
-      </div>
-
-      <div id="unit_info_left" class="unit_info">
-        <div class="menu-header">
-          <img src="img/logo_small.png"> <div class="title">Macrostrat</div>
-
-          <div class="close left">x</div>
-        </div>
-        
-        <div class="menu-content">
-          <div class="menu-layers">
-            <div class="layer" id="geology">Geology <i class="fa fa-toggle-on layer-control"></i><i class="fa fa-sliders layer-control"></i>
-              <div class="opacity-adjuster">
-                <input id="geology-opacity-slider" type="range">
-                <div id="opacity-label">Opacity</div>
-              </div>
-            </div>
-            <div class="layer" id="gmnaFaults">GMNA faults <i class="fa fa-toggle-off layer-control"></i></div>
-            <div class="layer" id="gmusFaults">GMUS faults <i class="fa fa-toggle-off layer-control"></i></div>
-            <div class="layer" id="satellite">Satellite <i class="fa fa-toggle-off layer-control"></i></div>
-          </div>
-        </div>
-      </div>
-
-      <div id="unit_info_right" class="unit_info">
-        <div class="close right">x</div>
-        <div class="unit_info_content"></div>
-        <div class="dd_content"></div>
-      </div>
-
-      <div id="unit_info_bottom" class="unit_info">
-        <div class="close bottom">x</div>
-        <div class="unit_info_content"></div>
-        <div class="dd_content"></div>
-      </div>
-
-    </div>
-  </div>
-  
-  <script id="gmna-template" type="x-tmpl-mustache">
-    <h3 class="title-three"><a href='http://pubs.usgs.gov/ds/424/'>GMNA</a></h3>
-    <hr>
-    <h2 class="title-two">{{#interval_name}}{{interval_name}}{{/interval_name}}{{^interval_name}}"Unknown interval"{{/interval_name}}</h2>
-    <strong>Age: </strong>{{ages}} ({{age_bottom}} - {{age_top}} <small>Ma</small>)<br>
-    
-    {{#rocktype}}
-    <strong>Rock type: </strong>{{rocktype}} <br>
-    {{/rocktype}}
-
-    {{#lithology}}
-    <strong>Lithology: </strong>{{lithology}} <br>
-    {{/lithology}}
-  </script>
-
-  <script id="gmus-template" type="x-tmpl-mustache">
-    <h3 class="title-three"><a href='http://mrdata.usgs.gov/geology/state/state.php'>GMUS</a></h3>
-    <hr>
-    <h2 class="title-two">{{unit_name}}</h2>
-    <strong>USGS info: </strong><a target='_blank' href='info?unit_link={{unit_link}}'>{{unit_link}}</a> &mdash; <small>{{gid}}</small> <br>
-    <strong>Age: </strong>{{ages}} ({{age_bottom}} - {{age_top}} <small>Ma</small>)<br>
-    {{#strat_unit}}
-    <strong>Strat unit: </strong>{{strat_unit}} <br>
-    {{/strat_unit}}
-    <strong>Rock type: </strong>{{rocktypes}} <br>
-    <strong>Lithology: </strong>{{lithologies}} <br>
-    
-    {{#unitdesc}}
-    <div class="lt-holder">
-      <strong>Description: </strong><span class="long-text">{{unitdesc}}</span> 
-    </div>
-    {{/unitdesc}}
-
-    {{#unit_com}}
-    <div class="lt-holder">
-      <strong>Comments: </strong><span class="long-text">{{unit_com}}</span>
-    </div>
-    {{/unit_com}}
-
-    {{#macrodata}}
-    <div class="macrostrat-data">
-      <h3 class="title-three">Macrostrat</h3>
-      <hr>
-      <h2 class="title-two">{{{names}}}</h2>
-      <strong>Units present: </strong>{{{ids}}} <br>
-      <strong>Age: </strong>{{uniqueIntervals}} ({{b_ages}} - {{t_ages}} <small>Ma</small>)<br>
-      <strong>Thickness: </strong>{{min_thicks}} - {{max_thicks}} <br>
-      {{#uniqueEnvironments}}
-      <strong>Environment: </strong>{{uniqueEnvironments}} <br>
-      {{/uniqueEnvironments}}
-      <strong>PBDB Collections: </strong>{{pbdb}}
-    </div>
-    {{/macrodata}}
-  </script>
-
-  <script id="dd-template" type="x-tmpl-mustache">
-    <h3 class="title-three">Literature</h3>
-    <hr>
-    {{#journals}}
-      <div class="journal">
-        <div class="journal-title"><i>{{name}}</i></div>
-        {{#articles}}
-        <div class="dd-article">
-          <div class="dd-article-heading">
-            <a href="{{fields.scidirect}}" target="_blank" class="title-link"><strong>{{fields.title}}</strong></a> <i>{{#fields.authors}}{{.}}{{/fields.authors}}</i>
-            <i class="fa fa-plus-square-o fa-lg show-content"></i>
-          </div>
-          <div class="dd-text">
-            {{#highlight.contents}}
-              <div class="dd-snippet">
-                ...{{{.}}}...
-              </div>
-            {{/highlight.contents}}
-          </div>
-        </div>
-      {{/articles}}
-      </div>
-    {{/journals}}
-  </script>
+  <div class="react"></div>
 
   <script>
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
     (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
     m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
     ga('create', 'UA-59921731-1', 'auto');
     ga('send', 'pageview');
   </script>
 
-  <script src="js/libs.js"></script>
-  <script async src="js/map.js"></script>
+  <script src="build/leaflet-all.min.js"></script>
+  <script src="build/bundle.min.js"></script>
+
 </body>
 </html>

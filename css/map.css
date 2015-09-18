@@ -17,18 +17,25 @@ html, body, #map {
   position: fixed;
 }
 
-.title-three {
+.title-three, .title-three > a {
   color: #aaa;
-  font-size: 1.5em;
+  font-size: 25px;
   letter-spacing: 2px;
   font-weight: 200;
   text-align: center;
   line-height: 5px;
+  text-decoration: none;
 }
+
 
 .title-two {
   font-size: 1.4em;
   line-height: 1.2em;
+}
+
+.title-two a {
+  color: inherit;
+  text-decoration: none;
 }
 
 strong {
@@ -36,7 +43,7 @@ strong {
 }
 
 small {
-  color: #bbb; 
+  color: #bbb;
 }
 
 .leaflet-popup-content {
@@ -54,6 +61,7 @@ small {
   bottom: -45px;
   padding-left: 9px;
   padding-bottom: 7px;
+  z-index: 1000;
 }
 
 .menu-control {
@@ -76,17 +84,22 @@ small {
   -moz-border-radius: 50%;
   border-radius: 50%;
 
-  background: rgba(255, 255, 255, 0.7);
+  background: rgba(0, 0, 0, 0.7);
   border: 1px solid #777;
-  color: #777;
+  color: #ffffff;
   text-align: center;
-  font-size: 14px;
+  font-size: 17px;
   font-weight: 200;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.leaflet-bar a, .leaflet-bar a:hover {
+  background-color: rgba(0, 0, 0, 1);
+  color: #ffffff;
 }
 
 .info-link:hover {
@@ -127,7 +140,7 @@ small {
   padding: 25px;
 }
 
-#attr-info > div > a {
+#attr-info > div > a, #attr-info > div > p > a {
   color: #eaeaea;
 }
 
@@ -140,7 +153,7 @@ small {
 .unit_info {
   position: absolute;
   z-index: 100000;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0,0,0,0.7);
   color: #ccc;
   overflow-y: scroll;
   line-height: 23px;
@@ -155,6 +168,11 @@ small {
   -webkit-backface-visibility: hidden;
 }
 
+.unit-info-header {
+  height: 50px;
+  position: fixed;
+  width: 100%;
+}
 .macrostrat-data > a, .macrostrat-data > h2 > a {
   text-decoration: none;
   color: #ccc;
@@ -200,10 +218,6 @@ small {
   padding-left: 15px;
 }
 
-.opacity-adjuster {
-  display: none;
-}
-
 #geology-opacity-slider {
   width: 100%;
   padding: 25px 0;
@@ -213,7 +227,7 @@ small {
     padding: 3px;
 }
 #geology-opacity-slider:active::-moz-range-thumb {
-    background: orange;               
+    background: orange;
 }
 
 #unit_info_right.moveRight {
@@ -236,6 +250,7 @@ small {
  /* padding-bottom: 140px; */
   z-index: 0;
   height: auto;
+  margin-top: 15px;
 }
 
 .unit_info_content > a {
@@ -257,6 +272,16 @@ small {
   color: #aaa;
 }
 
+.dd-text {
+  overflow: hidden;
+  max-height: 0;
+  -webkit-transition: max-height 0.65s ease-in-out;
+  -moz-transition: max-height 0.65s ease-in-out;
+  transition: max-height 0.65s ease-in-out;
+}
+.auto-height {
+  max-height: 500px;
+}
 .journal {
   padding-bottom: 25px;
 }
@@ -267,6 +292,7 @@ small {
 }
 .title-link {
   text-decoration: none;
+  margin-right: 7px;
 }
 .dd-article {
   padding-bottom: 15px;
@@ -278,13 +304,10 @@ small {
   padding: 10px;
 }
 
-.dd-text {
-  display: none;
-}
-
 .show-content {
   color: #7FDBFF;
   cursor: pointer;
+  margin-left: 7px;
 }
 
 .hl {
@@ -347,25 +370,176 @@ small {
   left: 0;
 }
 
-.lt-holder {
-  /*float: left;*/
-}
 
 .show-more {
   cursor: pointer;
   color: orange;
+  font-size: 12px;
 }
 
 .the-rest {
   display: none;
 }
 
-.hidden {
+.view-text {
+  display: inline;
+}
+
+.noDisplay {
   display: none;
 }
 
-.view-text {
+.map-info {
+  position: absolute;
+  width: 150px;
+  background-color: #fff;
+  z-index: 1000;
+  top: 0;
+  right: 0;
+}
+
+.info-attr {
+  margin: 0;
+  margin-bottom: 2px;
+}
+.info-attr a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.visible {
+  visibility: visible;
+}
+
+.source-attribution {
+  margin-top: -15px;
+}
+.source-attribution a {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+.expand {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    text-align: center;
+    z-index: 99999;
+    color: white;
+    width: auto;
+    cursor: pointer;
+}
+.expand-toggle {
+    height: 50px;
+    width: 50px;
+    border-radius: 25px;
+    background-color: #FF5335;
+    position: absolute;
+    bottom: 0;
+    z-index: 2;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+.expand-toggle:hover {
+  background-color: #e82200;
+}
+.expand-toggle.expanded {
+    background-color: #35e1ff;
+}
+.expand-toggle.expanded:hover {
+    background-color: #00c5e8;
+}
+
+.expand-menu-center {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  -webkit-justify-content: center;
+  -webkit-flex-direction: column;
+}
+
+.expand-menu {
+    margin-bottom: 55px;
+    z-index: 1;
+    -webkit-animation-duration: 0.65s;
+    -moz-animation-duration: 0.65s;
+    animation-duration: 0.65s;
+}
+.expand-menu-button {
+    height: 50px;
+    width: 50px;
+    border-radius: 35px;
+    background-color: #3E92A3;
+    margin-bottom: 5px;
+    -moz-transition: all .2s ease-in;
+    -o-transition: all .2s ease-in;
+    -webkit-transition: all .2s ease-in;
+    transition: all .2s ease-in;
+}
+
+.expand-menu-button:hover {
+  background-color: #3e81a3;
+}
+.open {
+    visibility: visible !important;
+}
+.closeMenu {
+    visibility: visible !important;
+}
+
+.preload * {
+  visibility:hidden !important;
+}
+
+.location-stats {
+  font-size: 11px;
+  text-align: right;
+  padding-right: 25px;
+  padding-top: 20px;
+}
+.inline {
   display: inline;
+  margin-right: 8px;
+}
+.flex-center-text {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  text-align: center;
+  -webkit-justify-content: center;
+  -webkit-flex-direction: column;
+}
+.location-stat .fa {
+  position: absolute;
+  color: #444;
+  z-index: -1;
+  font-size: 90px;
+}
+.location-stat {
+  display: inline-block;
+}
+.coordinates > i {
+  margin-left: 65px;
+}
+.elevations {
+  line-height: 0;
+  font-weight: 200;
+  margin-left: 16px;
+}
+.coords {
+  line-height: 0;
+  font-weight: 200;
+  letter-spacing: 1px;
 }
 
 @media(max-width: 460px) {
