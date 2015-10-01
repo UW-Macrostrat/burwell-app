@@ -40,7 +40,7 @@ var Menu = React.createClass({
     return (
       <div className={this.props.data.showMenu ? 'unit_info moveLeft' : 'unit_info'} id='unit_info_left'>
         <div className='menu-header'>
-          <img src='img/logo_small.png'/> <div className='title'>Macrostrat</div>
+          <img src='img/logo_small.png'/> <div className='title'>Burwell</div>
 
           <div className='close left' onClick={this.hide}>x</div>
         </div>
@@ -56,8 +56,8 @@ var Menu = React.createClass({
               </div>
             </div>
 
-            <div className='layer' id='gmnaFaults'>GMNA faults <i className={this.props.data.hasGMNAFaults ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleGMNAFaults}></i></div>
-            <div className='layer' id='gmusFaults'>GMUS faults <i className={this.props.data.hasGMUSFaults ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleGMUSFaults}></i></div>
+            <div className='layer' id='gmnaFaults'>GMNA structures <i className={this.props.data.hasGMNAFaults ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleGMNAFaults}></i></div>
+            <div className='layer' id='gmusFaults'>GMUS structures <i className={this.props.data.hasGMUSFaults ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleGMUSFaults}></i></div>
             <div className='layer' id='satellite'>Satellite <i className={this.props.data.hasSatellite ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleSatellite}></i></div>
 
           </div>
