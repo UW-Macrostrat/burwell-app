@@ -44,11 +44,11 @@ var Map = React.createClass({
       zIndex: 1
     });
 
-    this.burwell = L.tileLayer('https://dev.macrostrat.org/tiles/burwell/{z}/{x}/{y}.png', {
+    this.burwell = L.tileLayer(Config.apiUrl + '/maps/burwell/{z}/{x}/{y}/tile.png', {
       maxZoom: 12,
       opacity: 0.4,
-      zIndex: 100,
-      detectRetina: true
+      zIndex: 100
+      //detectRetina: true
     }).addTo(map);
 
     this.gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
@@ -194,13 +194,13 @@ var Map = React.createClass({
       1: 'tiny',
       2: 'tiny',
       3: 'tiny',
-      4: 'small',
+      4: 'tiny',
       5: 'small',
-      6: 'medium',
+      6: 'small',
       7: 'medium',
       8: 'medium',
       9: 'medium',
-      10: 'large',
+      10: 'medium',
       11: 'large',
       12: 'large',
       13: 'large',
@@ -248,6 +248,10 @@ var Map = React.createClass({
               d.macrostrat = unitSummary;
               callback(null);
             });
+          // We know that Australia medium strat names are legit, so we will use them to get articles
+          } else if (d.source_id === 5 && d.strat_name.length) {
+            this.getArticles([d.strat_name]);
+            callback(null);
           } else {
             callback(null);
           }
