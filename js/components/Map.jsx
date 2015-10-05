@@ -44,6 +44,7 @@ var Map = React.createClass({
       zIndex: 1
     });
 
+    //this.burwell = L.tileLayer('https://dev.macrostrat.org/api/v2/maps/burwell/{z}/{x}/{y}/tile.png', {
     this.burwell = L.tileLayer(Config.apiUrl + '/maps/burwell/{z}/{x}/{y}/tile.png', {
       maxZoom: 12,
       opacity: 0.4,
@@ -85,7 +86,7 @@ var Map = React.createClass({
     map.on('zoomend', this.adjustInterface);
 
     map.on('locationfound', function(event) {
-      map.setView(event.latlng, 9);
+      map.setView(event.latlng, 11);
     });
 
     this.props.locate(this.locate);
@@ -397,7 +398,16 @@ var Map = React.createClass({
 
   },
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.data.zoom != this.props.data.zoom) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+
   render: function() {
+    console.log('map render');
     return <div id='map'></div>
   }
 });
