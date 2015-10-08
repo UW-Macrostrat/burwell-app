@@ -23,7 +23,7 @@ var BurwellSource = React.createClass({
       <div className='burwell-source'>
         <h2 className='title-two'>{this.props.data.name}</h2>
         <p className='source-attribution'><small><i>
-          From <a href='#' onClick={this.showSource}>{this.props.sourceMap[this.props.data.source_id].name}</a>
+          Source: <a href='#' onClick={this.showSource}>{this.props.sourceMap[this.props.data.source_id].name}</a>
         </i></small></p>
 
         <p className='info-attr'><strong>Age: </strong>
@@ -31,7 +31,7 @@ var BurwellSource = React.createClass({
           this.props.data.t_int_name === this.props.data.b_int_name
           ? this.props.data.t_int_name
           : this.props.data.b_int_name + ' - ' + this.props.data.t_int_name
-        } ({this.props.data.b_int_age} - {this.props.data.t_int_age}<small>Ma</small>)
+        } ({this.props.data.b_int_age} - {this.props.data.t_int_age}<small> Ma</small>)
         </p>
 
         {

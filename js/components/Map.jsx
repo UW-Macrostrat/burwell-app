@@ -85,8 +85,10 @@ var Map = React.createClass({
     map.on('zoomstart, movestart', this.onMove);
     map.on('zoomend', this.adjustInterface);
 
-    map.on('locationfound', function(event) {
+    map.on('locationfound', (event) => {
+      // Update this to map.flyTo in Leaflet 1.0
       map.setView(event.latlng, 11);
+      this.onClick(event);
     });
 
     this.props.locate(this.locate);

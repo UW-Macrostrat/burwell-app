@@ -161,9 +161,8 @@ small {
 .unit_info {
   position: absolute;
   z-index: 100000;
-  background-color: rgba(0,0,0,0.7);
-  color: #ccc;
-  overflow-y: scroll;
+  background-color: rgba(255,255,255,0.93);
+  color: #333;
   line-height: 23px;
   -webkit-transition: all 0.6s ease;
   -moz-transition: all 0.6s ease;
@@ -180,7 +179,17 @@ small {
   height: 50px;
   position: fixed;
   width: 100%;
+  background-color: rgba(255,255,255,0.98);
 }
+
+.macrostrat-info {
+  padding-top: 25px;
+}
+
+.macrostrat-info > h2 {
+  padding-top: 10px;
+}
+
 .macrostrat-data > a, .macrostrat-data > h2 > a {
   text-decoration: none;
   color: #ccc;
@@ -244,9 +253,9 @@ small {
 
 #unit_info_bottom {
   width: 100%;
-  bottom: -60%;
-  height: 60%;
-  max-height: 500px;
+  bottom: -100%;
+  height: 100%;
+/*  max-height: 500px;*/
 }
 
 #unit_info_bottom.moveDown {
@@ -257,23 +266,30 @@ small {
   padding: 25px;
  /* padding-bottom: 140px; */
   z-index: 0;
-  height: auto;
+  height: 100%;
   margin-top: 15px;
+  overflow-y: scroll;
 }
 
 .unit_info_content > a {
   color: #aaa;
 }
 
+.burwell-source {
+  padding-top: 10px;
+}
+
+.burwell-info {
+  padding-bottom: 30px;
+}
+
 .dd-result {
   padding-bottom: 20px;
 }
 
-.dd_content {
-  padding: 25px;
+
+.dd-content {
   padding-bottom: 140px;
-  z-index: 0;
-  height: auto;
 }
 
 .dd_content > a {
@@ -296,7 +312,6 @@ small {
 
 .journal-title {
   font-weight: bold;
-  font-size: 1.2em;
 }
 .title-link {
   text-decoration: none;
@@ -355,11 +370,11 @@ small {
 }
 
 .close {
-  color: #fff;
+  color: #000;
   position: absolute;
   cursor: pointer;
   font-size: 25px;
-  padding: 20px;
+  padding: 11px 20px;
   top: 0;
 }
 
@@ -409,6 +424,7 @@ small {
 .info-attr {
   margin: 0;
   margin-bottom: 2px;
+  font-size: 14px;
 }
 .info-attr a {
   color: inherit;
@@ -513,8 +529,8 @@ small {
 .location-stats {
   font-size: 11px;
   text-align: right;
+  padding-top: 15px;
   padding-right: 25px;
-  padding-top: 20px;
 }
 .inline {
   display: inline;
