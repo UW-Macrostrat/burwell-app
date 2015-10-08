@@ -46,7 +46,7 @@ var Map = React.createClass({
 
     //this.burwell = L.tileLayer('https://dev.macrostrat.org/api/v2/maps/burwell/{z}/{x}/{y}/tile.png', {
     this.burwell = L.tileLayer(Config.apiUrl + '/maps/burwell/{z}/{x}/{y}/tile.png', {
-      maxZoom: 12,
+      maxZoom: 13,
       opacity: 0.4,
       zIndex: 100
       //detectRetina: true
