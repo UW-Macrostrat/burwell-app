@@ -12,8 +12,7 @@ var Map = React.createClass({
         macrostrat: null,
         articles: null,
         burwell: null
-      },
-      geologyWasVisible: true
+      }
     }
   },
 
@@ -44,7 +43,7 @@ var Map = React.createClass({
       zIndex: 1
     });
 
-    //this.burwell = L.tileLayer('https://dev.macrostrat.org/api/v2/maps/burwell/{z}/{x}/{y}/tile.png', {
+    //this.burwell = L.tileLayer('/api/v2/maps/burwell/{z}/{x}/{y}/tile.png', {
     this.burwell = L.tileLayer(Config.apiUrl + '/maps/burwell/{z}/{x}/{y}/tile.png', {
       maxZoom: 13,
       opacity: 0.4,
@@ -52,13 +51,13 @@ var Map = React.createClass({
       //detectRetina: true
     }).addTo(map);
 
-    this.gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
+    this.gmnaFaults = L.tileLayer('https://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
       maxZoom: 12,
       detectRetina: true,
       zIndex: 1000
     });
 
-    this.gmusFaults = L.tileLayer('http://macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
+    this.gmusFaults = L.tileLayer('https://macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
       maxZoom: 12,
       detectRetina: true,
       zIndex: 1000
@@ -86,7 +85,6 @@ var Map = React.createClass({
     map.on('zoomend', this.adjustInterface);
 
     map.on('locationfound', (event) => {
-      // Update this to map.flyTo in Leaflet 1.0
       map.setView(event.latlng, 11);
       this.onClick(event);
     });
@@ -136,7 +134,6 @@ var Map = React.createClass({
   },
 
   onClick: function(d) {
-    console.log(d);
     // Set the marker on the click location and add it to the map
     this.marker.setLatLng(d.latlng).addTo(this.map);
     this.props.onInteraction('lat', d.latlng.lat);
@@ -148,6 +145,15 @@ var Map = React.createClass({
       strat_names: [{id: null, name: null}],
       ids: []
     });
+
+    // Abort pending article and macrostrat requests so that interface stays consistent
+    if (this.state.requests.articles && this.state.requests.articles.readyState != 4) {
+      this.state.requests.articles.abort();
+    }
+    if (this.state.requests.macrostrat && this.state.requests.macrostrat.readyState != 4) {
+      this.state.requests.macrostrat.abort();
+    }
+
 
     this.props.onInteraction('burwell', []);
 
@@ -266,10 +272,6 @@ var Map = React.createClass({
   },
 
   getMacrostrat: function(unit_ids, callback) {
-    if (this.state.requests.macrostrat && this.state.requests.macrostrat.readyState != 4) {
-      this.state.requests.macrostrat.abort();
-    }
-
     this.state.requests.macrostrat = xhr({
       uri: `${Config.apiUrl}/units?response=long&unit_id=${unit_ids.join(',')}`
     }, function(error, response, body) {
@@ -358,10 +360,6 @@ var Map = React.createClass({
   },
 
   getArticles: function(strat_names) {
-    if (this.state.requests.articles && this.state.requests.articles.readyState != 4) {
-      this.state.requests.articles.abort();
-    }
-
     this.state.requests.articles = xhr({
       uri: `https://dev.macrostrat.org/mdd/api/v1/articles?q=${strat_names.join(',')}`
     }, function(error, response, body) {
