@@ -1,6 +1,5 @@
 import React from 'react';
 import LongText from './LongText.jsx';
-import MacrostratInfo from './MacrostratInfo.jsx';
 
 var BurwellSource = React.createClass({
   getInitialState() {
@@ -68,12 +67,6 @@ var BurwellSource = React.createClass({
         }
 
         <p className='info-attr'><strong>Map ID: </strong>{this.props.data.map_id}</p>
-
-        {
-          this.props.data.macrostrat
-          ? <MacrostratInfo data={this.props.data.macrostrat}/>
-          : ''
-        }
 
       </div>
     );
