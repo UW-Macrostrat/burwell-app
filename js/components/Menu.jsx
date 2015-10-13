@@ -40,7 +40,7 @@ var Menu = React.createClass({
     return (
       <div className={this.props.data.showMenu ? 'unit_info moveLeft' : 'unit_info'} id='unit_info_left'>
         <div className='menu-header'>
-          <img src='img/logo_small.png'/> <div className='title'>Burwell</div>
+          <img src='img/icon_long.png'/>
 
           <div className='close left' onClick={this.hide}>x</div>
         </div>

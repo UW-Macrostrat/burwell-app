@@ -1,6 +1,5 @@
 import React from 'react';
 import LongText from './LongText.jsx';
-import MacrostratInfo from './MacrostratInfo.jsx';
 
 var BurwellSource = React.createClass({
   getInitialState() {
@@ -23,7 +22,7 @@ var BurwellSource = React.createClass({
       <div className='burwell-source'>
         <h2 className='title-two'>{this.props.data.name}</h2>
         <p className='source-attribution'><small><i>
-          From <a href='#' onClick={this.showSource}>{this.props.sourceMap[this.props.data.source_id].name}</a>
+          Source: <a href='#' onClick={this.showSource}>{this.props.sourceMap[this.props.data.source_id].name}</a>
         </i></small></p>
 
         <p className='info-attr'><strong>Age: </strong>
@@ -31,7 +30,7 @@ var BurwellSource = React.createClass({
           this.props.data.t_int_name === this.props.data.b_int_name
           ? this.props.data.t_int_name
           : this.props.data.b_int_name + ' - ' + this.props.data.t_int_name
-        } ({this.props.data.b_int_age} - {this.props.data.t_int_age}<small>Ma</small>)
+        } ({this.props.data.b_int_age} - {this.props.data.t_int_age}<small> Ma</small>)
         </p>
 
         {
@@ -68,12 +67,6 @@ var BurwellSource = React.createClass({
         }
 
         <p className='info-attr'><strong>Map ID: </strong>{this.props.data.map_id}</p>
-
-        {
-          this.props.data.macrostrat
-          ? <MacrostratInfo data={this.props.data.macrostrat}/>
-          : ''
-        }
 
       </div>
     );

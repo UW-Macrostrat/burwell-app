@@ -12,8 +12,7 @@ var Map = React.createClass({
         macrostrat: null,
         articles: null,
         burwell: null
-      },
-      geologyWasVisible: true
+      }
     }
   },
 
@@ -25,15 +24,13 @@ var Map = React.createClass({
     var map = this.map = L.map(this.getDOMNode(), {
       attributionControl: false,
       minZoom: 1
-    }).setView([40, -97], 5);
+    }).setView([40.8, -94.1], 3);
 
     // If there is a hash location, go there immediately
     if (window.location.hash.length > 3) {
       var hashLocation = L.Hash.parseHash(window.location.hash);
       map.setView(hashLocation.center, hashLocation.zoom);
       this.props.onInteraction('zoom', hashLocation.zoom);
-    } else {
-      map.setView([40.8, -94.1], 3);
     }
 
     // Make map states linkable
@@ -44,7 +41,7 @@ var Map = React.createClass({
       zIndex: 1
     });
 
-    //this.burwell = L.tileLayer('https://dev.macrostrat.org/api/v2/maps/burwell/{z}/{x}/{y}/tile.png', {
+    //this.burwell = L.tileLayer('/api/v2/maps/burwell/{z}/{x}/{y}/tile.png', {
     this.burwell = L.tileLayer(Config.apiUrl + '/maps/burwell/{z}/{x}/{y}/tile.png', {
       maxZoom: 13,
       opacity: 0.4,
@@ -52,13 +49,13 @@ var Map = React.createClass({
       //detectRetina: true
     }).addTo(map);
 
-    this.gmnaFaults = L.tileLayer('http://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
+    this.gmnaFaults = L.tileLayer('https://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
       maxZoom: 12,
       detectRetina: true,
       zIndex: 1000
     });
 
-    this.gmusFaults = L.tileLayer('http://macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
+    this.gmusFaults = L.tileLayer('https://macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
       maxZoom: 12,
       detectRetina: true,
       zIndex: 1000
@@ -85,8 +82,9 @@ var Map = React.createClass({
     map.on('zoomstart, movestart', this.onMove);
     map.on('zoomend', this.adjustInterface);
 
-    map.on('locationfound', function(event) {
+    map.on('locationfound', (event) => {
       map.setView(event.latlng, 11);
+      this.onClick(event);
     });
 
     this.props.locate(this.locate);
@@ -134,33 +132,40 @@ var Map = React.createClass({
   },
 
   onClick: function(d) {
-    console.log(d);
     // Set the marker on the click location and add it to the map
     this.marker.setLatLng(d.latlng).addTo(this.map);
-    this.props.onInteraction('lat', d.latlng.lat);
-    this.props.onInteraction('lng', d.latlng.lng);
-    this.props.onInteraction('active', true);
-    this.props.onInteraction('articles', {journals: []});
-    this.props.onInteraction('macrostrat', {
-      names: [],
-      strat_names: [{id: null, name: null}],
-      ids: []
+    this.props.onInteraction({
+      lat: d.latlng.lat,
+      lng: d.latlng.lng,
+      active: true,
+      burwell: [],
+      articles: {journals: []},
+      macrostrat: {
+        names: [],
+        strat_names: [{id: null, name: null}],
+        ids: []
+      },
+      showMenu: false
     });
 
-    this.props.onInteraction('burwell', []);
-
-    // Hide the menu
-    if (this.props.data.showMenu) {
-      this.props.onInteraction('showMenu', false);
+    // Abort pending requests so that interface stays consistent
+    if (this.state.requests.articles && this.state.requests.articles.readyState != 4) {
+      this.state.requests.articles.abort();
+    }
+    if (this.state.requests.macrostrat && this.state.requests.macrostrat.readyState != 4) {
+      this.state.requests.macrostrat.abort();
+    }
+    if (this.state.requests.burwell && this.state.requests.burwell.readyState != 4) {
+      this.state.requests.burwell.abort();
     }
 
     // Jigger the map so that we can open the info display and still show the marker
     if (window.innerHeight > window.innerWidth) {
-      this.map.panToOffset(d.latlng, [ 0, -((window.innerHeight*0.6)/2) ]);
+  //    this.map.panToOffset(d.latlng, [ 0, -((window.innerHeight*0.6)/2) ]);
     } else {
       this.map.panToOffset(d.latlng, [ -((window.innerWidth*0.6)/2), 0 ]);
     }
-    (this.props.data.zoom >= 5 && (this.props.data.hasGeology || (!(this.props.data.hasGeology) && !(this.props.data.hasBurwell))))
+
     // Fetch data depending on zoom level
     if (this.props.data.hasBurwell) {
       if (this.map.getZoom() < 4) {
@@ -215,13 +220,10 @@ var Map = React.createClass({
       'large': ['large', 'medium', 'small', 'tiny']
     }
 
-    if (this.state.requests.burwell && this.state.requests.burwell.readyState != 4) {
-      this.state.requests.burwell.abort();
-    }
 
     this.state.requests.burwell = xhr({
       uri: `${Config.apiUrl}/geologic_units/burwell?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}`
-    }, function(error, response, body) {
+    }, (error, response, body) => {
       var data = JSON.parse(body);
       if (data.success.data.length) {
         // Find which scale we should use
@@ -243,34 +245,40 @@ var Map = React.createClass({
           }
         });
 
-        async.eachLimit(bestFit, 1, function(d, callback) {
-          if (d.macro_units && d.macro_units.length) {
-            this.getMacrostrat(d.macro_units, function(unitSummary) {
-              d.macrostrat = unitSummary;
-              callback(null);
+        var macroUnits = [].concat.apply([], bestFit.map(unit => { return unit.macro_units }));
+
+        if (macroUnits.length) {
+          this.getMacrostrat(macroUnits, unitSummary => {
+            if (unitSummary.names.length) {
+              this.getArticles(unitSummary.names);
+            }
+            this.props.onInteraction({
+              burwell: bestFit,
+              macrostrat: unitSummary
             });
-          // We know that Australia medium strat names are legit, so we will use them to get articles
-          } else if (d.source_id === 5 && d.strat_name.length) {
-            this.getArticles([d.strat_name]);
-            callback(null);
-          } else {
-            callback(null);
+
+          });
+        } else {
+          this.props.onInteraction({
+            burwell: bestFit
+          });
+        }
+
+        // Hack to get articles for Australia medium in the absence of Macrostrat matches
+        bestFit.forEach(unit => {
+          if (unit.source_id === 5 && unit.strat_name.length) {
+            this.getArticles([unit.strat_name]);
           }
-        }.bind(this), function(error) {
-          this.props.onInteraction('burwell', bestFit);
-        }.bind(this));
+        });
+
       }
-    }.bind(this));
+    });
   },
 
   getMacrostrat: function(unit_ids, callback) {
-    if (this.state.requests.macrostrat && this.state.requests.macrostrat.readyState != 4) {
-      this.state.requests.macrostrat.abort();
-    }
-
     this.state.requests.macrostrat = xhr({
       uri: `${Config.apiUrl}/units?response=long&unit_id=${unit_ids.join(',')}`
-    }, function(error, response, body) {
+    }, (error, response, body) => {
       var data = JSON.parse(body);
       if (data.success.data.length) {
 
@@ -306,13 +314,13 @@ var Map = React.createClass({
           strat_names: filteredStratNames,
           names: data.success.data.map(function(d) {
             if (d.Mbr) {
-              return d.Mbr + " Member";
+              return d.Mbr + ' Member';
             } else if (d.Fm) {
-              return d.Fm + " Formation";
+              return d.Fm + ' Formation';
             } else if (d.Gp) {
-              return d.Gp + " Group";
+              return d.Gp + ' Group';
             } else if (d.SGp) {
-              return d.SGp + " Supergroup"
+              return d.SGp + ' Supergroup';
             }
           }).filter(function(name, idx, names) { return names.indexOf(name) === idx; }),
           ids: data.success.data.map(function(d) { return d.unit_id }),
@@ -323,9 +331,9 @@ var Map = React.createClass({
           pbdb_collections: data.success.data.map(function(d) { return d.pbdb_collections; }).reduce(function(total, each) { return total + each }, 0),
           uniqueIntervals: (function() {
             var min_age = 9999,
-                min_age_interval = "",
+                min_age_interval = '',
                 max_age = -1,
-                max_age_interval = "";
+                max_age_interval = '';
 
             data.success.data.forEach(function(d, i) {
               if (d.t_age < min_age) {
@@ -337,13 +345,11 @@ var Map = React.createClass({
                 max_age_interval = d.b_int_name;
               }
             });
-            return (max_age_interval === min_age_interval) ? min_age_interval : max_age_interval + " - " + min_age_interval;
+            return (max_age_interval === min_age_interval) ? min_age_interval : max_age_interval + ' - ' + min_age_interval;
           })()
         }
 
-        if (unitSummary.names.length) {
-          this.getArticles(unitSummary.names);
-        }
+
 
         callback(unitSummary);
       } else {
@@ -352,17 +358,13 @@ var Map = React.createClass({
           ids: []
         });
       }
-    }.bind(this));
+    });
   },
 
   getArticles: function(strat_names) {
-    if (this.state.requests.articles && this.state.requests.articles.readyState != 4) {
-      this.state.requests.articles.abort();
-    }
-
     this.state.requests.articles = xhr({
       uri: `https://dev.macrostrat.org/mdd/api/v1/articles?q=${strat_names.join(',')}`
-    }, function(error, response, body) {
+    }, (error, response, body) => {
       var data;
       if (body) {
         data = JSON.parse(response.body).results.results;
@@ -394,7 +396,7 @@ var Map = React.createClass({
 
       this.props.onInteraction('articles', parsed);
 
-    }.bind(this));
+    });
 
   },
 

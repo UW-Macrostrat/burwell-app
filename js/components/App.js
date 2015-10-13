@@ -57,17 +57,12 @@ var App = React.createClass({
   },
 
   updateState: function(prop, data) {
-    // Do this so we can have a generic state update method
-    /*var updatedProp = (function() {
-      var obj = {};
-      obj[prop] = data;
-      return obj;
-    })();
-*/
-    // If using ES6, I can do this instead:
-     this.setState({ [prop] : data })
+    if (typeof(prop) === 'string') {
+      this.setState({ [prop] : data });
+    } else {
+      this.setState(prop);
+    }
 
-    //this.setState(updatedProp);
   },
 
   componentWillMount() {
