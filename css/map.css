@@ -205,7 +205,7 @@ small {
   left: -60%;
   max-width: 350px;
   overflow: hidden;
-  background-color: rgba(0,0,0,0.84);
+  background-color: rgba(255,255,255,.93);
 }
 
 #unit_info_left.moveLeft {
@@ -282,14 +282,14 @@ small {
   padding-top: 10px;
 }
 
-.burwell-info {
-  padding-bottom: 30px;
-}
+
 
 .dd-result {
   padding-bottom: 20px;
 }
-
+.dd-content {
+  padding-top: 25px;
+}
 .dd_content > a {
   color: #aaa;
 }
@@ -310,7 +310,9 @@ small {
 .journal {
   padding-bottom: 15px;
 }
-
+.journal:first-of-type {
+  padding-top: 10px;
+}
 .journal-title {
   font-weight: bold;
   margin-bottom: -10px;
@@ -351,7 +353,7 @@ small {
 .layer {
   font-size: 20px;
   line-height: 35px;
-  border-bottom: 1px solid rgba(245,245,245,0.2);
+  border-bottom: 1px solid rgba(100,100,100,.2);
 }
 
 .layer-control {
