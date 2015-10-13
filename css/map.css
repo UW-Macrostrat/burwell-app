@@ -576,10 +576,6 @@ small {
 }
 
 @media(max-width: 460px) {
-  .menu-header {
-    font-size: 1.5em;
-  }
-
   .menu-header > img {
     height: 23px;
   }
@@ -596,10 +592,6 @@ small {
 }
 
 @media(max-width: 380px) {
-  .menu-header > img {
-    display: none;
-  }
-
   .menu-header > .title {
     padding-left: 0;
   }

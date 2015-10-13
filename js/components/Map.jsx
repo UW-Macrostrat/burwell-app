@@ -24,15 +24,13 @@ var Map = React.createClass({
     var map = this.map = L.map(this.getDOMNode(), {
       attributionControl: false,
       minZoom: 1
-    }).setView([40, -97], 5);
+    }).setView([40.8, -94.1], 3);
 
     // If there is a hash location, go there immediately
     if (window.location.hash.length > 3) {
       var hashLocation = L.Hash.parseHash(window.location.hash);
       map.setView(hashLocation.center, hashLocation.zoom);
       this.props.onInteraction('zoom', hashLocation.zoom);
-    } else {
-      map.setView([40.8, -94.1], 3);
     }
 
     // Make map states linkable
