@@ -15,31 +15,31 @@ var Article = React.createClass({
     // Attempt to pull out only the year and not the whole date
     var year;
     try {
-      year = (this.props.data.fields.coverDate) ? this.props.data.fields.coverDate[0].match(/\d{4}/)[0] : '';
+      year = (this.props.data.coverDate) ? this.props.data.coverDate.match(/\d{4}/)[0] : '';
     } catch(e) {
       year = '';
     }
 
-    var url = (this.props.data.fields.URL[0].indexOf('elsevier') > -1) ? 'http://www.sciencedirect.com/science/article/pii/' + this.props.data.fields.URL[0].split('pii/')[1] : this.props.data.fields.URL[0];
+    var url = (this.props.data.URL.indexOf('elsevier') > -1) ? 'http://www.sciencedirect.com/science/article/pii/' + this.props.data.URL.split('pii/')[1] : this.props.data.URL;
 
     return (
       <div className='dd-article'>
         <div className='dd-article-heading'>
           <a href={url} target='_blank' className='title-link'>
-            <strong>{this.props.data.fields.title[0]}</strong>
+            <strong>{this.props.data.title}</strong>
           </a>
-          <i className='article-author'>{(this.props.data.fields.authors) ? this.props.data.fields.authors[0] : 'Unknown'}</i>
+          <i className='article-author'>{(this.props.data.authors) ? this.props.data.authors : 'Unknown'}</i>
           {year.length ? (' ' + year + '.') : ''}
           <i className={this.state.showText ? 'noDisplay' : 'fa fa-plus-square-o fa-lg show-content'} onClick={this.toggle}></i>
           <i className={this.state.showText ? 'fa fa-minus-square-o fa-lg show-content' : 'noDisplay'} onClick={this.toggle}></i>
         </div>
         <div className={this.state.showText ? 'dd-text auto-height' : 'dd-text'}>
-          {this.props.data.highlight.contents.map(function(snippet, i) {
+          {this.props.data.highlight.map(function(snippet, i) {
             // The text from Elasticsearch sometimes has errant < and >, which mess up the html
             // so we have to do this, otherwise when React encounters one of those
             // problematic ones it stops working
 
-            var text = snippet.replace(/<em class='hl'>/g, "@@@")
+            var text = snippet.replace(/<em class="hl">/g, "@@@")
                               .replace(/<\/em>/g, "***")
                               .replace(/(?:\r\n|\r|\n|\<|\>)/g, ' ')
                               .trim()

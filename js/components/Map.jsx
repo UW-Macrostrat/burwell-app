@@ -41,7 +41,6 @@ var Map = React.createClass({
       zIndex: 1
     });
 
-    //this.burwell = L.tileLayer('/api/v2/maps/burwell/{z}/{x}/{y}/tile.png', {
     this.burwell = L.tileLayer(Config.apiUrl + '/maps/burwell/{z}/{x}/{y}/tile.png', {
       maxZoom: 13,
       opacity: 0.4,
@@ -143,6 +142,7 @@ var Map = React.createClass({
       macrostrat: {
         names: [],
         strat_names: [{id: null, name: null}],
+        rank_names: [],
         ids: []
       },
       showMenu: false
@@ -160,24 +160,13 @@ var Map = React.createClass({
     }
 
     // Jigger the map so that we can open the info display and still show the marker
-    if (window.innerHeight > window.innerWidth) {
-  //    this.map.panToOffset(d.latlng, [ 0, -((window.innerHeight*0.6)/2) ]);
-    } else {
+    if (window.innerHeight < window.innerWidth) {
       this.map.panToOffset(d.latlng, [ -((window.innerWidth*0.6)/2), 0 ]);
     }
 
-    // Fetch data depending on zoom level
-    if (this.props.data.hasBurwell) {
-      if (this.map.getZoom() < 4) {
-        this.getBurwell(d.latlng, 'tiny');
-      } else if (this.map.getZoom() > 3 && this.map.getZoom() < 6) {
-        this.getBurwell(d.latlng, 'small');
-      } else if (this.map.getZoom() >= 6 && this.map.getZoom() < 10) {
-        this.getBurwell(d.latlng, 'medium');
-      } else {
-        this.getBurwell(d.latlng, 'large');
-      }
-    }
+    // Fetch data
+    this.getBurwell(d.latlng);
+
   },
 
   onMove: function() {
@@ -194,7 +183,7 @@ var Map = React.createClass({
     this.props.onInteraction('zoom', this.map.getZoom());
   },
 
-  getBurwell: function(latlng, scale) {
+  getBurwell: function(latlng) {
     var scaleLookup = {
       0: 'tiny',
       1: 'tiny',
@@ -230,17 +219,21 @@ var Map = React.createClass({
         var currentScale = scaleLookup[this.props.data.zoom];
         var returnedScales = data.success.data.map(d => { return this.props.scales[d.source_id] });
 
-        var targetScale;
+        var targetScales = [];
 
         for (var i = 0; i < priorities[currentScale].length; i++) {
           if (returnedScales.indexOf(priorities[currentScale][i]) > -1) {
-            targetScale = priorities[currentScale][i];
-            break;
+            targetScales.push(priorities[currentScale][i]);
+            if (currentScale != 'tiny' && currentScale != 'small') {
+              break;
+            } else if (targetScales.length > 1) {
+              break;
+            }
           }
         }
 
         var bestFit = data.success.data.filter(d => {
-          if (this.props.scales[d.source_id] == targetScale) {
+          if (targetScales.indexOf(this.props.scales[d.source_id]) > -1) {
             return d;
           }
         });
@@ -249,8 +242,8 @@ var Map = React.createClass({
 
         if (macroUnits.length) {
           this.getMacrostrat(macroUnits, unitSummary => {
-            if (unitSummary.names.length) {
-              this.getArticles(unitSummary.names);
+            if (unitSummary.rank_names.length) {
+              this.getArticles(unitSummary.rank_names);
             }
             this.props.onInteraction({
               burwell: bestFit,
@@ -283,20 +276,8 @@ var Map = React.createClass({
       if (data.success.data.length) {
 
         var allStratNames = data.success.data.map(function(d) {
-          var name;
-
-          if (d.Mbr) {
-            name = d.Mbr + " Member";
-          } else if (d.Fm) {
-            name = d.Fm + " Formation";
-          } else if (d.Gp) {
-            name = d.Gp + " Group";
-          } else if (d.SGp) {
-            name = d.SGp + " Supergroup"
-          }
-
           return {
-            name: name,
+            name: d.strat_name_long,
             id: d.strat_name_id
           }
         });
@@ -312,17 +293,7 @@ var Map = React.createClass({
         // Summarize the data
         var unitSummary = {
           strat_names: filteredStratNames,
-          names: data.success.data.map(function(d) {
-            if (d.Mbr) {
-              return d.Mbr + ' Member';
-            } else if (d.Fm) {
-              return d.Fm + ' Formation';
-            } else if (d.Gp) {
-              return d.Gp + ' Group';
-            } else if (d.SGp) {
-              return d.SGp + ' Supergroup';
-            }
-          }).filter(function(name, idx, names) { return names.indexOf(name) === idx; }),
+          rank_names: data.success.data.map(function(d) { return d.strat_name_long }),
           ids: data.success.data.map(function(d) { return d.unit_id }),
           max_thick: Math.max.apply(null, data.success.data.map(function(d) { return d.max_thick; })),
           min_thick: Math.min.apply(null, data.success.data.map(function(d) { return d.min_thick; })),
@@ -363,15 +334,19 @@ var Map = React.createClass({
 
   getArticles: function(strat_names) {
     this.state.requests.articles = xhr({
-      uri: `https://dev.macrostrat.org/mdd/api/v1/articles?q=${strat_names.join(',')}`
+      uri: `${Config.geodeepdiveURL}/snippets?term=${strat_names.join(',')}`
     }, (error, response, body) => {
       var data;
       if (body) {
-        data = JSON.parse(response.body).results.results;
+        data = JSON.parse(response.body);
+        if (data.error) {
+          data = []
+        } else {
+          data = data.success.data
+        }
       } else {
         data = []
       }
-
 
       var parsed = {
         journals: []
@@ -380,7 +355,7 @@ var Map = React.createClass({
       for (var i = 0; i < data.length; i++) {
         var found = false;
         for (var j = 0; j < parsed.journals.length; j++) {
-          if (parsed.journals[j].name === data[i].fields.pubname[0]) {
+          if (parsed.journals[j].name === data[i].pubname) {
             parsed.journals[j].articles.push(data[i]);
             found = true;
           }
@@ -388,7 +363,7 @@ var Map = React.createClass({
 
         if (!found) {
           parsed.journals.push({
-            name: data[i].fields.pubname[0],
+            name: data[i].pubname,
             articles: [data[i]]
           });
         }
@@ -409,7 +384,7 @@ var Map = React.createClass({
   },
 
   render: function() {
-    console.log('map render');
+  //  console.log('map render');
     return <div id='map'></div>
   }
 });

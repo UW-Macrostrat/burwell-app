@@ -36,6 +36,7 @@ var App = React.createClass({
         macrostrat: {
           names: [],
           strat_names: [{id: null, name:null}],
+          rank_names: [],
           ids: []
         },
         articles: {

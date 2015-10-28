@@ -9,9 +9,8 @@ var BurwellSource = React.createClass({
   },
 
   showSource(event) {
-
     event.preventDefault();
-    console.log(this.props.sourceMap[this.props.data.source_id]);
+  //  console.log(this.props.sourceMap[this.props.data.source_id]);
     this.props.onInteraction('active', false);
     this.props.onInteraction('currentSource', this.props.sourceMap[this.props.data.source_id]);
     this.props.onInteraction('showSource', true);
@@ -22,7 +21,7 @@ var BurwellSource = React.createClass({
       <div className='burwell-source'>
         <h2 className='title-two'>{this.props.data.name}</h2>
         <p className='source-attribution'><small><i>
-          Source: <a href='#' onClick={this.showSource}>{this.props.sourceMap[this.props.data.source_id].name}</a>
+          Source: <a href='#' onClick={this.showSource}>{this.props.sourceMap[this.props.data.source_id].name}</a> <small>- {this.props.data.map_id}</small>
         </i></small></p>
 
         <p className='info-attr'><strong>Age: </strong>
@@ -65,8 +64,6 @@ var BurwellSource = React.createClass({
             />
           : ''
         }
-
-        <p className='info-attr'><strong>Map ID: </strong>{this.props.data.map_id}</p>
 
       </div>
     );
