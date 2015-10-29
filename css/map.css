@@ -272,6 +272,7 @@ small {
   height: 100%;
   margin-top: 15px;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .unit_info_content > a {
