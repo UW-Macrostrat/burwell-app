@@ -23,7 +23,7 @@ var InfoPanel = React.createClass({
             />
         </div>
 
-        <div className={this.props.data.hasBurwell ? 'unit_info_content' : 'noDisplay'}>
+        <div className='unit_info_content'>
           <BurwellInfo data={this.props.data.burwell} sources={this.props.sources} onInteraction={this.props.onInteraction}/>
           <MacrostratInfo data={this.props.data.macrostrat}/>
           <ArticleInfo data={this.props.data.articles}/>
