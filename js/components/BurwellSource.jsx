@@ -17,12 +17,10 @@ var BurwellSource = React.createClass({
   },
 
   render() {
+    var reference = this.props.sourceMap[this.props.data.source_id];
     return (
       <div className='burwell-source'>
         <h2 className='title-two'>{this.props.data.name}</h2>
-        <p className='source-attribution'><small><i>
-          Source: <a href='#' onClick={this.showSource}>{this.props.sourceMap[this.props.data.source_id].name}</a> <small>- {this.props.data.map_id}</small>
-        </i></small></p>
 
         <p className='info-attr'><strong>Age: </strong>
         {
@@ -34,7 +32,10 @@ var BurwellSource = React.createClass({
 
         {
           this.props.data.strat_name
-          ? <p className='info-attr'><strong>Stratigraphic name: </strong>{this.props.data.strat_name}</p>
+          ? <LongText
+              title='Stratigraphic name'
+              text={this.props.data.strat_name}
+            />
           : ''
         }
 
@@ -65,6 +66,7 @@ var BurwellSource = React.createClass({
           : ''
         }
 
+        <p className='info-attr reference'><strong>Reference: </strong>{reference.authors}{reference.ref_year ? ', ' + reference.ref_year : ''}, <a target='_blank' href={reference.url}>{reference.ref_title}</a>: {reference.ref_source}. {this.props.data.map_id}.</p>
       </div>
     );
   }

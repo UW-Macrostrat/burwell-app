@@ -9,9 +9,6 @@ var MacrostratInfo = React.createClass({
       <h2 className='title-two'>{this.props.data.strat_names.map((d, idx) => {
         return <span><a href={'https://macrostrat.org/sift/#/strat_name/' + d.id} target='_blank'>{d.name}</a>{(idx != this.props.data.strat_names.length - 1) ? ', ' : ''} </span>
       })}</h2>
-      <p className='source-attribution'><small><i>
-        Source: <a href='https://macrostrat.org' target='_blank'>Macrostrat</a>
-      </i></small></p>
 
       <p className='info-attr'><strong>Age: </strong>{this.props.data.uniqueIntervals} - ({this.props.data.b_age} - {this.props.data.t_age}<small> Ma</small>)</p>
       <p className='info-attr'><strong>Thickness: </strong>{this.props.data.min_thick} - {this.props.data.max_thick}<small>m</small></p>
@@ -19,6 +16,8 @@ var MacrostratInfo = React.createClass({
       <p className='info-attr'><strong>Unit ID{this.props.data.ids.length > 1 ? 's' : ''}: </strong>{this.props.data.ids.map((d, idx) => {
         return <span><a href={'https://macrostrat.org/sift/#/unit/' + d} target='_blank'>{d}</a>{ (idx != this.props.data.ids.length - 1) ? ', ' : '' }</span>
       })}</p>
+
+    <p className='info-attr reference'><strong>Reference: </strong><a target='_blank' href='https://macrostrat.org'>Macrostrat.org</a></p>
     </div>
   }
 });

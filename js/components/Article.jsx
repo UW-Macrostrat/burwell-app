@@ -25,11 +25,15 @@ var Article = React.createClass({
     return (
       <div className='dd-article'>
         <div className='dd-article-heading'>
-          <a href={url} target='_blank' className='title-link'>
-            <strong>{this.props.data.title}</strong>
-          </a>
-          <i className='article-author'>{(this.props.data.authors) ? this.props.data.authors : 'Unknown'}</i>
+          <p className='article-author'>{(this.props.data.authors) ? this.props.data.authors : 'Unknown'}, </p>
+
           {year.length ? (' ' + year + '.') : ''}
+
+          <a href={url} target='_blank' className='title-link'>
+            <strong>{this.props.data.title}. </strong>
+          </a>
+          {this.props.data.source}.
+
           <i className={this.state.showText ? 'noDisplay' : 'fa fa-plus-square-o fa-lg show-content'} onClick={this.toggle}></i>
           <i className={this.state.showText ? 'fa fa-minus-square-o fa-lg show-content' : 'noDisplay'} onClick={this.toggle}></i>
         </div>
