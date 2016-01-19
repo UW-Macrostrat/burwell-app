@@ -27,10 +27,10 @@ var Article = React.createClass({
         <div className='dd-article-heading'>
           <p className='article-author'>{(this.props.data.authors) ? this.props.data.authors : 'Unknown'}, </p>
 
-          {year.length ? (' ' + year + '.') : ''}
+          {year.length ? (' ' + year + '. ') : ''}
 
           <a href={url} target='_blank' className='title-link'>
-            <strong>{this.props.data.title}. </strong>
+            <strong>{this.props.data.title}.</strong>
           </a>
           {this.props.data.source}.
 
