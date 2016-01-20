@@ -20,12 +20,16 @@ var Article = React.createClass({
       year = '';
     }
 
+    var authors = this.props.data.authors.split(';');
+
+    var displayAuthors = (authors.length && authors.length >= 4) ? authors.slice(0, 4).join(', ') + ' et al.' : authors.join(', ');
+
     var url = (this.props.data.URL.indexOf('elsevier') > -1) ? 'http://www.sciencedirect.com/science/article/pii/' + this.props.data.URL.split('pii/')[1] : this.props.data.URL;
 
     return (
       <div className='dd-article'>
         <div className='dd-article-heading'>
-          <p className='article-author'>{(this.props.data.authors) ? this.props.data.authors : 'Unknown'}, </p>
+          <p className='article-author'>{(displayAuthors) ? displayAuthors : 'Unknown'}, </p>
 
           {year.length ? (' ' + year + '. ') : ''}
 
