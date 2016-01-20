@@ -364,6 +364,7 @@ var Map = React.createClass({
         if (!found) {
           parsed.journals.push({
             name: data[i].pubname,
+            source: data[i].source,
             articles: [data[i]]
           });
         }

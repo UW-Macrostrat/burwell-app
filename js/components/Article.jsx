@@ -32,7 +32,6 @@ var Article = React.createClass({
           <a href={url} target='_blank' className='title-link'>
             <strong>{this.props.data.title}.</strong>
           </a>
-          {this.props.data.source}.
 
           <i className={this.state.showText ? 'noDisplay' : 'fa fa-plus-square-o fa-lg show-content'} onClick={this.toggle}></i>
           <i className={this.state.showText ? 'fa fa-minus-square-o fa-lg show-content' : 'noDisplay'} onClick={this.toggle}></i>

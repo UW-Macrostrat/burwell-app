@@ -304,6 +304,7 @@ small {
 }
 .dd-article-heading {
   font-size: 13px;
+  line-height: 20px;
 }
 .article-author {
   display: inline;
@@ -324,6 +325,13 @@ small {
 .journal-title > .title-two {
   font-size: 1em;
   color: #444;
+}
+.journal-source {
+  font-size: 14px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  padding-left: 3px;
+  color: #999;
 }
 .title-link {
   text-decoration: none;
