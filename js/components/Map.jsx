@@ -239,9 +239,10 @@ var Map = React.createClass({
         });
 
         var macroUnits = [].concat.apply([], bestFit.map(unit => { return unit.macro_units }));
+        var stratNames = [].concat.apply([], bestFit.map(unit => { return unit.strat_names }));
 
         if (macroUnits.length) {
-          this.getMacrostrat(macroUnits, unitSummary => {
+          this.getMacrostrat(macroUnits, stratNames, unitSummary => {
             if (unitSummary.rank_names.length) {
               this.getArticles(unitSummary.rank_names);
             }
@@ -268,7 +269,7 @@ var Map = React.createClass({
     });
   },
 
-  getMacrostrat: function(unit_ids, callback) {
+  getMacrostrat: function(unit_ids, strat_names, callback) {
     this.state.requests.macrostrat = xhr({
       uri: `${Config.apiUrl}/units?response=long&unit_id=${unit_ids.join(',')}`
     }, (error, response, body) => {
@@ -284,7 +285,7 @@ var Map = React.createClass({
         var s = {}
 
         var filteredStratNames = allStratNames.filter(function(d) {
-          if (!s[d.id]) {
+          if (strat_names.indexOf(d.id) > -1 && !s[d.id]) {
             s[d.id] = d;
             return d;
           }
