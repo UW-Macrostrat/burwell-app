@@ -28,8 +28,8 @@ gulp.task('css-min', function() {
 })
 
 gulp.task('watch', function() {
-    gulp.watch('js/components/*.jsx', ['browserify-babel']);
-    gulp.watch('js/**/*.jsx', ['browserify-babel']);
+    gulp.watch('js/components/*.js*', ['browserify-babel']);
+    gulp.watch('js/**/*.js*', ['browserify-babel']);
     gulp.watch('css/*.css', ['css-min']);
     gulp.watch('index.html', ['build']);
 });

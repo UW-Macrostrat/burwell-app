@@ -20,6 +20,10 @@ var Map = React.createClass({
     this.map.locate();
   },
 
+  updateView: function(coords, z) {
+    this.map.setView(coords, z);
+  },
+
   componentDidMount: function() {
     var map = this.map = L.map(this.getDOMNode(), {
       attributionControl: false,
@@ -87,10 +91,11 @@ var Map = React.createClass({
     });
 
     this.props.locate(this.locate);
+    this.props.updateView(this.updateView);
   },
 
   componentWillUpdate: function(nextProps) {
-
+    console.log('receiving props', nextProps.data.searchCoords[0], this.props.data.searchCoords[0]);
     // Handle burwell
     if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
       this.map.addLayer(this.burwell);
@@ -128,6 +133,7 @@ var Map = React.createClass({
     if (nextProps.data.burwellOpacity != this.props.data.burwellOpacity) {
       this.burwell.setOpacity(nextProps.data.burwellOpacity/100);
     }
+
   },
 
   onClick: function(d) {

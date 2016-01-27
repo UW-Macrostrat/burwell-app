@@ -606,6 +606,125 @@ small {
   letter-spacing: 1px;
 }
 
+.hidden {
+  display: none;
+}
+.close-autocomplete {
+  color: #fff;
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0px 15px;
+  cursor: pointer;
+  font-size: 40px;
+  font-weight: 100;
+}
+
+.autocomplete-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.autocomplete-container {
+  width: 80%;
+  text-align: left;
+  z-index: 9999999;
+
+  position: absolute;
+  top: 8%;
+  right: 0;
+  left: 0;
+  margin: 0 auto;
+
+}
+.autocomplete-input-container {
+  border-bottom: 1px solid #D1D1D1;
+  padding-bottom: 10px;
+  font-size: 18px;
+}
+.autocomplete-search-icon {
+  display: inline;
+  color: #D1D1D1;
+  margin-right: 10px;
+}
+.autocomplete-input {
+  display: inline;
+  border: none;
+  font-size: 18px;
+  -webkit-appearance: none;
+  color: #fff;
+  background-color: rgba(0,0,0,0);
+}
+.autocomplete-input:focus {
+  outline:none;
+  box-shadow: none;
+}
+.autocomplete-results {
+  width: 100%;
+  padding: 10px;
+
+  margin-top: 5px;
+/*  background-color: #fff;
+  margin-top: -5px;
+  border: 1px solid #ddd;
+  box-shadow: 0px 1px 5px rgba(50,50,50,0.2);*/
+}
+.autocomplete-result-category {
+  margin-bottom: 5px;
+}
+.autocomplete-result-category-title {
+  color: #777777;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 8px;
+}
+.autocomplete-result-category-list {
+  list-style: none;
+  margin-left: -45px;
+  margin-top: -12px;
+  cursor: pointer;
+}
+.autocomplete-hint {
+  padding: 15px;
+}
+.autocomplete-hint > p {
+  font-size: 12px;
+  color: #aaa;
+  letter-spacing: 1px;
+  font-weight: 300;
+}
+.autocomplete-hint > ul {
+  list-style: none;
+  color: #777;
+  font-weight: 200;
+  margin-left: -25px;
+}
+.autocomplete-hint > ul > li {
+  padding: 5px;
+}
+.autocomplete-hint > ul > li > a {
+  color: inherit;
+}
+
+.result-item {
+  padding: 15px 7px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  font-weight: 300;
+  color: #fff;
+}
+.result-item.focused {
+  background-color: #1092fe;
+  color: #fff;
+}
+.result-item-id {
+  font-size: 10px;
+  color: #777;
+  margin-left: 5px;
+}
+
+
+
 @media(max-width: 460px) {
   .menu-header > img {
     height: 23px;
