@@ -95,7 +95,6 @@ var Map = React.createClass({
   },
 
   componentWillUpdate: function(nextProps) {
-    console.log('receiving props', nextProps.data.searchCoords[0], this.props.data.searchCoords[0]);
     // Handle burwell
     if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
       this.map.addLayer(this.burwell);

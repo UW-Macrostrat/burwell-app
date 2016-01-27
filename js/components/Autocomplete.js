@@ -34,6 +34,14 @@ class Autocomplete extends React.Component {
     this.enableAndHide = this.enableAndHide.bind(this);
   }
 
+  componentDidMount() {
+    this.refs.autocompleteInput.getDOMNode().focus();
+  }
+
+  componentDidUpdate() {
+    this.refs.autocompleteInput.getDOMNode().focus();
+  }
+
   resetResults() {
     return [];
   }
@@ -232,6 +240,7 @@ class Autocomplete extends React.Component {
           <i className='fa fa-search autocomplete-search-icon'></i>
           <input
             className='autocomplete-input'
+            ref='autocompleteInput'
             type='text'
             autoComplete='off'
             spellCheck='false'

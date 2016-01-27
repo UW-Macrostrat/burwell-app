@@ -3,7 +3,7 @@ import Autocomplete from './Autocomplete';
 
 var Search = React.createClass({
   hide: function() {
-      this.props.onInteraction('showSearch', false);
+    this.props.onInteraction('showSearch', false);
   },
 
   render: function() {

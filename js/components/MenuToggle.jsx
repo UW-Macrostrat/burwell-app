@@ -1,4 +1,5 @@
 import React from 'react';
+var ReactDOM = require('react-dom');
 
 var MenuToggle = React.createClass({
   getInitialState() {
@@ -32,6 +33,10 @@ var MenuToggle = React.createClass({
     this.toggle();
     event.preventDefault();
     this.props.onInteraction('showSearch', true);
+    document.getElementsByClassName('autocomplete-wrapper')[0].focus();
+    document.getElementsByClassName('autocomplete-input')[0].focus();
+    document.getElementsByClassName('autocomplete-input')[0].select();
+
   },
 
   // A little hack to make sure the menu doesn't animate on load
