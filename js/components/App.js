@@ -4,6 +4,7 @@ import xhr from 'xhr';
 import Config from './Config.js';
 
 import Attribution from './Attribution.jsx';
+import Search from './Search';
 import BurwellReference from './BurwellReference.jsx';
 import Menu from './Menu.jsx';
 import InfoPanel from './InfoPanel.jsx';
@@ -15,9 +16,11 @@ var App = React.createClass({
         sources: {},
         scales: {},
         showAttribution: false,
+        showSearch: false,
         showSource: false,
         showMenu: false,
         active: false,
+        searchCoords: [0,0],
         lat: null,
         lng: null,
         zoom: 0,
@@ -97,6 +100,9 @@ var App = React.createClass({
           locate={function(l) {
             this.setState({locate: l});
           }.bind(this)}
+          updateView={function(l) {
+            this.setState({updateView: l})
+          }.bind(this)}
           scales={this.state.scales}
         />
 
@@ -104,6 +110,12 @@ var App = React.createClass({
         <Attribution
           data={this.state}
           onInteraction={this.updateState}
+        />
+
+        <Search
+          data={this.state}
+          onInteraction={this.updateState}
+          updateView={this.state.updateView}
         />
 
         <BurwellReference
