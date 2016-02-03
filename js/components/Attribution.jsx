@@ -11,8 +11,12 @@ var Attribution = React.createClass({
         <div id='attr-info'>
           <div>
             <p><strong>Mapping API </strong> via <a href='http://leafletjs.com' title='A JS library for interactive maps' target='_blank'>Leaflet</a> under <a href='https://github.com/Leaflet/Leaflet/blob/master/LICENSE' target='_blank'>BSD 2-Clause</a>.</p>
+
             <p><strong>Black & white tiles </strong>by <a href='http://stamen.com' target='_blank'>Stamen Design</a>, under <a href='http://creativecommons.org/licenses/by/3.0' target='_blank'>CC BY 3.0</a>. Data by <a href='http://openstreetmap.org' target='_blank'>OpenStreetMap</a>, under <a href='http://www.openstreetmap.org/copyright' target='_blank'>ODbL</a>.</p>
+
             <p><strong>Satellite tiles </strong>by <a href='https://www.mapbox.com/about/maps/' target='_blank'>Mapbox</a>. Data by <a href='http://openstreetmap.org' target='_blank'>OpenStreetMap</a>, under <a href='http://www.openstreetmap.org/copyright' target='_blank'>ODbL</a>.</p>
+
+            <p><strong>Place search API </strong>by <a href='https://mapzen.com/' target='_blank'>Mapzen</a>. Data by NASA/JPL, USGS, and others.</p>
 
             <p><strong>Geologic tiles </strong>by <a href='https://macrostrat.org' target='_blank'>Macrostrat </a>, under <a href='http://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a>.</p>
 

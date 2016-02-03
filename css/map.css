@@ -638,6 +638,16 @@ small {
   margin: 0 auto;
 
 }
+.autocomplete-placeholder-text {
+  position: absolute;
+  left: 30px;
+  top: -16px;
+  font-weight: 200;
+  letter-spacing: 1px;
+  font-size: 18px;
+  user-select: none;
+  color: #D1D1D1;
+}
 .autocomplete-input-container {
   border-bottom: 1px solid #D1D1D1;
   padding-bottom: 10px;
