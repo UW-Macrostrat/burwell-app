@@ -66,7 +66,7 @@ var Map = React.createClass({
 
     this.satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
       zIndex: 1,
-      maxZoom: 14
+      maxZoom: 17
     }).addTo(map);
 
 
