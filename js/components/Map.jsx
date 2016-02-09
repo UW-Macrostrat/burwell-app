@@ -204,7 +204,10 @@ var Map = React.createClass({
       11: 'large',
       12: 'large',
       13: 'large',
-      14: 'large'
+      14: 'large',
+      15: 'large',
+      16: 'large',
+      17: 'large'
     }
 
     var priorities = {

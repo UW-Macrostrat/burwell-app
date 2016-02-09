@@ -20,7 +20,7 @@ var Article = React.createClass({
       year = '';
     }
 
-    var authors = this.props.data.authors.split(';');
+    var authors = (this.props.data.hasOwnProperty('authors')) ? this.props.data.authors.split(';') : [];
 
     var displayAuthors = (authors.length && authors.length >= 4) ? authors.slice(0, 4).join(', ') + ' et al.' : authors.join(', ');
 
