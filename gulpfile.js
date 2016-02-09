@@ -36,8 +36,8 @@ gulp.task('watch', function() {
 
 gulp.task('browserify-babel', function() {
   browserify({
-    entries: 'js/index.jsx',
-    extensions: ['.jsx'],
+    entries: 'js/index.js',
+    extensions: ['.js'],
     debug: true
   })
   .transform(babelify)

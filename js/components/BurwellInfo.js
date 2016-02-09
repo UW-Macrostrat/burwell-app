@@ -1,5 +1,5 @@
 import React from 'react';
-import BurwellSource from './BurwellSource.jsx';
+import BurwellSource from './BurwellSource';
 
 var BurwellInfo = React.createClass({
   getDefaultProps() {
@@ -15,7 +15,7 @@ var BurwellInfo = React.createClass({
     <div className='burwell-info'>
 
       {this.props.data.map(
-        (source, idx) => <BurwellSource key={idx} data={source} sourceMap={sourceHash} onInteraction={this.props.onInteraction}/>
+        (source, idx) => <BurwellSource key={idx} data={source} sourceMap={sourceHash} shareState={this.props.shareState}/>
       )}
 
     </div>

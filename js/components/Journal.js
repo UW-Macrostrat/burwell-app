@@ -1,5 +1,5 @@
 import React from 'react';
-import Article from './Article.jsx';
+import Article from './Article';
 
 class Journal extends React.Component {
   render() {

@@ -1,5 +1,5 @@
 import React from 'react';
-import Journal from './Journal.jsx';
+import Journal from './Journal';
 
 var ArticleInfo = React.createClass({
   render: function() {
