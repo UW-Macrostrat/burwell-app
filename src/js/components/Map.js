@@ -73,8 +73,8 @@ var Map = React.createClass({
     // Create the marker that will be used when user clicks
     this.marker = L.marker([0, 0], {
       icon: L.icon({
-        iconUrl: 'js/images/marker-icon-bw-2x.png',
-        shadowUrl: 'js/images/marker-shadow.png',
+        iconUrl: 'img/marker-icon-bw-2x.png',
+        shadowUrl: 'img/marker-shadow.png',
         iconSize: [25,41],
         iconAnchor: [12, 41]
       })

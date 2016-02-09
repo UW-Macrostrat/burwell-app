@@ -14,29 +14,29 @@ gulp.task('build', function() {
     .pipe(htmlhint())
     .pipe(htmlhint.reporter());
 
-  gulp.src(['node_modules/leaflet/dist/leaflet.js', 'node_modules/leaflet-hash/leaflet-hash.js', 'js/leaflet-panToOffset.js'])
+  gulp.src(['node_modules/leaflet/dist/leaflet.js', 'node_modules/leaflet-hash/leaflet-hash.js', 'src/js/leaflet-panToOffset.js'])
     .pipe(concat('leaflet-all.min.js'))
     .pipe(uglify())
-    .pipe(gulp.dest('./build'));
+    .pipe(gulp.dest('./dist/js'));
 });
 
 gulp.task('css-min', function() {
-  gulp.src(['node_modules/leaflet/dist/leaflet.css', 'css/animate.min.css', 'css/map.css'])
+  gulp.src(['node_modules/leaflet/dist/leaflet.css', 'src/css/animate.min.css', 'src/css/map.css'])
     .pipe(concat('styles.min.css'))
     .pipe(minifyCSS())
-    .pipe(gulp.dest('./css/'));
+    .pipe(gulp.dest('./dist/css/'));
 })
 
 gulp.task('watch', function() {
-    gulp.watch('js/components/*.js*', ['browserify-babel']);
-    gulp.watch('js/**/*.js*', ['browserify-babel']);
-    gulp.watch('css/*.css', ['css-min']);
+    gulp.watch('src/js/components/*.js*', ['browserify-babel']);
+    gulp.watch('src/js/**/*.js*', ['browserify-babel']);
+    gulp.watch('src/css/*.css', ['css-min']);
     gulp.watch('index.html', ['build']);
 });
 
 gulp.task('browserify-babel', function() {
   browserify({
-    entries: 'js/index.js',
+    entries: 'src/js/index.js',
     extensions: ['.js'],
     debug: true
   })
@@ -45,7 +45,7 @@ gulp.task('browserify-babel', function() {
   .pipe(source('bundle.min.js'))
   .pipe(buffer())
   .pipe(uglify())
-  .pipe(gulp.dest('./build'))
+  .pipe(gulp.dest('./dist/js'))
 
 });
 
