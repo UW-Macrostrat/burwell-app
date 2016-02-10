@@ -1,6 +1,6 @@
 {
-  "name": "gmna",
-  "version": "0.1.0",
+  "name": "burwell-app",
+  "version": "1.0.0",
   "description": "",
   "main": "index.html",
   "dependencies": {
@@ -30,12 +30,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/UW-Macrostrat/gmna-app.git"
+    "url": "https://github.com/UW-Macrostrat/burwell-app.git"
   },
   "author": "John J Czaplewski <jczaplew@gmail.com>",
   "license": "CC0",
   "bugs": {
-    "url": "https://github.com/UW-Macrostrat/gmna-app/issues"
+    "url": "https://github.com/UW-Macrostrat/burwell-app/issues"
   },
-  "homepage": "https://github.com/UW-Macrostrat/gmna-app"
+  "homepage": "https://github.com/UW-Macrostrat/burwell-app"
 }
