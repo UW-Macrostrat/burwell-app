@@ -9,23 +9,15 @@ var Menu = React.createClass({
   },
   hide: function(event) {
     event.preventDefault();
-    this.props.onInteraction('showMenu', false);
+    this.props.shareState('showMenu', false);
   },
 
   toggleBurwell: function() {
-    this.props.onInteraction('hasBurwell', !this.props.data.hasBurwell);
-  },
-
-  toggleGMNAFaults: function() {
-    this.props.onInteraction('hasGMNAFaults', !this.props.data.hasGMNAFaults);
-  },
-
-  toggleGMUSFaults: function() {
-    this.props.onInteraction('hasGMUSFaults', !this.props.data.hasGMUSFaults);
+    this.props.shareState('hasBurwell', !this.props.data.hasBurwell);
   },
 
   toggleSatellite: function() {
-    this.props.onInteraction('hasSatellite', !this.props.data.hasSatellite);
+    this.props.shareState('hasSatellite', !this.props.data.hasSatellite);
   },
 
   toggleOpacityBurwell: function() {
@@ -33,7 +25,7 @@ var Menu = React.createClass({
   },
 
   changeOpacityBurwell: function(event) {
-    this.props.onInteraction('burwellOpacity', event.currentTarget.valueAsNumber);
+    this.props.shareState('burwellOpacity', event.currentTarget.valueAsNumber);
   },
 
   render: function() {

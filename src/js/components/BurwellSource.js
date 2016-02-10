@@ -1,5 +1,5 @@
 import React from 'react';
-import LongText from './LongText.jsx';
+import LongText from './LongText';
 
 var BurwellSource = React.createClass({
   getInitialState() {
@@ -11,9 +11,9 @@ var BurwellSource = React.createClass({
   showSource(event) {
     event.preventDefault();
   //  console.log(this.props.sourceMap[this.props.data.source_id]);
-    this.props.onInteraction('active', false);
-    this.props.onInteraction('currentSource', this.props.sourceMap[this.props.data.source_id]);
-    this.props.onInteraction('showSource', true);
+    this.props.shareState('active', false);
+    this.props.shareState('currentSource', this.props.sourceMap[this.props.data.source_id]);
+    this.props.shareState('showSource', true);
   },
 
   render() {

@@ -3,7 +3,7 @@ import Autocomplete from './Autocomplete';
 
 var Search = React.createClass({
   hide: function() {
-    this.props.onInteraction('showSearch', false);
+    this.props.shareState('showSearch', false);
   },
 
   render: function() {
@@ -12,8 +12,10 @@ var Search = React.createClass({
         <div className='autocomplete-wrapper'>
           <div className='close-autocomplete' onClick={this.hide}>x</div>
           <Autocomplete
+            lat={this.props.data.lat}
+            lng={this.props.data.lng}
             updateView={this.props.updateView}
-            broadcast={this.props.onInteraction}
+            broadcast={this.props.shareState}
             minLength='2'
           />
         </div>

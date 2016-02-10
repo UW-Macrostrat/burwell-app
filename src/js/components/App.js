@@ -1,14 +1,14 @@
 import React from 'react';
-import Map from './Map.jsx';
+import Map from './Map.js';
 import xhr from 'xhr';
-import Config from './Config.js';
+import Config from './Config';
 
-import Attribution from './Attribution.jsx';
+import Attribution from './Attribution';
 import Search from './Search';
-import BurwellReference from './BurwellReference.jsx';
-import Menu from './Menu.jsx';
-import InfoPanel from './InfoPanel.jsx';
-import MenuToggle from './MenuToggle.jsx';
+import BurwellReference from './BurwellReference';
+import Menu from './Menu';
+import InfoPanel from './InfoPanel';
+import MenuToggle from './MenuToggle';
 
 var App = React.createClass({
   getInitialState: function() {
@@ -26,16 +26,9 @@ var App = React.createClass({
         zoom: 0,
         hasGeology: false,
         geologyOpacity: 80,
-        hasGMNAFaults: false,
-        hasGMUSFaults: false,
         hasSatellite: true,
         hasBurwell: true,
         burwellOpacity: 60,
-        gmna: {},
-        gmus: {
-          rocktype: [],
-          lithology: []
-        },
         macrostrat: {
           names: [],
           strat_names: [{id: null, name:null}],
@@ -96,7 +89,7 @@ var App = React.createClass({
       <div className='container'>
         <Map
           data={this.state}
-          onInteraction={this.updateState}
+          shareState={this.updateState}
           locate={function(l) {
             this.setState({locate: l});
           }.bind(this)}
@@ -109,33 +102,33 @@ var App = React.createClass({
 
         <Attribution
           data={this.state}
-          onInteraction={this.updateState}
+          shareState={this.updateState}
         />
 
         <Search
           data={this.state}
-          onInteraction={this.updateState}
+          shareState={this.updateState}
           updateView={this.state.updateView}
         />
 
         <BurwellReference
           data={this.state}
-          onInteraction={this.updateState}
+          shareState={this.updateState}
         />
 
         <Menu
           data={this.state}
-          onInteraction={this.updateState}
+          shareState={this.updateState}
         />
 
         <InfoPanel
           data={this.state}
-          onInteraction={this.updateState}
+          shareState={this.updateState}
           sources={this.state.sources}
         />
 
         <MenuToggle
-          onInteraction={this.updateState}
+          shareState={this.updateState}
           locate={this.state.locate}
         />
 
@@ -146,4 +139,4 @@ var App = React.createClass({
 
 export default App;
 
-console.log('Looking for the code? Find it here - https://github.com/UW-Macrostrat/gmna-app');
+console.log('Looking for the code? Find it here - https://github.com/UW-Macrostrat/burwell-app');

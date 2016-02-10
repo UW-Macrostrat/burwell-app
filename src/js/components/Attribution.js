@@ -2,7 +2,7 @@ import React from 'react';
 
 var Attribution = React.createClass({
   hide: function() {
-      this.props.onInteraction('showAttribution', false);
+      this.props.shareState('showAttribution', false);
   },
 
   render: function() {

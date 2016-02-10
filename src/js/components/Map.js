@@ -1,7 +1,7 @@
 import React from 'react';
 import xhr from 'xhr';
 import async from 'async';
-import Config from './Config.js';
+import Config from './Config';
 
 var Map = React.createClass({
   getInitialState: function() {
@@ -34,7 +34,7 @@ var Map = React.createClass({
     if (window.location.hash.length > 3) {
       var hashLocation = L.Hash.parseHash(window.location.hash);
       map.setView(hashLocation.center, hashLocation.zoom);
-      this.props.onInteraction('zoom', hashLocation.zoom);
+      this.props.shareState('zoom', hashLocation.zoom);
     }
 
     // Make map states linkable
@@ -73,8 +73,8 @@ var Map = React.createClass({
     // Create the marker that will be used when user clicks
     this.marker = L.marker([0, 0], {
       icon: L.icon({
-        iconUrl: 'js/images/marker-icon-bw-2x.png',
-        shadowUrl: 'js/images/marker-shadow.png',
+        iconUrl: 'img/marker-icon-bw-2x.png',
+        shadowUrl: 'img/marker-shadow.png',
         iconSize: [25,41],
         iconAnchor: [12, 41]
       })
@@ -98,11 +98,11 @@ var Map = React.createClass({
     // Handle burwell
     if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
       this.map.addLayer(this.burwell);
-      this.props.onInteraction('hasBurwell', true);
+      this.props.shareState('hasBurwell', true);
 
     } else if (!(nextProps.data.hasBurwell) && this.map.hasLayer(this.burwell)) {
       this.map.removeLayer(this.burwell);
-      this.props.onInteraction('hasGeology', false);
+      this.props.shareState('hasGeology', false);
     }
 
     // Handle GMNA faults
@@ -138,7 +138,7 @@ var Map = React.createClass({
   onClick: function(d) {
     // Set the marker on the click location and add it to the map
     this.marker.setLatLng(d.latlng).addTo(this.map);
-    this.props.onInteraction({
+    this.props.shareState({
       lat: d.latlng.lat,
       lng: d.latlng.lng,
       active: true,
@@ -177,15 +177,17 @@ var Map = React.createClass({
   onMove: function() {
     if (this.map.hasLayer(this.marker)) {
       this.map.removeLayer(this.marker);
-      this.props.onInteraction('active', false);
+      this.props.shareState('active', false);
     }
     if (this.props.data.showMenu) {
-      this.props.onInteraction('showMenu', false);
+      this.props.shareState('showMenu', false);
     }
+    this.props.shareState('lat', this.map.getCenter().lat);
+    this.props.shareState('lng', this.map.getCenter().lng);
   },
 
   adjustInterface: function() {
-    this.props.onInteraction('zoom', this.map.getZoom());
+    this.props.shareState('zoom', this.map.getZoom());
   },
 
   getBurwell: function(latlng) {
@@ -254,14 +256,14 @@ var Map = React.createClass({
             if (unitSummary.rank_names.length) {
               this.getArticles(unitSummary.rank_names);
             }
-            this.props.onInteraction({
+            this.props.shareState({
               burwell: bestFit,
               macrostrat: unitSummary
             });
 
           });
         } else {
-          this.props.onInteraction({
+          this.props.shareState({
             burwell: bestFit
           });
         }
@@ -379,7 +381,7 @@ var Map = React.createClass({
         }
       }
 
-      this.props.onInteraction('articles', parsed);
+      this.props.shareState('articles', parsed);
 
     });
 

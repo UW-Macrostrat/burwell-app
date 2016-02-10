@@ -2,7 +2,7 @@ import React from 'react';
 
 var BurwellReference = React.createClass({
   hide: function() {
-    this.props.onInteraction('showSource', false);
+    this.props.shareState('showSource', false);
   },
 
   render: function() {

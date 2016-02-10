@@ -54,10 +54,10 @@ class Autocomplete extends React.Component {
     });
   }
 
-  fetch(query, lat, lng) {
+  fetch(query) {
     xhr({
-      //uri: `https://search.mapzen.com/v1/autocomplete?text=${query}&focus.point.lat=${lat}&focus.point.lon=${lng}&api_key=${Config.mapzenAPIKey}`
-      uri: `https://search.mapzen.com/v1/autocomplete?text=${query}&api_key=${Config.mapzenAPIKey}`
+      uri: `https://search.mapzen.com/v1/autocomplete?text=${query}&focus.point.lat=${this.props.lat}&focus.point.lon=${this.props.lng}&api_key=${Config.mapzenAPIKey}`
+      //uri: `https://search.mapzen.com/v1/autocomplete?text=${query}&api_key=${Config.mapzenAPIKey}`
     }, (error, response, body) => {
       var response = JSON.parse(body);
 
@@ -197,8 +197,6 @@ class Autocomplete extends React.Component {
 
     this.props.updateView(selected.geometry.coordinates.reverse(), zoom);
     this.props.broadcast('showSearch', false);
-
-    console.log(selected)
 
     this.setState({
       selectedItem: selected,

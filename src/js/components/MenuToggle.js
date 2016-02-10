@@ -14,13 +14,13 @@ var MenuToggle = React.createClass({
   showAttribution(event) {
     this.toggle();
     event.preventDefault();
-    this.props.onInteraction('showAttribution', true);
+    this.props.shareState('showAttribution', true);
   },
 
   showMenu(event) {
     this.toggle();
     event.preventDefault();
-    this.props.onInteraction('showMenu', true);
+    this.props.shareState('showMenu', true);
   },
 
   getLocation(event) {
@@ -32,7 +32,7 @@ var MenuToggle = React.createClass({
   showSearch(event) {
     this.toggle();
     event.preventDefault();
-    this.props.onInteraction('showSearch', true);
+    this.props.shareState('showSearch', true);
     document.getElementsByClassName('autocomplete-wrapper')[0].focus();
     document.getElementsByClassName('autocomplete-input')[0].focus();
     document.getElementsByClassName('autocomplete-input')[0].select();

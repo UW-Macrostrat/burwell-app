@@ -1,13 +1,13 @@
 import React from 'react';
-import MacrostratInfo from './MacrostratInfo.jsx';
-import ArticleInfo from './ArticleInfo.jsx';
-import BurwellInfo from './BurwellInfo.jsx';
-import LocationStats from './LocationStats.jsx';
+import MacrostratInfo from './MacrostratInfo';
+import ArticleInfo from './ArticleInfo';
+import BurwellInfo from './BurwellInfo';
+import LocationStats from './LocationStats';
 
 var InfoPanel = React.createClass({
 
   toggle: function() {
-    this.props.onInteraction('active', false);
+    this.props.shareState('active', false);
   },
 
   render: function() {
@@ -24,7 +24,7 @@ var InfoPanel = React.createClass({
         </div>
 
         <div className='unit_info_content'>
-          <BurwellInfo data={this.props.data.burwell} sources={this.props.sources} onInteraction={this.props.onInteraction}/>
+          <BurwellInfo data={this.props.data.burwell} sources={this.props.sources} shareState={this.props.shareState}/>
           <MacrostratInfo data={this.props.data.macrostrat}/>
           <ArticleInfo data={this.props.data.articles}/>
           <div className='padding'></div>
