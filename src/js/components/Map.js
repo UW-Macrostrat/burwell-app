@@ -272,7 +272,7 @@ var Map = React.createClass({
         bestFit.forEach(unit => {
           if ((unit.source_id === 5 || unit.source_id === 23) && unit.strat_name.length) {
             var name = (unit.strat_name.indexOf(' of ') > -1) ? unit.strat_name.split(' of ')[0] : unit.strat_name;
-            this.getArticles([unit.strat_name]);
+            this.getArticles([name]);
           }
         });
 
