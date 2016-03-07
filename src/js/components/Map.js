@@ -270,7 +270,7 @@ var Map = React.createClass({
 
         // Hack to get articles for Australia and UK medium in the absence of Macrostrat matches
         bestFit.forEach(unit => {
-          if ((unit.source_id === 5 || unit.source_id === 18) && unit.strat_name.length) {
+          if ((unit.source_id === 5 || unit.source_id === 23) && unit.strat_name.length) {
             this.getArticles([unit.strat_name]);
           }
         });
