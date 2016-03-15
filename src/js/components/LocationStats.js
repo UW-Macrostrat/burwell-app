@@ -25,6 +25,7 @@ var LocationStats = React.createClass({
   },
 
   _update(lat, lng) {
+
     if (this.state.requests.elevation && this.state.requests.elevation.readyState != 4) {
       this.state.requests.elevation.abort();
     }

@@ -182,8 +182,8 @@ var Map = React.createClass({
     if (this.props.data.showMenu) {
       this.props.shareState('showMenu', false);
     }
-    this.props.shareState('lat', this.map.getCenter().lat);
-    this.props.shareState('lng', this.map.getCenter().lng);
+  //  this.props.shareState('lat', this.map.getCenter().lat);
+  //  this.props.shareState('lng', this.map.getCenter().lng);
   },
 
   adjustInterface: function() {
@@ -397,7 +397,6 @@ var Map = React.createClass({
   },
 
   render: function() {
-  //  console.log('map render');
     return <div id='map'></div>
   }
 });

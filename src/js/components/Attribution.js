@@ -18,6 +18,8 @@ var Attribution = React.createClass({
 
             <p><strong>Place search API </strong>by <a href='https://mapzen.com/' target='_blank'>Mapzen</a>. Data by NASA/JPL, USGS, and others.</p>
 
+            <p><strong>Elevation data</strong> via <a href='https://lta.cr.usgs.gov/SRTM1Arc'>USGS SRTM1</a>, under public domain.</p>
+
             <p><strong>Geologic tiles </strong>by <a href='https://macrostrat.org' target='_blank'>Macrostrat </a>, under <a href='http://creativecommons.org/licenses/by/4.0/' target='_blank'>CC-BY 4.0</a>.</p>
 
             <p><strong>Data</strong> adapted from various providers as noted, including <a href='http://pubs.usgs.gov/ds/424/' target='_blank'>USGS</a>.</p>
