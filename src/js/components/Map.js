@@ -45,24 +45,19 @@ var Map = React.createClass({
       zIndex: 1
     });
 
-    this.burwell = L.tileLayer(Config.apiUrl + '/maps/burwell/{z}/{x}/{y}/tile.png', {
+    this.burwell = L.tileLayer(Config.apiUrl + '/maps/burwell/vanilla/{z}/{x}/{y}/tile.png', {
       maxZoom: 13,
       opacity: 0.4,
       zIndex: 100
       //detectRetina: true
     }).addTo(map);
 
-    this.gmnaFaults = L.tileLayer('https://macrostrat.org/tiles/gmna_faults/{z}/{x}/{y}.png', {
-      maxZoom: 12,
-      detectRetina: true,
-      zIndex: 1000
-    });
-
-    this.gmusFaults = L.tileLayer('https://macrostrat.org/tiles/gmus_faults/{z}/{x}/{y}.png', {
-      maxZoom: 12,
-      detectRetina: true,
-      zIndex: 1000
-    });
+    this.emphasized = L.tileLayer(Config.apiUrl + '/maps/burwell/emphasized/{z}/{x}/{y}/tile.png', {
+      maxZoom: 13,
+      opacity: 0.4,
+      zIndex: 100
+      //detectRetina: true
+    }).addTo(map);
 
     this.satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
       zIndex: 1,
@@ -98,25 +93,26 @@ var Map = React.createClass({
     // Handle burwell
     if (nextProps.data.hasBurwell && !(this.map.hasLayer(this.burwell))) {
       this.map.addLayer(this.burwell);
+      this.map.removeLayer(this.emphasized);
       this.props.shareState('hasBurwell', true);
+      this.props.shareState('hasEmphasized', false);
+      return;
 
     } else if (!(nextProps.data.hasBurwell) && this.map.hasLayer(this.burwell)) {
       this.map.removeLayer(this.burwell);
       this.props.shareState('hasGeology', false);
     }
 
-    // Handle GMNA faults
-    if (nextProps.data.hasGMNAFaults && !(this.map.hasLayer(this.gmnaFaults))) {
-      this.map.addLayer(this.gmnaFaults);
-    } else if (!(nextProps.data.hasGMNAFaults) && this.map.hasLayer(this.gmnaFaults)) {
-      this.map.removeLayer(this.gmnaFaults);
-    }
+    // Handle emphasized
+    if (nextProps.data.hasEmphasized && !(this.map.hasLayer(this.emphasized))) {
+      this.map.addLayer(this.emphasized);
+      this.map.removeLayer(this.burwell);
+      this.props.shareState('hasEmphasized', true);
+      this.props.shareState('hasBurwell', false);
 
-    // Handle GMUS faults
-    if (nextProps.data.hasGMUSFaults && !(this.map.hasLayer(this.gmusFaults))) {
-      this.map.addLayer(this.gmusFaults);
-    } else if (!(nextProps.data.hasGMUSFaults) && this.map.hasLayer(this.gmusFaults)) {
-      this.map.removeLayer(this.gmusFaults);
+    } else if (!(nextProps.data.hasEmphasized) && this.map.hasLayer(this.emphasized)) {
+      this.map.removeLayer(this.emphasized);
+      this.props.shareState('hasEmphasized', false);
     }
 
     // Handle satellite
@@ -132,6 +128,12 @@ var Map = React.createClass({
     if (nextProps.data.burwellOpacity != this.props.data.burwellOpacity) {
       this.burwell.setOpacity(nextProps.data.burwellOpacity/100);
     }
+
+    // Handle emphasized opacity
+    if (nextProps.data.emphasizedOpacity != this.props.data.emphasizedOpacity) {
+      this.emphasized.setOpacity(nextProps.data.emphasizedOpacity/100);
+    }
+
 
   },
 

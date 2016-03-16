@@ -16,6 +16,10 @@ var Menu = React.createClass({
     this.props.shareState('hasBurwell', !this.props.data.hasBurwell);
   },
 
+  toggleEmphasized: function() {
+    this.props.shareState('hasEmphasized', !this.props.data.hasEmphasized);
+  },
+
   toggleSatellite: function() {
     this.props.shareState('hasSatellite', !this.props.data.hasSatellite);
   },
@@ -26,6 +30,14 @@ var Menu = React.createClass({
 
   changeOpacityBurwell: function(event) {
     this.props.shareState('burwellOpacity', event.currentTarget.valueAsNumber);
+  },
+
+  toggleOpacityEmphasized: function() {
+    this.setState({'showOpacityEmphasized': !this.state.showOpacityEmphasized})
+  },
+
+  changeOpacityEmphasized: function(event) {
+    this.props.shareState('emphasizedOpacity', event.currentTarget.valueAsNumber);
   },
 
   render: function() {
@@ -49,11 +61,15 @@ var Menu = React.createClass({
               </div>
             </div>
 
-          { /*
-            <div className='layer' id='gmnaFaults'>GMNA structures <i className={this.props.data.hasGMNAFaults ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleGMNAFaults}></i></div>
-            <div className='layer' id='gmusFaults'>GMUS structures <i className={this.props.data.hasGMUSFaults ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleGMUSFaults}></i></div>
-            */
-          }
+            <div className='layer' id='burwell'>Bedrock (emphasized)
+              <i className={this.props.data.hasEmphasized ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleEmphasized}></i>
+              <i className='fa fa-sliders layer-control' onClick={this.toggleOpacityEmphasized}></i>
+              <div className={!this.state.showOpacityEmphasized ? 'noDisplay' : 'opacity-adjuster'}>
+                <input id='geology-opacity-slider' type='range' max='100' min='0' step='10' value={this.props.data.emphasizedOpacity} onChange={this.changeOpacityEmphasized}/>
+                <div id='opacity-label'>Opacity</div>
+              </div>
+            </div>
+
             <div className='layer' id='satellite'>Satellite <i className={this.props.data.hasSatellite ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleSatellite}></i></div>
 
           </div>
