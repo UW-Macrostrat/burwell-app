@@ -57,7 +57,7 @@ var Map = React.createClass({
       opacity: 0.4,
       zIndex: 100
       //detectRetina: true
-    }).addTo(map);
+    });
 
     this.satellite = L.tileLayer('https://{s}.tiles.mapbox.com/v3/jczaplewski.ld2ndl61/{z}/{x}/{y}.png', {
       zIndex: 1,
