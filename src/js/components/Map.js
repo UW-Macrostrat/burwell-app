@@ -298,7 +298,7 @@ var Map = React.createClass({
         var s = {}
 
         var filteredStratNames = allStratNames.filter(function(d) {
-          if (strat_names.indexOf(d.id) > -1 && !s[d.id]) {
+          if (!s[d.id]) {
             s[d.id] = d;
             return d;
           }
