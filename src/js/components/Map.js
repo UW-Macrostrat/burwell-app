@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import xhr from 'xhr';
 import async from 'async';
 import Config from './Config';
@@ -25,7 +26,7 @@ var Map = React.createClass({
   },
 
   componentDidMount: function() {
-    var map = this.map = L.map(this.getDOMNode(), {
+    var map = this.map = L.map(ReactDOM.findDOMNode(this), {
       attributionControl: false,
       minZoom: 1
     }).setView([40.8, -94.1], 3);

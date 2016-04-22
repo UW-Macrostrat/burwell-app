@@ -1,4 +1,5 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import AutocompleteResultItem from './AutocompleteResultItem';
 import xhr from 'xhr';
 import Config from './Config';
@@ -35,11 +36,13 @@ class Autocomplete extends React.Component {
   }
 
   componentDidMount() {
-    this.refs.autocompleteInput.getDOMNode().focus();
+    ReactDOM.findDOMNode(this.refs.autocompleteInput).focus()
+  //  this.refs.autocompleteInput.getDOMNode().focus();
   }
 
   componentDidUpdate() {
-    this.refs.autocompleteInput.getDOMNode().focus();
+    ReactDOM.findDOMNode(this.refs.autocompleteInput).focus()
+  //  this.refs.autocompleteInput.getDOMNode().focus();
   }
 
   resetResults() {
