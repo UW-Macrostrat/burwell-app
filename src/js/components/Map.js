@@ -271,9 +271,9 @@ var Map = React.createClass({
           });
         }
 
-        // Hack to get articles for Australia and UK medium in the absence of Macrostrat matches
+        // Hack to get articles for Australia, UK medium, and South Africa in the absence of Macrostrat matches
         bestFit.forEach(unit => {
-          if ((unit.source_id === 5 || unit.source_id === 23) && unit.strat_name.length) {
+          if ((unit.source_id === 5 || unit.source_id === 23 || unit.source_id === 41) && unit.strat_name.length) {
             var name = (unit.strat_name.indexOf(' of ') > -1) ? unit.strat_name.split(' of ')[0] : unit.strat_name;
             this.getArticles([name]);
           }
