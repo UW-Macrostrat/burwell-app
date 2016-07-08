@@ -20,11 +20,9 @@ var Article = React.createClass({
       year = '';
     }
 
-    var authors = (this.props.data.hasOwnProperty('authors')) ? this.props.data.authors.split(';') : [];
+    var authors = (this.props.data.hasOwnProperty('authors')) ? this.props.data.authors.map(function(d) { return d.name }) : [];
 
     var displayAuthors = (authors.length && authors.length >= 4) ? authors.slice(0, 4).join(', ') + ' et al.' : authors.join(', ');
-
-    var url = (this.props.data.URL.indexOf('elsevier') > -1) ? 'http://www.sciencedirect.com/science/article/pii/' + this.props.data.URL.split('pii/')[1] : this.props.data.URL;
 
     return (
       <div className='dd-article'>
@@ -33,7 +31,7 @@ var Article = React.createClass({
 
           {year.length ? (' ' + year + '. ') : ''}
 
-          <a href={url} target='_blank' className='title-link'>
+          <a href={this.props.data.url} target='_blank' className='title-link'>
             <strong>{this.props.data.title}.</strong>
           </a>
 
@@ -41,7 +39,7 @@ var Article = React.createClass({
           <i className={this.state.showText ? 'fa fa-minus-square-o fa-lg show-content' : 'noDisplay'} onClick={this.toggle}></i>
         </div>
         <div className={this.state.showText ? 'dd-text auto-height' : 'dd-text'}>
-          {this.props.data.highlight.map(function(snippet, i) {
+          {this.props.data.snippets.map(function(snippet, i) {
             // The text from Elasticsearch sometimes has errant < and >, which mess up the html
             // so we have to do this, otherwise when React encounters one of those
             // problematic ones it stops working
