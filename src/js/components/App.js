@@ -27,8 +27,10 @@ var App = React.createClass({
         hasGeology: false,
         geologyOpacity: 80,
         hasSatellite: true,
-        hasBurwell: true,
+        hasBurwell: false,
+        hasEmphasized: true,
         burwellOpacity: 60,
+        emphasizedOpacity: 60,
         macrostrat: {
           names: [],
           strat_names: [{id: null, name:null}],

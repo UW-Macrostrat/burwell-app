@@ -48,17 +48,17 @@ var Map = React.createClass({
 
     this.burwell = L.tileLayer(Config.apiUrl + '/maps/burwell/vanilla/{z}/{x}/{y}/tile.png', {
       maxZoom: 13,
-      opacity: 0.4,
-      zIndex: 100
-      //detectRetina: true
-    }).addTo(map);
-
-    this.emphasized = L.tileLayer(Config.apiUrl + '/maps/burwell/emphasized/{z}/{x}/{y}/tile.png', {
-      maxZoom: 13,
-      opacity: 0.4,
+      opacity: 0.6,
       zIndex: 100
       //detectRetina: true
     });
+
+    this.emphasized = L.tileLayer(Config.apiUrl + '/maps/burwell/emphasized/{z}/{x}/{y}/tile.png', {
+      maxZoom: 13,
+      opacity: 0.6,
+      zIndex: 100
+      //detectRetina: true
+    }).addTo(map);
 
     this.satellite = L.tileLayer('https://api.mapbox.com/styles/v1/jczaplewski/cigmamq4n000xaaknfpuj1zdk/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiamN6YXBsZXdza2kiLCJhIjoiWnQxSC01USJ9.oleZzfREJUKAK1TMeCD0bg', {
       zIndex: 1,
@@ -384,7 +384,6 @@ var Map = React.createClass({
           });
         }
       }
-      console.log(parsed)
       this.props.shareState('articles', parsed);
 
     });

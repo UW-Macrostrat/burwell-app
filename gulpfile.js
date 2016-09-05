@@ -38,7 +38,7 @@ gulp.task('browserify-babel', function() {
   browserify({
     entries: 'src/js/index.js',
     extensions: ['.js'],
-    debug: true
+    debug: false
   })
   .transform(babelify)
   .bundle()
@@ -49,4 +49,8 @@ gulp.task('browserify-babel', function() {
 
 });
 
-gulp.task('default', ['build', 'css-min', 'browserify-babel']);
+gulp.task('apply-prod-environment', function() {
+    process.env.NODE_ENV = 'production';
+});
+
+gulp.task('default', ['apply-prod-environment', 'build', 'css-min', 'browserify-babel']);
