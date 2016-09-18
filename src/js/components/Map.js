@@ -205,7 +205,7 @@ var Map = React.createClass({
       7: 'medium',
       8: 'medium',
       9: 'medium',
-      10: 'medium',
+      10: 'large',
       11: 'large',
       12: 'large',
       13: 'large',
