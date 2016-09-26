@@ -1,6 +1,4 @@
 import React from 'react';
-import xhr from 'xhr';
-import Config from './Config';
 
 var LocationStats = React.createClass({
   getInitialState() {
@@ -12,9 +10,6 @@ var LocationStats = React.createClass({
       elevation: {
         ft: null,
         m: null
-      },
-      requests: {
-        elevation: null
       }
     }
   },
@@ -24,38 +19,9 @@ var LocationStats = React.createClass({
     return ((lng - 180) % 360 + 360) % 360 - 180;
   },
 
-  _update(lat, lng) {
-
-    if (this.state.requests.elevation && this.state.requests.elevation.readyState != 4) {
-      this.state.requests.elevation.abort();
-    }
-    if (!lat || !lng) {
-      return;
-    }
-
-    xhr({
-      uri: `${Config.apiUrl}/elevation?lat=${lat.toFixed(5)}&lng=${lng.toFixed(5)}`
-    }, (error, response, body) => {
-      if (error) {
-        console.log('Elevation error ', error);
-        return;
-      }
-
-      var data = JSON.parse(body);
-
-      this.setState({
-        lat,
-        lng,
-        elevation: {
-          ft: (data.success.data[0].elevation * 3.28084).toFixed(0),
-          m: data.success.data[0].elevation
-        }
-      });
-    });
-  },
 
   componentDidMount() {
-    this._update(this.props.lat, this.props.lng);
+  //  this._update(this.props.lat, this.props.lng);
   },
 
   componentWillReceiveProps(nextProps) {
@@ -63,10 +29,13 @@ var LocationStats = React.createClass({
       this.setState({
         lat: nextProps.lat,
         lng: nextProps.lng,
+        elevation: {
+          ft: (nextProps.elevation * 3.28084).toFixed(0),
+          m: nextProps.elevation
+        },
         dmsLat: dd2dms(nextProps.lat, 'lat'),
         dmsLng: dd2dms(nextProps.lng, 'lng')
       });
-      this._update(nextProps.lat, nextProps.lng);
     }
   },
 

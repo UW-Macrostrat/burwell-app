@@ -20,11 +20,12 @@ var InfoPanel = React.createClass({
             <LocationStats
               lat={this.props.data.lat}
               lng={this.props.data.lng}
+              elevation={this.props.data.elevation}
             />
         </div>
 
         <div className='unit_info_content'>
-          <BurwellInfo data={this.props.data.burwell} sources={this.props.sources} shareState={this.props.shareState}/>
+          <BurwellInfo data={this.props.data.burwell} shareState={this.props.shareState}/>
           <MacrostratInfo data={this.props.data.macrostrat}/>
           <ArticleInfo data={this.props.data.articles}/>
           <div className='padding'></div>

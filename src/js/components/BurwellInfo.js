@@ -9,13 +9,11 @@ var BurwellInfo = React.createClass({
   },
 
   render() {
-    var sourceHash = this.props.sources;
-
     return (
     <div className='burwell-info'>
 
       {this.props.data.map(
-        (source, idx) => <BurwellSource key={idx} data={source} sourceMap={sourceHash} shareState={this.props.shareState}/>
+        (source, idx) => <BurwellSource key={idx} data={source} shareState={this.props.shareState}/>
       )}
 
     </div>

@@ -142,8 +142,9 @@ var Map = React.createClass({
     // Set the marker on the click location and add it to the map
     this.marker.setLatLng(d.latlng).addTo(this.map);
     this.props.shareState({
-      lat: d.latlng.lat,
-      lng: d.latlng.lng,
+      lat: null,
+      lng: null,
+      elevation: null,
       active: true,
       burwell: [],
       articles: {journals: []},
@@ -160,9 +161,6 @@ var Map = React.createClass({
     if (this.state.requests.articles && this.state.requests.articles.readyState != 4) {
       this.state.requests.articles.abort();
     }
-    if (this.state.requests.macrostrat && this.state.requests.macrostrat.readyState != 4) {
-      this.state.requests.macrostrat.abort();
-    }
     if (this.state.requests.burwell && this.state.requests.burwell.readyState != 4) {
       this.state.requests.burwell.abort();
     }
@@ -173,7 +171,7 @@ var Map = React.createClass({
     }
 
     // Fetch data
-    this.getBurwell(d.latlng);
+    this.getBurwell(d.latlng, this.map.getZoom());
 
   },
 
@@ -193,156 +191,31 @@ var Map = React.createClass({
     this.props.shareState('zoom', this.map.getZoom());
   },
 
-  getBurwell: function(latlng) {
-    var scaleLookup = {
-      0: 'tiny',
-      1: 'tiny',
-      2: 'tiny',
-      3: 'tiny',
-      4: 'small',
-      5: 'small',
-      6: 'medium',
-      7: 'medium',
-      8: 'medium',
-      9: 'medium',
-      10: 'large',
-      11: 'large',
-      12: 'large',
-      13: 'large',
-      14: 'large',
-      15: 'large',
-      16: 'large',
-      17: 'large'
-    }
-
-    var priorities = {
-      'tiny': ['tiny', 'small', 'medium', 'large'],
-      'small': ['small', 'medium', 'large', 'tiny'],
-      'medium': ['medium', 'large', 'small', 'tiny'],
-      'large': ['large', 'medium', 'small', 'tiny']
-    }
-
-
+  getBurwell: function(latlng, z) {
     this.state.requests.burwell = xhr({
-      uri: `${Config.apiUrl}/geologic_units/burwell?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}`
+      uri: `${Config.apiUrl}/mobile/map_query?lat=${latlng.lat.toFixed(5)}&lng=${latlng.lng.toFixed(5)}&z=${z}`
     }, (error, response, body) => {
       var data = JSON.parse(body);
-      if (data.success.data.length) {
-        // Find which scale we should use
-        var currentScale = scaleLookup[this.props.data.zoom];
-        var returnedScales = data.success.data.map(d => { return this.props.scales[d.source_id] });
-
-        var targetScales = [];
-
-        for (var i = 0; i < priorities[currentScale].length; i++) {
-          if (returnedScales.indexOf(priorities[currentScale][i]) > -1) {
-            targetScales.push(priorities[currentScale][i]);
-            if (currentScale != 'tiny' && currentScale != 'small') {
-              break;
-            } else if (targetScales.length > 1) {
-              break;
-            }
-          }
+      if (data.success.data) {
+        if (data.success.data.macrostrat.rank_names) {
+          this.getArticles([data.success.data.macrostrat.rank_names])
         }
 
-        var bestFit = data.success.data.filter(d => {
-          if (targetScales.indexOf(this.props.scales[d.source_id]) > -1) {
-            return d;
-          }
-        });
-
-        var macroUnits = [].concat.apply([], bestFit.map(unit => { return unit.macro_units }));
-        var stratNames = [].concat.apply([], bestFit.map(unit => { return unit.strat_names }));
-
-        if (macroUnits.length) {
-          this.getMacrostrat(macroUnits, stratNames, unitSummary => {
-            if (unitSummary.rank_names.length) {
-              this.getArticles(unitSummary.rank_names);
-            }
-            this.props.shareState({
-              burwell: bestFit,
-              macrostrat: unitSummary
-            });
-
-          });
-        } else {
-          this.props.shareState({
-            burwell: bestFit
-          });
-        }
+        this.props.shareState({
+          lat: latlng.lat,
+          lng: latlng.lng,
+          elevation: data.success.data.elevation,
+          burwell: data.success.data.burwell,
+          macrostrat: data.success.data.macrostrat
+        })
 
         // Hack to get articles for Australia, UK medium, and South Africa in the absence of Macrostrat matches
-        bestFit.forEach(unit => {
-          if ((unit.source_id === 5 || unit.source_id === 23 || unit.source_id === 41) && unit.strat_name.length) {
+        data.success.data.burwell.forEach(unit => {
+          if ((unit.ref.source_id === 5 || unit.ref.source_id === 23 || unit.ref.source_id === 41) && unit.strat_name.length) {
             var name = (unit.strat_name.indexOf(' of ') > -1) ? unit.strat_name.split(' of ')[0] : unit.strat_name;
             this.getArticles([name]);
           }
-        });
-
-      }
-    });
-  },
-
-  getMacrostrat: function(unit_ids, strat_names, callback) {
-    this.state.requests.macrostrat = xhr({
-      uri: `${Config.apiUrl}/units?response=long&unit_id=${unit_ids.join(',')}`
-    }, (error, response, body) => {
-      var data = JSON.parse(body);
-      if (data.success.data.length) {
-
-        var allStratNames = data.success.data.map(function(d) {
-          return {
-            name: d.strat_name_long,
-            id: d.strat_name_id
-          }
-        });
-        var s = {}
-
-        var filteredStratNames = allStratNames.filter(function(d) {
-          if (!s[d.id]) {
-            s[d.id] = d;
-            return d;
-          }
-        });
-
-        // Summarize the data
-        var unitSummary = {
-          strat_names: filteredStratNames,
-          rank_names: data.success.data.map(function(d) { return d.strat_name_long }),
-          ids: data.success.data.map(function(d) { return d.unit_id }),
-          max_thick: Math.max.apply(null, data.success.data.map(function(d) { return d.max_thick; })),
-          min_thick: Math.min.apply(null, data.success.data.map(function(d) { return d.min_thick; })),
-          b_age: Math.max.apply(null, data.success.data.map(function(d) { return d.b_age; })),
-          t_age: Math.min.apply(null, data.success.data.map(function(d) { return d.t_age; })),
-          pbdb_collections: data.success.data.map(function(d) { return d.pbdb_collections; }).reduce(function(total, each) { return total + each }, 0),
-          uniqueIntervals: (function() {
-            var min_age = 9999,
-                min_age_interval = '',
-                max_age = -1,
-                max_age_interval = '';
-
-            data.success.data.forEach(function(d, i) {
-              if (d.t_age < min_age) {
-                min_age = d.t_age;
-                min_age_interval = d.t_int_name;
-              }
-              if (d.b_age > max_age) {
-                max_age = d.b_age;
-                max_age_interval = d.b_int_name;
-              }
-            });
-            return (max_age_interval === min_age_interval) ? min_age_interval : max_age_interval + ' - ' + min_age_interval;
-          })()
-        }
-
-
-
-        callback(unitSummary);
-      } else {
-        callback({
-          names: [],
-          ids: []
-        });
+        })
       }
     });
   },

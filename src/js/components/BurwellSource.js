@@ -12,12 +12,10 @@ var BurwellSource = React.createClass({
     event.preventDefault();
   //  console.log(this.props.sourceMap[this.props.data.source_id]);
     this.props.shareState('active', false);
-    this.props.shareState('currentSource', this.props.sourceMap[this.props.data.source_id]);
     this.props.shareState('showSource', true);
   },
 
   render() {
-    var reference = this.props.sourceMap[this.props.data.source_id];
     return (
       <div className='burwell-source'>
         <h2 className='title-two'>{this.props.data.name}</h2>
@@ -66,7 +64,7 @@ var BurwellSource = React.createClass({
           : ''
         }
 
-        <p className='info-attr reference'><strong>Reference: </strong>{reference.authors}{reference.ref_year ? ', ' + reference.ref_year : ''}, <a target='_blank' href={reference.url}>{reference.ref_title}</a>: {reference.ref_source}. {this.props.data.map_id}.</p>
+        <p className='info-attr reference'><strong>Reference: </strong>{this.props.data.ref.authors}{this.props.data.ref.ref_year ? ', ' + this.props.data.ref.ref_year : ''}, <a target='_blank' href={this.props.data.ref.url}>{this.props.data.ref.ref_title}</a>: {this.props.data.ref.ref_source}. {this.props.data.map_id}.</p>
       </div>
     );
   }

@@ -13,8 +13,6 @@ import MenuToggle from './MenuToggle';
 var App = React.createClass({
   getInitialState: function() {
       return {
-        sources: {},
-        scales: {},
         showAttribution: false,
         showSearch: false,
         showSource: false,
@@ -64,28 +62,6 @@ var App = React.createClass({
 
   },
 
-  componentWillMount() {
-    xhr({
-      uri: `${Config.apiUrl}/defs/sources?all`
-    }, function(error, response, body) {
-      var data = JSON.parse(body);
-
-      if (data.success.data.length) {
-        var mappedSources = {};
-        var mappedScales = {};
-        for (var i = 0; i < data.success.data.length; i++) {
-          mappedSources[data.success.data[i].source_id] = data.success.data[i];
-          mappedScales[data.success.data[i].source_id] = data.success.data[i].scale;
-        }
-
-        this.setState({
-          sources: mappedSources,
-          scales: mappedScales
-        });
-      }
-    }.bind(this))
-  },
-
   render: function() {
     return (
       <div className='container'>
@@ -98,7 +74,6 @@ var App = React.createClass({
           updateView={function(l) {
             this.setState({updateView: l})
           }.bind(this)}
-          scales={this.state.scales}
         />
 
 
@@ -126,7 +101,6 @@ var App = React.createClass({
         <InfoPanel
           data={this.state}
           shareState={this.updateState}
-          sources={this.state.sources}
         />
 
         <MenuToggle
