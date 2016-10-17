@@ -154,6 +154,13 @@ var Map = React.createClass({
         rank_names: [],
         ids: []
       },
+      lines: {
+        name: '',
+        type: '',
+        direction: '',
+        descrip: '',
+        ref: {}
+      },
       showMenu: false
     });
 
@@ -206,7 +213,8 @@ var Map = React.createClass({
           lng: latlng.lng,
           elevation: data.success.data.elevation,
           burwell: data.success.data.burwell,
-          macrostrat: data.success.data.macrostrat
+          macrostrat: data.success.data.macrostrat,
+          lines: data.success.data.lines
         })
 
         // Hack to get articles for Australia, UK medium, and South Africa in the absence of Macrostrat matches

@@ -39,6 +39,13 @@ var App = React.createClass({
          journals: []
        },
        burwell: [],
+       lines: {
+         name: '',
+         type: '',
+         direction: '',
+         descrip: '',
+         ref: {}
+       },
        currentSource: {
          source_id: null,
          name: '',

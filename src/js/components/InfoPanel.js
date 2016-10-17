@@ -2,6 +2,7 @@ import React from 'react';
 import MacrostratInfo from './MacrostratInfo';
 import ArticleInfo from './ArticleInfo';
 import BurwellInfo from './BurwellInfo';
+import LineInfo from './LineInfo';
 import LocationStats from './LocationStats';
 
 var InfoPanel = React.createClass({
@@ -27,6 +28,7 @@ var InfoPanel = React.createClass({
         <div className='unit_info_content'>
           <BurwellInfo data={this.props.data.burwell} shareState={this.props.shareState}/>
           <MacrostratInfo data={this.props.data.macrostrat}/>
+          <LineInfo data={this.props.data.lines}/>
           <ArticleInfo data={this.props.data.articles}/>
           <div className='padding'></div>
         </div>

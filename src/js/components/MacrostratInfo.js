@@ -2,8 +2,13 @@ import React from 'react';
 
 var MacrostratInfo = React.createClass({
   render: function() {
-
-    return <div className={this.props.data.rank_names.length ? 'macrostrat-info macrostrat-data' : 'macrostrat-info macrostrat-data noDisplay'}>
+    if (!this.props.data.hasOwnProperty('strat_names')) {
+      this.props.data.strat_names = []
+    }
+    if (!this.props.data.hasOwnProperty('ids')) {
+      this.props.data.ids = []
+    }
+    return <div className={this.props.data && this.props.data.rank_names && this.props.data.rank_names.length ? 'macrostrat-info macrostrat-data' : 'macrostrat-info macrostrat-data noDisplay'}>
       <hr/>
 
       <h2 className='title-two'>{this.props.data.strat_names.map((d, idx) => {
