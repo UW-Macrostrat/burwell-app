@@ -27,8 +27,8 @@ var InfoPanel = React.createClass({
 
         <div className='unit_info_content'>
           <BurwellInfo data={this.props.data.burwell} shareState={this.props.shareState}/>
-          <MacrostratInfo data={this.props.data.macrostrat}/>
           <LineInfo data={this.props.data.lines}/>
+          <MacrostratInfo data={this.props.data.macrostrat}/>
           <ArticleInfo data={this.props.data.articles}/>
           <div className='padding'></div>
         </div>
