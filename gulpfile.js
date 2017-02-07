@@ -40,7 +40,7 @@ gulp.task('browserify-babel', function() {
     extensions: ['.js'],
     debug: false
   })
-  .transform(babelify)
+  .transform(babelify, { presets: [ 'es2015', 'react' ] })
   .bundle()
   .pipe(source('bundle.min.js'))
   .pipe(buffer())
