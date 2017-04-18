@@ -21,6 +21,18 @@ var Map = React.createClass({
     this.map.locate();
   },
 
+  drawElevation: function() {
+    console.log('fire drawElevation')
+    var m1 = L.marker([0, 0]).addTo(this.map)
+
+    // add marker that tracks the cursor
+    // on click, set it down
+    // do it again for another marker
+    // draw a line between them
+    // fire off the vertices to the api
+    // draw the elevation chart
+  },
+
   updateView: function(coords, z) {
     this.map.setView(coords, z);
   },
@@ -88,6 +100,7 @@ var Map = React.createClass({
 
     this.props.locate(this.locate);
     this.props.updateView(this.updateView);
+    this.props.drawElevation(this.drawElevation);
   },
 
   componentWillUpdate: function(nextProps) {
@@ -219,7 +232,7 @@ var Map = React.createClass({
 
         // Hack to get articles for Australia, UK medium, and South Africa in the absence of Macrostrat matches
         data.success.data.burwell.forEach(unit => {
-          if ((unit.ref.source_id === 5 || unit.ref.source_id === 23 || unit.ref.source_id === 41) && unit.strat_name.length) {
+          if ((unit.ref.source_id === 5 || unit.ref.source_id === 41) && unit.strat_name.length) {
             var name = (unit.strat_name.indexOf(' of ') > -1) ? unit.strat_name.split(' of ')[0] : unit.strat_name;
             this.getArticles([name]);
           }

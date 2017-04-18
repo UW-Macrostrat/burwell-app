@@ -81,6 +81,9 @@ var App = React.createClass({
           updateView={function(l) {
             this.setState({updateView: l})
           }.bind(this)}
+          drawElevation={function(l) {
+            this.setState({drawElevation: l})
+          }.bind(this)}
         />
 
 
@@ -113,6 +116,7 @@ var App = React.createClass({
         <MenuToggle
           shareState={this.updateState}
           locate={this.state.locate}
+          drawElevation={this.state.drawElevation}
         />
 
       </div>

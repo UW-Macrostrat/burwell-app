@@ -6,6 +6,7 @@
   "dependencies": {
     "async": "^1.4.0",
     "babel-polyfill": "^6.16.0",
+    "chart.js": "^2.5.0",
     "fastclick": "^1.0.6",
     "leaflet": "^1.0.0-rc.1",
     "leaflet-hash": "^0.2.1",

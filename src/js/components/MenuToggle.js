@@ -29,6 +29,12 @@ var MenuToggle = React.createClass({
     this.props.locate();
   },
 
+  drawElevation(event) {
+    this.toggle();
+    event.preventDefault();
+    this.props.drawElevation();
+  },
+
   showSearch(event) {
     this.toggle();
     event.preventDefault();
@@ -67,6 +73,9 @@ var MenuToggle = React.createClass({
               </div>
               <div className='expand-menu-button expand-menu-center' onClick={this.showSearch}>
                 <i className='fa fa-search'></i>
+              </div>
+              <div className='expand-menu-button expand-menu-center' onClick={this.drawElevation}>
+                <i className='fa fa-line-chart'></i>
               </div>
           </div>
       </div>
