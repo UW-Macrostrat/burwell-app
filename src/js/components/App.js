@@ -10,6 +10,8 @@ import Menu from './Menu';
 import InfoPanel from './InfoPanel';
 import MenuToggle from './MenuToggle';
 
+import ElevationChart from './ElevationChart'
+
 var App = React.createClass({
   getInitialState: function() {
       return {
@@ -56,7 +58,12 @@ var App = React.createClass({
          ref_source: '',
          isbn_doi: ''
        },
-       locate: null
+       locate: null,
+       showElevation: false,
+       selectElevation: false,
+       loadingElevation: false,
+       elevationData: [],
+       activeElevationPoint: []
       }
   },
 
@@ -81,6 +88,7 @@ var App = React.createClass({
           updateView={function(l) {
             this.setState({updateView: l})
           }.bind(this)}
+
         />
 
 
@@ -114,6 +122,11 @@ var App = React.createClass({
           shareState={this.updateState}
           locate={this.state.locate}
         />
+
+      <ElevationChart
+        shareState={this.updateState}
+        data={this.state}
+      />
 
       </div>
     );

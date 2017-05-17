@@ -21,6 +21,24 @@ var Map = React.createClass({
     this.map.locate();
   },
 
+  drawElevation: function() {
+    this.props.shareState('loadingElevation', true)
+    let start = this.m1.getLatLng()
+    let end = this.m2.getLatLng()
+
+    this.state.requests.burwell = xhr({
+      uri: `${Config.apiUrl}/elevation?start_lng=${start.lng.toFixed(5)}&start_lat=${start.lat.toFixed(5)}&end_lng=${end.lng.toFixed(5)}&end_lat=${end.lat.toFixed(5)}`
+    }, (error, response, body) => {
+      this.props.shareState('loadingElevation', false)
+      var data = JSON.parse(body)
+      if (data.success.data) {
+        // Update elevation data
+        this.props.shareState('showElevation', true)
+        this.props.shareState('elevationData', data.success.data)
+      }
+    })
+  },
+
   updateView: function(coords, z) {
     this.map.setView(coords, z);
   },
@@ -76,6 +94,31 @@ var Map = React.createClass({
       })
     });
 
+    var elevationIcon = L.divIcon({
+      className: 'elevation-marker',
+      html: "<i class='fa fa-map-marker'></i>",
+      iconAnchor: [12, 47]
+    })
+
+    this.m1 = L.marker([0, 0], { icon: elevationIcon })
+    this.m2 = L.marker([0, 0], { icon: elevationIcon })
+
+    this.elevationMarker = L.circleMarker([0,0], {
+      stroke: true,
+      color: 'rgba(220,220,220,1)',
+      weight: 2,
+      fillColor: 'rgba(75,192,192,1)',
+      fillOpacity: 1,
+      radius: 8
+    }).addTo(this.map)
+
+    this.elevationLine = L.polyline([[0,0], [0,0]], {
+      stroke: true,
+      color: '#ffffff',
+      weight: 3,
+      dashArray: '10, 5'
+    })
+
     // Attach interaction handlers
     map.on('click', this.onClick);
     map.on('zoomstart, movestart', this.onMove);
@@ -88,6 +131,7 @@ var Map = React.createClass({
 
     this.props.locate(this.locate);
     this.props.updateView(this.updateView);
+  //  this.props.drawElevation(this.drawElevation);
   },
 
   componentWillUpdate: function(nextProps) {
@@ -135,10 +179,40 @@ var Map = React.createClass({
       this.emphasized.setOpacity(nextProps.data.emphasizedOpacity/100);
     }
 
+    if ((nextProps.data.loadingElevation === false && nextProps.data.showElevation === false && nextProps.data.selectElevation === false)) {
+      this.map.removeLayer(this.m1)
+      this.map.removeLayer(this.m2)
+      this.map.removeLayer(this.elevationLine)
+      this.map.removeLayer(this.elevationMarker)
+    }
 
+    if (nextProps.data.activeElevationPoint[0] != this.props.data.activeElevationPoint[0]) {
+      if (nextProps.data.activeElevationPoint[0] == null) {
+        this.map.removeLayer(this.elevationMarker)
+      } else {
+        this.elevationMarker.setLatLng(nextProps.data.activeElevationPoint).addTo(this.map)
+      }
+    }
   },
 
   onClick: function(d) {
+    if (this.props.data.selectElevation && !this.map.hasLayer(this.elevationLine)) {
+      this.onMove()
+      if (!this.map.hasLayer(this.m1)) {
+        this.m1.setLatLng(d.latlng).addTo(this.map)
+      } else {
+        this.m2.setLatLng(d.latlng).addTo(this.map)
+
+        this.elevationLine.setLatLngs([
+          this.m1.getLatLng(),
+          d.latlng
+        ])
+        this.elevationLine.addTo(this.map)
+
+        this.drawElevation()
+      }
+      return
+    }
     // Set the marker on the click location and add it to the map
     this.marker.setLatLng(d.latlng).addTo(this.map);
     this.props.shareState({
