@@ -96,8 +96,8 @@ var Map = React.createClass({
 
     var elevationIcon = L.divIcon({
       className: 'elevation-marker',
-      html: "<i class='fa fa-map-marker'></i>",
-      iconAnchor: [12, 47]
+      html: "<i class='icon-location'></i>",
+      iconAnchor: [28, 47]
     })
 
     this.m1 = L.marker([0, 0], { icon: elevationIcon })

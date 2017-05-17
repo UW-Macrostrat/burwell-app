@@ -112,7 +112,7 @@ var ElevationChart = React.createClass({
     let minElevationBuffered = minElevation - ((maxElevation - minElevation) * 0.2)
     let maxElevationBuffered = maxElevation + ((maxElevation - minElevation) * 0.1)
 
-    this.exageration = (d3.max(this.props.data.elevationData, d => { return d.d }) / width) / (((maxElevationBuffered - minElevationBuffered) * 0.001) / height) || null
+    this.exageration = (d3.max(this.props.data.elevationData, d => { return d.d }) / width) / (((maxElevationBuffered - minElevationBuffered) * 0.001) / height)
 
 
     x.domain(d3.extent(this.props.data.elevationData, d => { return d.d }))

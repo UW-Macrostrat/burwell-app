@@ -376,6 +376,7 @@ small {
   float: right;
   padding: 8px;
   cursor: pointer;
+  line-height: 14px;
 }
 
 #opacity-label {

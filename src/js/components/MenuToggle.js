@@ -60,23 +60,23 @@ var MenuToggle = React.createClass({
     return (
       <div className='expand'>
           <div className={this.state.open ? 'expand-toggle expand-menu-center expanded' : 'expand-toggle expand-menu-center'} onClick={this.toggle}>
-            <i className={this.state.open ? 'fa fa-minus' : 'fa fa-bars'}></i>
+            <i className={this.state.open ? 'icon-minus' : 'icon-menu'}></i>
           </div>
           <div className={this.state.open ? 'expand-menu animated bounceInUp open' : 'expand-menu animated bounceOutDown closeMenu preload'}>
               <div className='expand-menu-button expand-menu-center' onClick={this.showAttribution}>
-                <i className='fa fa-info'></i>
+                <i className='icon-info'></i>
               </div>
               <div className='expand-menu-button expand-menu-center' onClick={this.showMenu}>
-                <i className='fa fa-gear'></i>
+                <i className='icon-cog'></i>
               </div>
               <div className='expand-menu-button expand-menu-center' onClick={this.getLocation}>
-                <i className='fa fa-map-marker'></i>
+                <i className='icon-location'></i>
               </div>
               <div className='expand-menu-button expand-menu-center' onClick={this.showSearch}>
-                <i className='fa fa-search'></i>
+                <i className='icon-search'></i>
               </div>
               <div className='expand-menu-button expand-menu-center' onClick={this.drawElevation}>
-                <i className='fa fa-line-chart'></i>
+                <i className='icon-chart-area'></i>
               </div>
           </div>
       </div>

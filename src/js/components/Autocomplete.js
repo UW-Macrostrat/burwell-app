@@ -239,7 +239,7 @@ class Autocomplete extends React.Component {
       <div className='autocomplete-container'>
         <p className={this.state.searchTerm.length ? 'noDisplay' : 'autocomplete-placeholder-text'}>Enter a place name...</p>
         <div className='autocomplete-input-container'>
-          <i className='fa fa-search autocomplete-search-icon'></i>
+          <i className='icon-search autocomplete-search-icon'></i>
           <input
             className='autocomplete-input'
             ref='autocompleteInput'

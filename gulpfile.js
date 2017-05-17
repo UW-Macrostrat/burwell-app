@@ -21,7 +21,7 @@ gulp.task('build', function() {
 });
 
 gulp.task('css-min', function() {
-  gulp.src(['node_modules/leaflet/dist/leaflet.css', 'src/css/animate_custom.css', 'src/css/map.css'])
+  gulp.src(['src/css/purecss.css', 'node_modules/leaflet/dist/leaflet.css', 'src/css/animate_custom.css', 'src/css/animation.css', 'src/css/fontello.css', 'src/css/map.css'])
     .pipe(concat('styles.min.css'))
     .pipe(minifyCSS())
     .pipe(gulp.dest('./dist/css/'));
@@ -53,4 +53,12 @@ gulp.task('apply-prod-environment', function() {
     process.env.NODE_ENV = 'production';
 });
 
+gulp.task('final-wrap', function() {
+  gulp.src(['./dist/js/leaflet-all.min.js', './dist/js/bundle.min.js'])
+    .pipe(concat('script.min.js'))
+    .pipe(gulp.dest('./dist/js'))
+})
+
 gulp.task('default', ['apply-prod-environment', 'build', 'css-min', 'browserify-babel']);
+
+gulp.task('production', ['apply-prod-environment', 'build', 'css-min', 'browserify-babel', 'final-wrap'])

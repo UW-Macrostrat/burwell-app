@@ -38,15 +38,15 @@ var Menu = React.createClass({
           <div className='menu-layers'>
 
             <div className='layer' id='burwell'>Bedrock
-              <i className={this.props.data.hasEmphasized ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleEmphasized}></i>
-              <i className='fa fa-sliders layer-control' onClick={this.toggleOpacityEmphasized}></i>
+              <i className={this.props.data.hasEmphasized ? 'icon-toggle-on layer-control' : 'icon-toggle-off layer-control'} onClick={this.toggleEmphasized}></i>
+              <i className='icon-sliders layer-control' onClick={this.toggleOpacityEmphasized}></i>
               <div className={!this.state.showOpacityEmphasized ? 'noDisplay' : 'opacity-adjuster'}>
                 <input id='geology-opacity-slider' type='range' max='100' min='0' step='10' value={this.props.data.emphasizedOpacity} onChange={this.changeOpacityEmphasized}/>
                 <div id='opacity-label'>Opacity</div>
               </div>
             </div>
 
-            <div className='layer' id='satellite'>Satellite <i className={this.props.data.hasSatellite ? 'fa fa-toggle-on layer-control' : 'fa fa-toggle-off layer-control'} onClick={this.toggleSatellite}></i></div>
+            <div className='layer' id='satellite'>Satellite <i className={this.props.data.hasSatellite ? 'icon-toggle-on layer-control' : 'icon-toggle-off layer-control'} onClick={this.toggleSatellite}></i></div>
 
           </div>
         </div>
