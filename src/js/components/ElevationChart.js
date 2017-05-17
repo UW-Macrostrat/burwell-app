@@ -50,8 +50,9 @@ var ElevationChart = React.createClass({
         <div className='elevationChartWrapper'>
           <svg id="elevationChart"></svg>
         </div>
-        <div className='pure-g'>
-          <div className='pure-u-1 elevation-citation'>
+        <div className='pure-g elevation-citation'>
+          <div className='pure-u-1-12'>{ parseInt(this.exageration) }x</div>
+          <div className='pure-u-22-24'>
             Elevation queries via <a href='https://mapzen.com/documentation/elevation/elevation-service/' target='_blank'>Mapzen</a>, data from <a href='http://www2.jpl.nasa.gov/srtm/' target='_blank'>SRTM</a>, <a href='http://topotools.cr.usgs.gov/gmted_viewer/' target='_blank'>GMTED</a>, <a href='https://nationalmap.gov/elevation.html' target='_blank'>NED</a>, and <a href='https://www.ngdc.noaa.gov/mgg/global/' target='_blank'>ETOPO1</a>
           </div>
         </div>
@@ -65,7 +66,7 @@ var ElevationChart = React.createClass({
     let data = this.props.data.elevationData
     let shareState = this.props.shareState
 
-    let margin = {top: 20, right: 50, bottom: 30, left: 50}
+    let margin = {top: 20, right: 50, bottom: 30, left: 70}
     let width = window.innerWidth - margin.left - margin.right
     let height = 150 - margin.top - margin.bottom
 
@@ -108,10 +109,16 @@ var ElevationChart = React.createClass({
     let minElevation = d3.min(this.props.data.elevationData, d => { return d.elevation })
     let maxElevation = d3.max(this.props.data.elevationData, d => { return d.elevation })
 
-    x.domain(d3.extent(this.props.data.elevationData, d => { return d.d }))
-    y.domain([minElevation, maxElevation + ((maxElevation - minElevation) * 0.1)])
+    let minElevationBuffered = minElevation - ((maxElevation - minElevation) * 0.2)
+    let maxElevationBuffered = maxElevation + ((maxElevation - minElevation) * 0.1)
 
-    area.y0(y(d3.min(this.props.data.elevationData, d => { return d.elevation })))
+    this.exageration = (d3.max(this.props.data.elevationData, d => { return d.d }) / width) / (((maxElevationBuffered - minElevationBuffered) * 0.001) / height) || null
+
+
+    x.domain(d3.extent(this.props.data.elevationData, d => { return d.d }))
+    y.domain([minElevationBuffered, maxElevationBuffered])
+
+    area.y0(y(minElevationBuffered))
 
     this.chart.append('g')
         .attr('class', 'x axis')
@@ -127,7 +134,7 @@ var ElevationChart = React.createClass({
         .attr('class', 'y axis')
         .call(yAxis)
       .append('text')
-        .attr('transform', `translate(-40,${height/2})rotate(-90)`)
+        .attr('transform', `translate(-50,${height/2})rotate(-90)`)
         .style('text-anchor', 'middle')
         .style('font-size', '12px')
         .text('Elevation (m)')
