@@ -32,7 +32,8 @@ var MenuToggle = React.createClass({
   drawElevation(event) {
     this.toggle();
     event.preventDefault();
-    this.props.drawElevation();
+//    this.props.drawElevation();
+    this.props.shareState('selectElevation', true)
   },
 
   showSearch(event) {

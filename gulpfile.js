@@ -21,7 +21,7 @@ gulp.task('build', function() {
 });
 
 gulp.task('css-min', function() {
-  gulp.src(['node_modules/leaflet/dist/leaflet.css', 'src/css/animate.min.css', 'src/css/map.css'])
+  gulp.src(['node_modules/leaflet/dist/leaflet.css', 'src/css/animate_custom.css', 'src/css/map.css'])
     .pipe(concat('styles.min.css'))
     .pipe(minifyCSS())
     .pipe(gulp.dest('./dist/css/'));
