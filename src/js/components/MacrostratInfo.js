@@ -27,9 +27,7 @@ var MacrostratInfo = React.createClass({
     return <div className={this.props.data && this.props.data.rank_names && this.props.data.rank_names.length ? 'macrostrat-info macrostrat-data' : 'macrostrat-info macrostrat-data noDisplay'}>
       <hr/>
 
-      <h2 className={this.props.data && this.props.data.strat_names ? 'title-two' : 'noDisplay'}>{this.props.data.strat_names.map((d, idx) => {
-        return <span key={'m' + idx}><a href={'https://macrostrat.org/sift/#/strat_name/' + d.id} target='_blank'>{d.name}</a>{(idx != this.props.data.strat_names.length - 1) ? ', ' : ''} </span>
-      })}</h2>
+      <h2 className={this.props.data && this.props.data.rank_names ? 'title-two' : 'noDisplay'}>{this.props.data.rank_names}</h2>
 
 
       <p className={this.props.data && this.props.data.uniqueIntervals ? 'info-attr' : 'noDisplay'} key='d1'><strong>Age: </strong>{this.props.data.uniqueIntervals} - ({this.props.data.b_age} - {this.props.data.t_age}<small> Ma</small>)</p>
