@@ -35,8 +35,8 @@ var Article = React.createClass({
             <strong>{this.props.data.title}.</strong>
           </a>
 
-          <i className={this.state.showText ? 'noDisplay' : 'fa fa-plus-square-o fa-lg show-content'} onClick={this.toggle}></i>
-          <i className={this.state.showText ? 'fa fa-minus-square-o fa-lg show-content' : 'noDisplay'} onClick={this.toggle}></i>
+          <i className={this.state.showText ? 'noDisplay' : 'icon-plus-squared-alt show-content'} onClick={this.toggle}></i>
+          <i className={this.state.showText ? 'icon-minus-squared-alt show-content' : 'noDisplay'} onClick={this.toggle}></i>
         </div>
         <div className={this.state.showText ? 'dd-text auto-height' : 'dd-text'}>
           {this.props.data.snippets.map(function(snippet, i) {
