@@ -51,7 +51,7 @@ var ElevationChart = React.createClass({
           <svg id="elevationChart"></svg>
         </div>
         <div className='pure-g elevation-citation'>
-          <div className='pure-u-1-12'>{ parseInt(this.exageration) }x</div>
+          <div className='pure-u-1-12'>{ parseFloat(this.exageration.toFixed(1)) }x</div>
           <div className='pure-u-22-24'>
             Elevation queries via <a href='https://mapzen.com/documentation/elevation/elevation-service/' target='_blank'>Mapzen</a>, data from <a href='http://www2.jpl.nasa.gov/srtm/' target='_blank'>SRTM</a>, <a href='http://topotools.cr.usgs.gov/gmted_viewer/' target='_blank'>GMTED</a>, <a href='https://nationalmap.gov/elevation.html' target='_blank'>NED</a>, and <a href='https://www.ngdc.noaa.gov/mgg/global/' target='_blank'>ETOPO1</a>
           </div>
