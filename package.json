@@ -9,7 +9,7 @@
     "chart.js": "^2.5.0",
     "d3": "^3.5.17",
     "fastclick": "^1.0.6",
-    "leaflet": "^1.0.0-rc.1",
+    "leaflet": "^1.1.0",
     "leaflet-hash": "^0.2.1",
     "react": "^15.0.1",
     "react-dom": "^15.0.1",

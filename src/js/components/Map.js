@@ -110,7 +110,7 @@ var Map = React.createClass({
       fillColor: 'rgba(75,192,192,1)',
       fillOpacity: 1,
       radius: 8
-    }).addTo(this.map)
+    })
 
     this.elevationLine = L.polyline([[0,0], [0,0]], {
       stroke: true,
