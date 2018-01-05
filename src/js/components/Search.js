@@ -15,6 +15,7 @@ var Search = React.createClass({
             lat={this.props.data.lat}
             lng={this.props.data.lng}
             updateView={this.props.updateView}
+            fitBounds={this.props.fitBounds}
             broadcast={this.props.shareState}
             minLength='2'
           />

@@ -59,28 +59,16 @@ class Autocomplete extends React.Component {
 
   fetch(query) {
     xhr({
-    //  uri: `https://search.mapzen.com/v1/autocomplete?text=${query}&focus.point.lat=${this.props.lat}&focus.point.lon=${this.props.lng}&api_key=${Config.mapzenAPIKey}`
-      uri: `https://search.mapzen.com/v1/autocomplete?text=${query}&api_key=${Config.mapzenAPIKey}`
+      uri: `http://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${Config.mapboxAutocompleteAPIKey}&types=country,region,locality,place,poi.landmark`
     }, (error, response, body) => {
       var response = JSON.parse(body);
 
-      // Filter
-      var categories = ['country', 'region', 'county', 'locality', 'localadmin'];
-      var found = [];
-
-      var searchResults = response.features.filter(d => {
-        if (categories.indexOf(d.properties.layer) > -1 && found.indexOf(d.properties.label) < 0) {
-          found.push(d.properties.label);
-          return d;
-        }
-      });
-
       // Cache the results so we don't have to make an HTTP request
       // next time we see the same query
-      this.cache[query] = searchResults;
+      this.cache[query] = response.features;
 
       // Update the current result list
-      this.updateResults(searchResults);
+      this.updateResults(response.features);
     });
   }
 
@@ -179,26 +167,45 @@ class Autocomplete extends React.Component {
     var i = (idx) ? idx : this.state.selectedIndex;
     // Do something with the selection here
     var selected = this.state.results[i];
-    var zoom;
 
-    switch (selected.properties.layer) {
-      case 'country':
+    if (selected.bbox) {
+      // fit bounds
+      this.props.fitBounds(selected.bbox);
+    } else {
+      // update view
+      var zoom;
+      if (selected.placetype.indexOf('country') > -1) {
         zoom = 5;
-        break;
-      case 'region':
+      } else if (selected.placetype.indexOf('region') > -1) {
         zoom = 6;
-        break;
-      case 'county':
-        zoom = 8;
-        break;
-      case 'locality':
+      } else if (selected.placetype.indexOf('locality') > -1) {
         zoom = 12;
-        break;
-      default:
+      } else {
         zoom = 12;
+      }
+      this.props.updateView(selected.center.reverse(), zoom);
     }
 
-    this.props.updateView(selected.geometry.coordinates.reverse(), zoom);
+    // var zoom;
+    //
+    // switch (selected.properties.layer) {
+    //   case 'country':
+    //     zoom = 5;
+    //     break;
+    //   case 'region':
+    //     zoom = 6;
+    //     break;
+    //   case 'county':
+    //     zoom = 8;
+    //     break;
+    //   case 'locality':
+    //     zoom = 12;
+    //     break;
+    //   default:
+    //     zoom = 12;
+    // }
+    //
+    // this.props.updateView(selected.geometry.coordinates.reverse(), zoom);
     this.props.broadcast('showSearch', false);
 
     this.setState({
@@ -262,7 +269,7 @@ class Autocomplete extends React.Component {
           {this.state.results.map((d, idx) => {
             return (
               <AutocompleteResultItem
-                data={d.properties}
+                data={d.place_name}
                 index={idx}
                 key={idx}
                 ref={idx}

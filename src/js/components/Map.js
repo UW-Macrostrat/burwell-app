@@ -43,6 +43,13 @@ var Map = React.createClass({
     this.map.setView(coords, z);
   },
 
+  fitBounds: function(bbox) {
+    this.map.fitBounds([
+      [bbox[1], bbox[0]],
+      [bbox[3], bbox[2]]
+    ])
+  },
+
   componentDidMount: function() {
     var map = this.map = L.map(ReactDOM.findDOMNode(this), {
       attributionControl: false,
@@ -131,6 +138,7 @@ var Map = React.createClass({
 
     this.props.locate(this.locate);
     this.props.updateView(this.updateView);
+    this.props.fitBounds(this.fitBounds);
   //  this.props.drawElevation(this.drawElevation);
   },
 

@@ -88,7 +88,9 @@ var App = React.createClass({
           updateView={function(l) {
             this.setState({updateView: l})
           }.bind(this)}
-
+          fitBounds={function(l) {
+            this.setState({fitBounds: l})
+          }.bind(this)}
         />
 
 
@@ -101,6 +103,7 @@ var App = React.createClass({
           data={this.state}
           shareState={this.updateState}
           updateView={this.state.updateView}
+          fitBounds={this.state.fitBounds}
         />
 
         <BurwellReference

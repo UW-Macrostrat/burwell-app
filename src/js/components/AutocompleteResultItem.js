@@ -22,7 +22,7 @@ class AutocompleteResultItem extends React.Component {
         onMouseOver={this.handleMouse}
         onMouseOut={this.handleMouse}
         onClick={this.handleClick}
-      >{this.props.data.label}</li>
+      >{this.props.data}</li>
     );
   }
 }
