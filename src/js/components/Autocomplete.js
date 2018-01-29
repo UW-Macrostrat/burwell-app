@@ -59,7 +59,7 @@ class Autocomplete extends React.Component {
 
   fetch(query) {
     xhr({
-      uri: `http://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${Config.mapboxAutocompleteAPIKey}&types=country,region,locality,place,poi.landmark`
+      uri: `https://api.mapbox.com/geocoding/v5/mapbox.places/${query}.json?access_token=${Config.mapboxAutocompleteAPIKey}&types=country,region,locality,place,poi.landmark`
     }, (error, response, body) => {
       var response = JSON.parse(body);
 
