@@ -312,7 +312,7 @@ var Map = React.createClass({
 
   getArticles: function(strat_names) {
     this.state.requests.articles = xhr({
-      uri: `${Config.geodeepdiveURL}/excerpts?term=${strat_names.join(',')}`
+      uri: `${Config.geodeepdiveURL}snippets?term=${strat_names.join(',')}`
     }, (error, response, body) => {
       var data;
       if (body) {
@@ -333,7 +333,7 @@ var Map = React.createClass({
       for (var i = 0; i < data.length; i++) {
         var found = false;
         for (var j = 0; j < parsed.journals.length; j++) {
-          if (parsed.journals[j].name === data[i].journal) {
+          if (parsed.journals[j].pubname === data[i].pubname) {
             parsed.journals[j].articles.push(data[i]);
             found = true;
           }
@@ -341,12 +341,13 @@ var Map = React.createClass({
 
         if (!found) {
           parsed.journals.push({
-            name: data[i].journal,
+            name: data[i].pubname,
             source: data[i].publisher,
             articles: [data[i]]
           });
         }
       }
+      console.log('parsed', parsed)
       this.props.shareState('articles', parsed);
 
     });

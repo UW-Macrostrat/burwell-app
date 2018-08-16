@@ -20,18 +20,18 @@ var Article = React.createClass({
       year = '';
     }
 
-    var authors = (this.props.data.hasOwnProperty('authors')) ? this.props.data.authors.map(function(d) { return d.name }) : [];
+    var authors = (this.props.data.hasOwnProperty('authors')) ? this.props.data.authors : '';
 
-    var displayAuthors = (authors.length && authors.length >= 4) ? authors.slice(0, 4).join(', ') + ' et al.' : authors.join(', ');
+    // var displayAuthors = (authors.length && authors.length >= 4) ? authors.slice(0, 4).join(', ') + ' et al.' : authors.join(', ');
 
     return (
       <div className='dd-article'>
         <div className='dd-article-heading'>
-          <p className='article-author'>{(displayAuthors) ? displayAuthors : 'Unknown'}, </p>
+          <p className='article-author'>{(authors) ? authors : 'Unknown'}, </p>
 
           {year.length ? (' ' + year + '. ') : ''}
 
-          <a href={this.props.data.url} target='_blank' className='title-link'>
+          <a href={this.props.data.URL} target='_blank' className='title-link'>
             <strong>{this.props.data.title}.</strong>
           </a>
 
@@ -39,7 +39,7 @@ var Article = React.createClass({
           <i className={this.state.showText ? 'icon-minus-squared-alt show-content' : 'noDisplay'} onClick={this.toggle}></i>
         </div>
         <div className={this.state.showText ? 'dd-text auto-height' : 'dd-text'}>
-          {this.props.data.snippets.map(function(snippet, i) {
+          {this.props.data.highlight.map(function(snippet, i) {
             // The text from Elasticsearch sometimes has errant < and >, which mess up the html
             // so we have to do this, otherwise when React encounters one of those
             // problematic ones it stops working
